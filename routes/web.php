@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\admin\filmController;
 use App\Http\Controllers\admin\homeController as AdminHomeController;
 use App\Http\Controllers\anonymous\homeAnonymous;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\author\homeController as AuthorHomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\subcriber\filmController as SubcriberFilmController;
 use App\Http\Controllers\subcriber\homeController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,9 +31,14 @@ Route::get('anonymous/home', [homeAnonymous::class,'index'])->name('anonymous.ho
 
 //subcriber
 Route::get('subcriber/home', [homeController::class,'index'])->name('subcriber.home');
+Route::get('subcriber/film', [SubcriberFilmController::class,'index'])->name('subcriber.film');
 
 //author
 Route::get('author/home', [AuthorHomeController::class,'index'])->name('author.home');
 
 //admin
 Route::get('admin/home', [AdminHomeController::class,'index'])->name('admin.home');
+Route::get('admin/film', [filmController::class,'index'])->name('admin.film');
+Route::get('admin/input-film', [filmController::class,'create'])->name('admin.input-film');
+
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');

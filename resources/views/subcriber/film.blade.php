@@ -10,7 +10,7 @@
 <body>
     @extends('navbar-subcriber.navbar')
     @section('navbar-subcriber')
-       
+       hai ini film sub
     @endsection
 </body>
 </html>
