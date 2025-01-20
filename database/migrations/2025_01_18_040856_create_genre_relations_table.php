@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_film')->references('id_film')->on('film');
-            $table->foreign('id_genre')->references('id_genres')->on('genre');
+            $table->foreign('id_genre')->references('id_genre')->on('genre');
         });
     }
 

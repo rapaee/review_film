@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\filmController;
+use App\Http\Controllers\admin\GenreController;
 use App\Http\Controllers\admin\homeController as AdminHomeController;
 use App\Http\Controllers\anonymous\homeAnonymous;
 use App\Http\Controllers\Auth\LogoutController;
@@ -40,5 +41,13 @@ Route::get('author/home', [AuthorHomeController::class,'index'])->name('author.h
 Route::get('admin/home', [AdminHomeController::class,'index'])->name('admin.home');
 Route::get('admin/film', [filmController::class,'index'])->name('admin.film');
 Route::get('admin/input-film', [filmController::class,'create'])->name('admin.input-film');
+Route::post('admin/input-film', [filmController::class,'store'])->name('admin.input-film.store');
+Route::get('admin/genre', [GenreController::class,'index'])->name('admin.genre');
+Route::get('admin/input-genre', [GenreController::class,'create'])->name('admin.input-genre');
+Route::post('admin/input-genre', [GenreController::class,'store'])->name('admin.input-genre.store');
+Route::get('admin/edit-genre/{id_genre}', [GenreController::class,'edit'])->name('admin.edit-genre');
+Route::put('admin/edit-genre/{id_genre}', [GenreController::class, 'update'])->name('admin.edit-input.update');
+Route::delete('admin/genre/{id_genre}', [GenreController::class, 'destroy'])->name('admin.genre.delete');
+
 
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');

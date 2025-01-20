@@ -14,8 +14,8 @@ class Film extends Model
 
     // Kolom-kolom yang dapat diisi secara mass assignment
     protected $fillable = [
-        'title', 'poster', 'description', 'release_year', 'duration',
-        'rating', 'creator', 'trailer'
+        'judul', 'poster', 'deskripsi', 'tahun_rilis', 'durasi',
+        'rating', 'pencipta', 'trailer'
     ];
 
     public function genres()

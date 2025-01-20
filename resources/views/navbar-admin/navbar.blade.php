@@ -71,7 +71,7 @@
                   <a href="{{ route('admin.film') }}" class="block py-2 px-3 md:p-0 text-white rounded md:bg-transparent {{ Route::currentRouteName() == 'admin.film' ? 'md:text-blue-700 bg-blue-700' : '' }}" aria-current="page">Film</a>
               </li>
               <li>
-               <a href="{{ route('admin.home') }}" class="block py-2 px-3 md:p-0 text-white rounded md:bg-transparent {{ Route::currentRouteName() == 'admin.home' ? 'md:text-blue-700 bg-blue-700' : '' }}" aria-current="page">Genre</a>
+               <a href="{{ route('admin.genre') }}" class="block py-2 px-3 md:p-0 text-white rounded md:bg-transparent {{ Route::currentRouteName() == 'admin.genre' ? 'md:text-blue-700 bg-blue-700' : '' }}" aria-current="page">Genre</a>
            </li>
            </ul>
        </div>

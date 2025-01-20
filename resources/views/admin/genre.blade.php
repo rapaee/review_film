@@ -1,11 +1,10 @@
-</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Film</title>
+    <title>Genre</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -28,7 +27,7 @@
            
         </div>
     </form>
-    <a href="{{ route('admin.input-film') }}">
+    <a href="{{ route('admin.input-genre') }}">
     <button type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
       Tambah
     </button>
@@ -45,25 +44,7 @@
                     Judul
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Pencipta
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Deskripsi
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Tahun Rilis
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Durasi
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Rating
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Poster
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Trailer
+                    Slug
                 </th>
                 <th scope="col" class="px-6 py-3">
                     <span class="sr-only">Edit</span>
@@ -71,33 +52,26 @@
             </tr>
         </thead>
         <tbody>
-            <tbody>
-                @foreach ($films as $film)
-                    <tr>
-                        <td class="px-6 py-3">{{ $film->judul }}</td>
-                        <td class="px-6 py-3">{{ $film->pencipta }}</td>
-                        <td class="px-6 py-3">{{ $film->deskripsi }}</td>
-                        <td class="px-6 py-3">{{ $film->tahun_rilis }}</td>
-                        <td class="px-6 py-3">{{ $film->durasi }}</td>
-                        <td class="px-6 py-3">{{ $film->rating }}</td>
-                        <td class="px-6 py-3 flex justify-center">
-                            <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-auto">
-                        </td>
-                        <td class="px-6 py-3">
-                            <a href="{{ asset('storage/' . $film->trailer) }}" target="_blank">Lihat Trailer</a>
-                        </td>
-                        {{-- <td class="px-6 py-3">
-                            <video width="320" height="240" controls>
-                                <source src="{{ asset('storage/' . $film->trailer) }}" type="video/mp4">
-                                Browser Anda tidak mendukung elemen video.
-                            </video>
-                        </td> --}}
-                        {{-- <td class="px-6 py-3">
-                            <a href="{{ route('admin.film.edit', $film->id_film) }}" class="text-blue-500">Edit</a>
-                        </td> --}}
-                    </tr>
-                @endforeach
-            </tbody>
+            @foreach ( $genre as $g )
+            <tr class="bg-white border-b dark:border-gray-400">
+                <td class="px-6 py-4">
+                    {{ $g->title }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ $g->slug }}
+                </td>
+                <td class="px-2 py-4 flex justify-end gap-3">
+                    
+                    <form action="{{ route('admin.genre.delete', $g->id_genre) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-white bg-red-600 hover:bg-red-700 py-1 rounded w-16">Delete</button>
+                    </form>
+                    
+                    <a href="{{ route('admin.edit-genre', $g->id_genre) }}" class="text-white text-center bg-green-600 hover:bg-green-700 py-1 rounded w-16">Edit</a>
+                </td>
+            </tr>
+            @endforeach
             
         </tbody>
     </table>
