@@ -12,7 +12,7 @@
     @section('navbar-admin')
        
 
-<form action="{{ route('admin.edit-input.update', $genre->id_genre) }}" method="POST" class="max-w-full mx-auto p-5">
+<form action="{{ route('admin.edit-genre.update', $genre->id_genre) }}" method="POST" class="max-w-full mx-auto p-5">
     @csrf
     @method('PUT')
     <h1 class="text-2xl font-bold text-center">FORM EDIT GENRE</h1>

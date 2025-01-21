@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Film;
 use Illuminate\Http\Request;
 
-class homeAnonymous extends Controller
+class detailfilmController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        $datafilm = Film::all();
-        return view('anonymous/home',compact('datafilm'));
+        $datafilm = Film::findOrFail($id);
+        return view('anonymous/detail-film', compact('datafilm'));
     }
+    
 
     /**
      * Show the form for creating a new resource.

@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\filmController;
 use App\Http\Controllers\admin\GenreController;
 use App\Http\Controllers\admin\homeController as AdminHomeController;
+use App\Http\Controllers\anonymous\detailfilmController;
 use App\Http\Controllers\anonymous\homeAnonymous;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\author\homeController as AuthorHomeController;
@@ -29,6 +30,7 @@ require __DIR__.'/auth.php';
 
 //anonymous
 Route::get('anonymous/home', [homeAnonymous::class,'index'])->name('anonymous.home');
+Route::get('anonymous/detail-film{id}', [detailfilmController::class,'index'])->name('anonymous.detail-film');
 
 //subcriber
 Route::get('subcriber/home', [homeController::class,'index'])->name('subcriber.home');
@@ -42,11 +44,14 @@ Route::get('admin/home', [AdminHomeController::class,'index'])->name('admin.home
 Route::get('admin/film', [filmController::class,'index'])->name('admin.film');
 Route::get('admin/input-film', [filmController::class,'create'])->name('admin.input-film');
 Route::post('admin/input-film', [filmController::class,'store'])->name('admin.input-film.store');
+Route::get('admin/edit-film/{id_film}', [filmController::class,'edit'])->name('admin.edit-film');
+Route::put('admin/edit-film/{id_film}', [filmController::class, 'update'])->name('admin.edit-film.update');
+Route::delete('admin/film/{id_film}', [filmController::class, 'destroy'])->name('admin.film.delete');
 Route::get('admin/genre', [GenreController::class,'index'])->name('admin.genre');
 Route::get('admin/input-genre', [GenreController::class,'create'])->name('admin.input-genre');
 Route::post('admin/input-genre', [GenreController::class,'store'])->name('admin.input-genre.store');
 Route::get('admin/edit-genre/{id_genre}', [GenreController::class,'edit'])->name('admin.edit-genre');
-Route::put('admin/edit-genre/{id_genre}', [GenreController::class, 'update'])->name('admin.edit-input.update');
+Route::put('admin/edit-genre/{id_genre}', [GenreController::class, 'update'])->name('admin.edit-genre.update');
 Route::delete('admin/genre/{id_genre}', [GenreController::class, 'destroy'])->name('admin.genre.delete');
 
 

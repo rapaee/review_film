@@ -9,6 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
     @extends('navbar-admin.navbar')
@@ -78,10 +80,21 @@
                         <td class="px-6 py-3">{{ $film->pencipta }}</td>
                         <td class="px-6 py-3">{{ $film->deskripsi }}</td>
                         <td class="px-6 py-3">{{ $film->tahun_rilis }}</td>
-                        <td class="px-6 py-3">{{ $film->durasi }}</td>
+                        <td class="px-6 py-3">
+                            @php
+                                $hours = floor($film->durasi / 60);
+                                $minutes = $film->durasi % 60;
+                            @endphp
+                            @if ($minutes == 0)
+                                {{ $hours }} jam
+                            @else
+                                {{ $hours }} jam {{ $minutes }} menit
+                            @endif
+                        </td>
+                        
                         <td class="px-6 py-3">{{ $film->rating }}</td>
                         <td class="px-6 py-3 flex justify-center">
-                            <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-auto">
+                            <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-16">
                         </td>
                         <td class="px-6 py-3">
                             <a href="{{ asset('storage/' . $film->trailer) }}" target="_blank">Lihat Trailer</a>
@@ -95,6 +108,18 @@
                         {{-- <td class="px-6 py-3">
                             <a href="{{ route('admin.film.edit', $film->id_film) }}" class="text-blue-500">Edit</a>
                         </td> --}}
+                        <td class="px-2 py-4 flex justify-end gap-3">
+                            <form action="{{ route('admin.film.delete', $film->id_film) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-white bg-red-600 hover:bg-red-700 p-2 h-8 rounded w-16">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                                <a href="{{ route('admin.edit-film', $film->id_film) }}" class="text-white bg-green-600 hover:bg-green-700 p-2 rounded h-8 w-16">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
