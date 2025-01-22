@@ -93,7 +93,7 @@
                         </td>
                         
                         <td class="px-6 py-3">{{ $film->rating }}</td>
-                        <td class="px-6 py-3 flex justify-center">
+                        <td class="px-6 py-3 flex items-center">
                             <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-16">
                         </td>
                         <td class="px-6 py-3">
@@ -108,16 +108,16 @@
                         {{-- <td class="px-6 py-3">
                             <a href="{{ route('admin.film.edit', $film->id_film) }}" class="text-blue-500">Edit</a>
                         </td> --}}
-                        <td class="px-2 py-4 flex justify-end gap-3">
+                        <td class="px-2 py-4 flex justify-end items-center gap-3">
                             <form action="{{ route('admin.film.delete', $film->id_film) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-white bg-red-600 hover:bg-red-700 p-2 h-8 rounded w-16">
-                                    <i class="fa-solid fa-trash"></i>
+                                <button type="submit" class="text-white bg-red-600 hover:bg-red-700 p-2 h-8 mt-3 rounded w-16">
+                                    Delete
                                 </button>
                             </form>
                                 <a href="{{ route('admin.edit-film', $film->id_film) }}" class="text-white bg-green-600 hover:bg-green-700 p-2 rounded h-8 w-16">
-                                    <i class="fa-solid fa-pencil"></i>
+                                    Edit
                                 </a>
                         </td>
                     </tr>
