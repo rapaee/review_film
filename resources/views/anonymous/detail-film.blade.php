@@ -48,6 +48,25 @@
             <h2 class="text-xl font-bold mb-4">Discussion (20)</h2>
 
             <form>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Rating</label>
+                    <div class="flex items-center">
+                        <input type="radio" id="star1" name="rating" value="1" class="hidden peer" required>
+                        <label for="star1" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-3xl mx-1">★</label>
+                        
+                        <input type="radio" id="star2" name="rating" value="2" class="hidden peer">
+                        <label for="star2" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-3xl mx-1">★</label>
+                        
+                        <input type="radio" id="star3" name="rating" value="3" class="hidden peer">
+                        <label for="star3" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-3xl mx-1">★</label>
+                        
+                        <input type="radio" id="star4" name="rating" value="4" class="hidden peer">
+                        <label for="star4" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-3xl mx-1">★</label>
+                        
+                        <input type="radio" id="star5" name="rating" value="5" class="hidden peer">
+                        <label for="star5" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-3xl mx-1">★</label>
+                    </div>
+                </div>
                 <div class="w-full mb-4 border border-gray-400 rounded-lg bg-gray-50 dark:bg-gray-200">
                     <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-200">
                         <label for="comment" class="sr-only">Your comment</label>
@@ -74,9 +93,44 @@
                                 <span class="sr-only">Upload image</span>
                             </button>
                         </div>
-                        <button type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                            Post comment
-                        </button>
+                        <a href="#" onclick="checkLogin(event)">
+                            <button type="button" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                                Post comment
+                            </button>
+                        </a>
+                        
+                        <!-- Popup notifikasi -->
+                        <div id="loginPopup" class="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                            <div class="bg-white p-4 rounded-lg shadow-lg">
+                                <p class="text-sm text-gray-700">Anda harus login dulu untuk memposting komentar.</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="closePopup()" class="px-4 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-800">
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <script>
+                            // Fungsi untuk memeriksa apakah pengguna login
+                            function checkLogin(event) {
+                                event.preventDefault(); // Mencegah tindakan default tombol
+                                const isLoggedIn = false; // Ganti ini dengan logika cek login Anda
+                        
+                                if (!isLoggedIn) {
+                                    document.getElementById('loginPopup').classList.remove('hidden'); // Tampilkan popup
+                                } else {
+                                    // Arahkan ke halaman tujuan jika sudah login
+                                    window.location.href = '/post-comment';
+                                }
+                            }
+                        
+                            // Fungsi untuk menutup popup
+                            function closePopup() {
+                                document.getElementById('loginPopup').classList.add('hidden'); // Sembunyikan popup
+                            }
+                        </script>
+                        
                     </div>
                 </div>
              </form>

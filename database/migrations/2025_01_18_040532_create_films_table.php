@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('deskripsi');
             $table->integer('tahun_rilis');
             $table->integer('durasi');
-            $table->integer('rating');
             $table->string('pencipta');
             $table->string('trailer');
             $table->timestamps();

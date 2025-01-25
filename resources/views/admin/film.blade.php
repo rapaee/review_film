@@ -30,11 +30,9 @@
            
         </div>
     </form>
-    <a href="{{ route('admin.input-film') }}">
-    <button type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-      Tambah
-    </button>
-    </a>
+    <button id="openModal" class="text-blue-700 hover:text-white border focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500">
+        Tambah
+      </button>
 </div>
 
 
@@ -57,9 +55,6 @@
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Durasi
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Rating
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Poster
@@ -92,22 +87,12 @@
                             @endif
                         </td>
                         
-                        <td class="px-6 py-3">{{ $film->rating }}</td>
                         <td class="px-6 py-3 flex items-center">
                             <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-16">
                         </td>
                         <td class="px-6 py-3">
                             <a href="{{ asset('storage/' . $film->trailer) }}" target="_blank">Lihat Trailer</a>
                         </td>
-                        {{-- <td class="px-6 py-3">
-                            <video width="320" height="240" controls>
-                                <source src="{{ asset('storage/' . $film->trailer) }}" type="video/mp4">
-                                Browser Anda tidak mendukung elemen video.
-                            </video>
-                        </td> --}}
-                        {{-- <td class="px-6 py-3">
-                            <a href="{{ route('admin.film.edit', $film->id_film) }}" class="text-blue-500">Edit</a>
-                        </td> --}}
                         <td class="px-2 py-4 flex justify-end items-center gap-3">
                             <form action="{{ route('admin.film.delete', $film->id_film) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                 @csrf
@@ -116,9 +101,12 @@
                                     Delete
                                 </button>
                             </form>
-                                <a href="{{ route('admin.edit-film', $film->id_film) }}" class="text-white bg-green-600 hover:bg-green-700 p-2 rounded h-8 w-16">
-                                    Edit
-                                </a>
+                            <button 
+                            class="text-white bg-green-600 hover:bg-green-700 py-1 rounded px-4" 
+                            onclick="showEditFilmPopup('{{ route('admin.edit-film.update', $film->id_film) }}', '{{ $film->judul }}', '{{ $film->pencipta }}', '{{ $film->deskripsi }}', '{{ $film->tahun_rilis }}', '{{ $film->durasi }}', '{{ $film->poster }}', '{{ $film->trailer }}')">
+                            Edit
+                        </button>
+                        
                         </td>
                     </tr>
                 @endforeach
@@ -129,6 +117,109 @@
     
 </div>
 <script>
+function showEditFilmPopup(updateUrl, judul, pencipta, deskripsi, tahun_rilis, durasi, poster, trailer) {
+    Swal.fire({
+        title: 'Edit Film',
+        html: `
+            <form id="editFilmForm" action="${updateUrl}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="mb-3 text-left">
+                    <label for="judul" class="block mb-2 text-sm font-medium text-gray-900">Judul</label>
+                    <input type="text" name="judul" id="judul" value="${judul}" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                </div>
+                <div class="mb-3 text-left">
+                    <label for="pencipta" class="block mb-2 text-sm font-medium text-gray-900">Pencipta</label>
+                    <input type="text" name="pencipta" id="pencipta" value="${pencipta}" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                </div>
+                <div class="mb-3 text-left">
+                    <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
+                    <textarea name="deskripsi" id="deskripsi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>${deskripsi}</textarea>
+                </div>
+                <div class="mb-3 text-left">
+                    <label for="tahun_rilis" class="block mb-2 text-sm font-medium text-gray-900">Tahun Rilis</label>
+                    <input type="number" name="tahun_rilis" id="tahun_rilis" value="${tahun_rilis}" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                </div>
+                <div class="mb-3 text-left">
+                    <label for="durasi" class="block mb-2 text-sm font-medium text-gray-900">Durasi</label>
+                    <input type="text" name="durasi" id="durasi" value="${durasi}" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                </div>
+                <div class="mb-3 text-left">
+                    <label for="poster" class="block mb-2 text-sm font-medium text-gray-900">Poster</label>
+                    <input type="file" name="poster" id="poster" accept="image/*" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                </div>
+                <div class="mb-3 text-left">
+                    <label for="trailer" class="block mb-2 text-sm font-medium text-gray-900">Trailer</label>
+                    <input type="file" name="trailer" id="trailer" accept="video/*" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                </div>
+            </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Batal',
+        cancelButtonColor: '#ff0000',  // Merah untuk tombol Batal
+        confirmButtonColor: '#008000', // Hijau untuk tombol Submit
+        preConfirm: () => {
+            document.getElementById('editFilmForm').submit();
+        }
+    });
+}
+
+
+
+document.getElementById('openModal').addEventListener('click', function () {
+    Swal.fire({
+                title: 'Tambah Film',
+                html: `
+                    <form id="addFilmForm" action="{{ route('admin.input-film.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3 text-left">
+                            <label for="judul" class="block mb-2 text-sm font-medium text-gray-900">Judul</label>
+                            <input type="text" name="judul" id="judul" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        </div>
+                        <div class="mb-3 text-left">
+                            <label for="pencipta" class="block mb-2 text-sm font-medium text-gray-900">Pencipta</label>
+                            <input type="text" name="pencipta" id="pencipta" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        </div>
+                        <div class="mb-3 text-left">
+                            <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
+                            <textarea name="deskripsi" id="deskripsi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required></textarea>
+                        </div>
+                        <div class="mb-3 text-left">
+                            <label for="tahun_rilis" class="block mb-2 text-sm font-medium text-gray-900">Tahun Rilis</label>
+                            <input type="number" name="tahun_rilis" id="tahun_rilis" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        </div>
+                        <div class="mb-3 text-left">
+                            <label for="durasi" class="block mb-2 text-sm font-medium text-gray-900">Durasi</label>
+                            <input type="text" name="durasi" id="durasi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        </div>
+                        <div class="mb-3 text-left">
+                            <label for="poster" class="block mb-2 text-sm font-medium text-gray-900">Poster</label>
+                            <input type="file" name="poster" id="poster" accept="image/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        </div>
+                        <div class="mb-3 text-left">
+                            <label for="trailer" class="block mb-2 text-sm font-medium text-gray-900">Trailer</label>
+                            <input type="file" name="trailer" id="trailer" accept="video/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        </div>
+                    </form>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                cancelButtonText: 'Batal',
+                cancelButtonColor: '#ff0000',  // Merah untuk tombol Batal
+                confirmButtonColor: '#008000', // Hijau untuk tombol Submit
+                preConfirm: () => {
+                    document.getElementById('addFilmForm').submit();
+                }
+            });
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('default-search');
         const tableRows = document.querySelectorAll('tbody tr');

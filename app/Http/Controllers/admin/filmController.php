@@ -40,7 +40,6 @@ class filmController extends Controller
             'deskripsi' => 'required|string',
             'tahun_rilis' => 'required|integer|min:1900|max:' . date('Y'),
             'durasi' => 'required|integer|min:1', // Validasi sebagai integer dengan minimal 1 menit
-            'rating' => 'required|numeric|min:0|max:10',
             'poster' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'trailer' => 'required|mimes:mp4,mov,avi,wmv',
         ]);
@@ -64,7 +63,6 @@ class filmController extends Controller
         $film->deskripsi = $request->deskripsi;
         $film->tahun_rilis = $request->tahun_rilis;
         $film->durasi = $durasiMenit; // Simpan durasi dalam menit sebagai integer
-        $film->rating = $request->rating;
         $film->poster = $posterPath;
         $film->trailer = $trailerPath;
         $film->save();
@@ -96,7 +94,6 @@ class filmController extends Controller
         'deskripsi' => 'required|string',
         'tahun_rilis' => 'required|integer|min:1900|max:' . date('Y'),
         'durasi' => 'required|string|max:50',
-        'rating' => 'required|numeric|min:0|max:10',
         'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         'trailer' => 'nullable|mimes:mp4,mov,avi,wmv',
     ]);
@@ -110,7 +107,6 @@ class filmController extends Controller
     $film->deskripsi = $validated['deskripsi'];
     $film->tahun_rilis = $validated['tahun_rilis'];
     $film->durasi = $validated['durasi'];
-    $film->rating = $validated['rating'];
 
     // Periksa jika file poster diunggah
     if ($request->hasFile('poster')) {
