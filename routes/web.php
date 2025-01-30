@@ -9,6 +9,7 @@ use App\Http\Controllers\anonymous\homeAnonymous;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\author\homeController as AuthorHomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\subcriber\detailFilmController as SubcriberDetailFilmController;
 use App\Http\Controllers\subcriber\filmController as SubcriberFilmController;
 use App\Http\Controllers\subcriber\homeController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,7 @@ Route::get('anonymous/detail-film{id}', [detailfilmController::class,'index'])->
 //subcriber
 Route::get('subcriber/home', [homeController::class,'index'])->name('subcriber.home');
 Route::get('subcriber/film', [SubcriberFilmController::class,'index'])->name('subcriber.film');
+Route::get('subcriber/detail-film{id}', [SubcriberDetailFilmController::class,'index'])->name('anonymous.detail-film');
 
 //author
 Route::get('author/home', [AuthorHomeController::class,'index'])->name('author.home');
@@ -54,7 +56,7 @@ Route::delete('admin/genre/{id_genre}', [GenreController::class, 'destroy'])->na
 
 Route::get('admin/genre-relasi', [GenreRelationController::class,'index'])->name('admin.genre-relasi');
 Route::post('admin/genre-relasi', [GenreRelationController::class,'store'])->name('admin.genre-relasi.store');
-Route::put('admin/genre-relasi/{id}', [GenreController::class, 'update'])->name('admin.genre-relasi.update');
+Route::put('admin/genre-relasi/{id}', [GenreRelationController::class, 'update'])->name('admin.genre-relasi.update');
 Route::delete('admin/genre-relasi/{id}', [GenreRelationController::class, 'destroy'])->name('admin.genre-relasi.delete');
 
 

@@ -4,25 +4,17 @@ namespace App\Http\Controllers\subcriber;
 
 use App\Http\Controllers\Controller;
 use App\Models\Film;
-use App\Models\Genre_relation;
 use Illuminate\Http\Request;
 
-class homeController extends Controller
+class detailFilmController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-       // Ambil data Genre_relation berdasarkan genre tertentu
-       $gl = Genre_relation::whereHas('genre', function ($query) {
-        $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
-    })->get();
-    
-    $datafilm = Film::all();
-    $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
-
-    return view('subcriber/home', compact('datafilm', 'gl','terbaru'));
+        $datafilm = Film::findOrFail($id);
+        return view('subcriber/detail-film', compact('datafilm'));
     }
 
     /**

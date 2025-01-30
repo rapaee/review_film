@@ -30,7 +30,7 @@
            
         </div>
     </form>
-    <button id="openModal" class="text-blue-700 hover:text-white border focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500">
+    <button id="openModal" class="text-blue-700 hover:text-white border focus:ring-blue-300 font-medium rounded-lg text-sm w-24 h-12 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500">
         Tambah
       </button>
 </div>
@@ -98,13 +98,13 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-white bg-red-600 hover:bg-red-700 p-2 h-8 mt-3 rounded w-16">
-                                    Delete
+                                    <p class="-mt-0.5">Delete</p>
                                 </button>
                             </form>
                             <button 
-                            class="text-white bg-green-600 hover:bg-green-700 py-1 rounded px-4" 
+                            class="text-white bg-green-600 hover:bg-green-700 rounded p-2 w-16 h-8" 
                             onclick="showEditFilmPopup('{{ route('admin.edit-film.update', $film->id_film) }}', '{{ $film->judul }}', '{{ $film->pencipta }}', '{{ $film->deskripsi }}', '{{ $film->tahun_rilis }}', '{{ $film->durasi }}', '{{ $film->poster }}', '{{ $film->trailer }}')">
-                            Edit
+                            <p class="-mt-0.5">Edit</p>
                         </button>
                         
                         </td>

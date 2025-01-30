@@ -4,6 +4,7 @@ namespace App\Http\Controllers\anonymous;
 
 use App\Http\Controllers\Controller;
 use App\Models\Film;
+use App\Models\Genre_relation;
 use Illuminate\Http\Request;
 
 class homeAnonymous extends Controller
@@ -13,9 +14,17 @@ class homeAnonymous extends Controller
      */
     public function index()
     {
+        // Ambil data Genre_relation berdasarkan genre tertentu
+        $gl = Genre_relation::whereHas('genre', function ($query) {
+            $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
+        })->get();
+        
         $datafilm = Film::all();
-        return view('anonymous/home',compact('datafilm'));
+        $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
+    
+        return view('anonymous/home', compact('datafilm', 'gl','terbaru'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
