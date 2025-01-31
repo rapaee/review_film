@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\GenreController;
 use App\Http\Controllers\admin\GenreRelationController;
 use App\Http\Controllers\admin\homeController as AdminHomeController;
 use App\Http\Controllers\anonymous\detailfilmController;
+use App\Http\Controllers\anonymous\FilmFilterTerbaruController;
 use App\Http\Controllers\anonymous\homeAnonymous;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\author\homeController as AuthorHomeController;
@@ -33,11 +34,16 @@ require __DIR__.'/auth.php';
 //anonymous
 Route::get('anonymous/home', [homeAnonymous::class,'index'])->name('anonymous.home');
 Route::get('anonymous/detail-film{id}', [detailfilmController::class,'index'])->name('anonymous.detail-film');
+Route::get('anonymous/filter-terbaru', [FilmFilterTerbaruController::class,'index'])->name('anonymous.filter-terbaru');
 
 //subcriber
 Route::get('subcriber/home', [homeController::class,'index'])->name('subcriber.home');
 Route::get('subcriber/film', [SubcriberFilmController::class,'index'])->name('subcriber.film');
-Route::get('subcriber/detail-film{id}', [SubcriberDetailFilmController::class,'index'])->name('anonymous.detail-film');
+Route::get('subcriber/detail-film{id}', [SubcriberDetailFilmController::class,'index'])->name('subcriber.detail-film');
+Route::post('subcriber/detail-film', [SubcriberDetailFilmController::class, 'store'])->middleware('auth')->name('subcriber.coment');
+
+
+
 
 //author
 Route::get('author/home', [AuthorHomeController::class,'index'])->name('author.home');

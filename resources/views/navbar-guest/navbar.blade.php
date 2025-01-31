@@ -1,7 +1,7 @@
 <nav class="bg-white border-gray-200 dark:bg-[#17153B] w-full fixed z-50">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <!-- Logo and Text -->
-        <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <a href="{{ route('anonymous.home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="https://cdn-icons-png.flaticon.com/128/1146/1146203.png" 
                  alt="" 
                  class="w-8 h-8 filter invert md:block"> <!-- Hidden on small screens -->

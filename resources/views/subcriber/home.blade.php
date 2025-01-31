@@ -24,8 +24,8 @@
         
         <!-- Container untuk film -->
         <div class="film-container pr-[500px] md:pr-0 flex space-x-4 mt-8 overflow-x-hidden scrollbar-thin absolute ml-[500px] md:ml-0 scrollbar-thumb-gray-500 scrollbar-track-gray-300 max-w-4xl">
-            @foreach($datafilm->take(10) as $film)
-            <a href="{{ route('anonymous.detail-film', ['id' => $film->id_film]) }}">
+            @foreach($datafilm as $film)
+            <a href="{{ route('subcriber.detail-film', ['id' => $film->id_film]) }}">
                 <div class="relative flex-shrink-0 min-w-[144px]">
                     <img src="{{ asset('storage/' . $film->poster) }}" alt="{{ $film->judul }}" class="w-36 md:w-36 h-56">
                     <p class="absolute bottom-0 left-0 w-full text-center bg-black bg-opacity-50 text-white p-1">
@@ -49,7 +49,7 @@
     
             <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
                 @foreach ($terbaru as $poster)
-                <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}" class="w-full md:w-[110px] group">
+                <a href="{{ route('subcriber.detail-film', ['id' => $poster->id_film]) }}" class="w-full md:w-[110px] group">
                     <div class="relative flex-shrink-0">
                         <!-- Gambar Poster -->
                         <img src="{{ asset('storage/' . $poster->poster) }}" alt="{{ $poster->judul }}" 
@@ -88,7 +88,7 @@
     
             <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
                 @foreach ($gl as $poster)
-                <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}" class="w-full md:w-36 group">
+                <a href="{{ route('subcriber.detail-film', ['id' => $poster->film->id_film]) }}" class="w-full md:w-36 group">
                     <div class="relative flex-shrink-0">
                         <!-- Gambar Poster -->
                         <img src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" 
