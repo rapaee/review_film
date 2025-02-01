@@ -41,7 +41,7 @@
 
     <div class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-5">
         <div class="p-3 w-full">
-            <!-- Header -->
+            <!-- Header  film terbaru-->
             <div class="flex justify-between items-center mb-2">
                 <h1 class="text-xl font-bold">TERBARU</h1>
                 <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">SEMUA</button>
@@ -78,7 +78,8 @@
 
 
   
-    <div class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-8">
+   
+    <div class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-8 mb-10">
         <div class="p-3 w-full">
             <!-- Header -->
             <div class="flex justify-between items-center mb-4">
@@ -87,33 +88,33 @@
             </div>
     
             <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
-                @foreach ($gl as $poster)
-                <a href="{{ route('subcriber.detail-film', ['id' => $poster->film->id_film]) }}" class="w-full md:w-36 group">
+                @foreach ($comments as $poster)
+                <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}" class="w-full md:w-[110px] group">
                     <div class="relative flex-shrink-0">
                         <!-- Gambar Poster -->
                         <img src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" 
-                             class="w-full md:w-[150px] h-32 md:h-[200px] group-hover:opacity-75 transition-transform-300">
+                             class="w-full md:w-[130px] h-32 md:h-[170px] group-hover:opacity-75 transition-transform-300">
                         
-                        <!-- Judul dan Tahun Rilis (Mobile Text) -->
-                        <p class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md hidden group-hover:block md:hidden">
+                        <!-- Judul dan Tahun Rilis -->
+                        <p class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md">
                             {{ $poster->film->judul }} <br> ({{ $poster->film->tahun_rilis }})
                         </p> 
-                        
-                        <!-- Judul dan Tahun Rilis (Desktop Text) -->
-                        <p class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md md:block hidden">
-                            {{ $poster->film->judul }} <br> ({{ $poster->film->tahun_rilis }})
-                        </p>
-    
+            
                         <!-- Overlay Efek Hover -->
                         <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 ease-in-out"></div>
                     </div> 
                 </a>
-                @endforeach
+            @endforeach
+            
             </div>
 
         </div>
     </div>
     
+    
+
+     
+
     
 
     

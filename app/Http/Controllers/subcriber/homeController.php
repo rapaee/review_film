@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\subcriber;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Film;
 use App\Models\Genre_relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class homeController extends Controller
 {
@@ -14,16 +16,23 @@ class homeController extends Controller
      */
     public function index()
     {
-       // Ambil data Genre_relation berdasarkan genre tertentu
-       $gl = Genre_relation::whereHas('genre', function ($query) {
-        $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
-    })->get();
+        // Ambil data Genre_relation berdasarkan genre tertentu
+        $gl = Genre_relation::whereHas('genre', function ($query) {
+            $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
+        })->get();
+        
+        $datafilm = Film::all();
+        $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
+        $comments = Comment::with('film')
+        ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
+        ->groupBy('id_film')
+        ->get();
     
-    $datafilm = Film::all();
-    $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
 
-    return view('subcriber/home', compact('datafilm', 'gl','terbaru'));
+    
+        return view('subcriber/home', compact('datafilm', 'gl','terbaru','comments'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
