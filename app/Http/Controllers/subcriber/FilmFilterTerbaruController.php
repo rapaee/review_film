@@ -1,38 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\anonymous;
+namespace App\Http\Controllers\subcriber;
 
 use App\Http\Controllers\Controller;
-use App\Models\Comment;
-use App\Models\Film;
 use App\Models\Genre_relation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class homeAnonymous extends Controller
+class FilmFilterTerbaruController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // Ambil data Genre_relation berdasarkan genre tertentu
-        $gl = Genre_relation::whereHas('genre', function ($query) {
-            $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
-        })->get();
-        
-        $datafilm = Film::all();
-        $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
-        $comments = Comment::with('film')
-        ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
-        ->groupBy('id_film')
+        $terbaru = Genre_relation::join('film', 'genre_relations.id_film', '=', 'film.id_film')
+        ->orderByDesc('film.tahun_rilis')
+        ->select('genre_relations.*') // Memilih semua data dari genre_relations
         ->get();
-    
-        
-    
-        return view('anonymous/home', compact('datafilm', 'gl','terbaru','comments'));
+        return view('subcriber.filter-terbaru',compact('terbaru'));
     }
-    
 
     /**
      * Show the form for creating a new resource.

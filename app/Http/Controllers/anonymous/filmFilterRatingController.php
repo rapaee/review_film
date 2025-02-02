@@ -4,35 +4,31 @@ namespace App\Http\Controllers\anonymous;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
-use App\Models\Film;
 use App\Models\Genre_relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class homeAnonymous extends Controller
+class filmFilterRatingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // Ambil data Genre_relation berdasarkan genre tertentu
-        $gl = Genre_relation::whereHas('genre', function ($query) {
-            $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
-        })->get();
-        
-        $datafilm = Film::all();
-        $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
         $comments = Comment::with('film')
         ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
         ->groupBy('id_film')
         ->get();
     
+        // Ambil ID film dari hasil query komentar
+        $idFilms = $comments->pluck('id_film');
         
-    
-        return view('anonymous/home', compact('datafilm', 'gl','terbaru','comments'));
+        // Ambil data film berdasarkan ID yang ada di komentar
+        $films = Genre_relation::whereIn('id_film', $idFilms)->get();
+
+        
+        return view('anonymous/filter-rating', compact('comments','films'));
     }
-    
 
     /**
      * Show the form for creating a new resource.

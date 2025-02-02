@@ -87,7 +87,9 @@
                 <!-- Header -->
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-xl font-bold">Paling Populer</h1>
-                    <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">SEMUA</button>
+                    <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">
+                        <a href="{{ route('anonymous.filter-rating') }}">SEMUA</a>
+                    </button>
                 </div>
         
                 <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">

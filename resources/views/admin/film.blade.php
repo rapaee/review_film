@@ -16,7 +16,7 @@
     @extends('navbar-admin.navbar')
     @section('navbar-admin')
        
-    
+    <h1 class="flex justify-center font-bold mb-4 mt-2 text-2xl">TABLE FILM</h1>
 <div class="flex justify-between mb-3">
     <form class="flex-grow me-4 ml-2 ">   
         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -70,7 +70,7 @@
         <tbody>
             <tbody>
                 @foreach ($films as $film)
-                    <tr>
+                    <tr class="border-b dark:border-gray-400">
                         <td class="px-6 py-3">{{ $film->judul }}</td>
                         <td class="px-6 py-3">{{ $film->pencipta }}</td>
                         <td class="px-6 py-3">{{ $film->deskripsi }}</td>

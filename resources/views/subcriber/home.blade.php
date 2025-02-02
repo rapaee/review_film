@@ -44,7 +44,9 @@
             <!-- Header  film terbaru-->
             <div class="flex justify-between items-center mb-2">
                 <h1 class="text-xl font-bold">TERBARU</h1>
-                <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">SEMUA</button>
+                <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">
+                    <a href="{{ route('subcriber.filter-terbaru') }}">SEMUA</a>
+                </button>
             </div>
     
             <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
@@ -84,12 +86,14 @@
             <!-- Header -->
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-xl font-bold">Paling Populer</h1>
-                <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">SEMUA</button>
+                <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">
+                    <a href="{{ route('subcriber.filter-rating') }}">SEMUA</a>
+                </button>
             </div>
     
             <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
                 @foreach ($comments as $poster)
-                <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}" class="w-full md:w-[110px] group">
+                <a href="{{ route('subcriber.detail-film', ['id' => $poster->film->id_film]) }}" class="w-full md:w-[110px] group">
                     <div class="relative flex-shrink-0">
                         <!-- Gambar Poster -->
                         <img src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" 
