@@ -16,7 +16,9 @@ class detailfilmController extends Controller
     public function index($id)
     {
         $user = User::all();
-        $comment = Comment::where('id_film', $id)->get();
+        $comment = Comment::where('id_film', $id)
+        ->orderByDesc('created_at')
+        ->get();
         $datafilm = Film::findOrFail($id);
     
         // Ensure $comment is an array or collection

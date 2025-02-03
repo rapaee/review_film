@@ -17,7 +17,10 @@ class detailFilmController extends Controller
     public function index($id)
     {
         $user = User::all();
-        $comment = Comment::where('id_film', $id)->get();
+        $comment = Comment::where('id_film', $id)
+        ->orderByDesc('created_at')
+        ->get();
+    
         $datafilm = Film::findOrFail($id);
     
         // Ensure $comment is an array or collection
@@ -83,8 +86,17 @@ class detailFilmController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id_comments)
     {
-        //
+        $comment = Comment::findOrFail($id_comments);
+
+        // Pastikan hanya pemilik komentar yang bisa menghapus
+        if ($comment->id_user !== Auth::id()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk menghapus komentar ini.');
+        }
+
+        $comment->delete();
+
+        return redirect()->back()->with('success', 'Komentar berhasil dihapus.');
     }
 }

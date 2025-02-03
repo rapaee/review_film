@@ -48,6 +48,7 @@ Route::get('subcriber/detail-film{id}', [SubcriberDetailFilmController::class,'i
 Route::post('subcriber/detail-film', [SubcriberDetailFilmController::class, 'store'])->middleware('auth')->name('subcriber.coment');
 Route::get('subcriber/filter-terbaru', [SubcriberFilmFilterTerbaruController::class,'index'])->name('subcriber.filter-terbaru');
 Route::get('subcriber/filter-rating', [SubcriberFilmFilterRatingController::class,'index'])->name('subcriber.filter-rating');
+Route::delete('subcriber/detail-film/{id}', [SubcriberDetailFilmController::class, 'destroy'])->name('subcriber.comment.detail-film');
 
 
 

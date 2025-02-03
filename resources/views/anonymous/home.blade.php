@@ -94,7 +94,7 @@
         
                 <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
                     @foreach ($comments as $poster)
-                    <a href="{{ route('subcriber.detail-film', ['id' => $poster->film->id_film]) }}" class="w-full md:w-[110px] group">
+                    <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}" class="w-full md:w-[110px] group">
                         <div class="relative flex-shrink-0">
                             <!-- Gambar Poster -->
                             <img src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" 

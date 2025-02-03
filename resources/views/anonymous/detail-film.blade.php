@@ -45,26 +45,21 @@
 
     <div class="w-full mx-auto mt-10">
         <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-bold mb-4">Discussion (20)</h2>
+            <h2 class="text-xl font-bold mb-4">Komentar</h2>
 
             <form>
                 <div class="mb-4 flex justify-center items-center">
 
                     <div class="flex items-center">
-                        <input type="radio" id="star1" name="rating" value="1" class="hidden peer" required>
-                        <label for="star1" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-7xl mx-1">★</label>
-                        
-                        <input type="radio" id="star2" name="rating" value="2" class="hidden peer">
-                        <label for="star2" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-7xl mx-1">★</label>
-                        
-                        <input type="radio" id="star3" name="rating" value="3" class="hidden peer">
-                        <label for="star3" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-7xl mx-1">★</label>
-                        
-                        <input type="radio" id="star4" name="rating" value="4" class="hidden peer">
-                        <label for="star4" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-7xl mx-1">★</label>
-                        
-                        <input type="radio" id="star5" name="rating" value="5" class="hidden peer">
-                        <label for="star5" class="cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-7xl mx-1">★</label>
+                                <label for="rating"/>
+                                <div id="rating-stars" class="flex space-x-2 mt-2">
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="1">★</span>
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="2">★</span>
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="3">★</span>
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="4">★</span>
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="5">★</span>
+                                </div>
+                                <input type="hidden" name="rating" id="rating">
                     </div>
                 </div>
                 <div class="w-full mb-4 border border-gray-400 rounded-lg bg-gray-50 dark:bg-gray-200">
@@ -90,8 +85,37 @@
                                 </div>
                             </div>
                         </div>
+
+                        
                         
                         <script>
+                             document.addEventListener("DOMContentLoaded", function () {
+                                    let stars = document.querySelectorAll(".star");
+                                    let ratingInput = document.getElementById("rating");
+
+                                    if (stars.length > 0) { // Pastikan elemen ada sebelum diproses
+                                        stars.forEach(star => {
+                                            star.addEventListener("click", function () {
+                                                let rating = this.getAttribute("data-value");
+                                                ratingInput.value = rating;
+
+                                                stars.forEach(s => {
+                                                    s.classList.toggle("text-yellow-400", s.getAttribute("data-value") <= rating);
+                                                    s.classList.toggle("text-gray-400", s.getAttribute("data-value") > rating);
+                                                });
+                                            });
+                                        });
+
+                                        let savedRating = ratingInput.value;
+                                        if (savedRating > 0) {
+                                            stars.forEach(s => {
+                                                s.classList.toggle("text-yellow-400", s.getAttribute("data-value") <= savedRating);
+                                                s.classList.toggle("text-gray-400", s.getAttribute("data-value") > savedRating);
+                                            });
+                                        }
+                                    }
+                                });
+
                             // Fungsi untuk memeriksa apakah pengguna login
                             function checkLogin(event) {
                                 event.preventDefault(); // Mencegah tindakan default tombol
@@ -121,7 +145,8 @@
                 <div class="bg-gray-300 p-4 rounded-lg">
                     <div class="flex justify-between">
                         <p class="font-bold">{{ $c->user->name }}</p>
-                        <p class="font-bold">{{ \Carbon\Carbon::parse($c->created_at)->format('Y-m-d') }}</p>
+                        <p class="font-bold">{{ \Carbon\Carbon::parse($c->created_at)->format('Y-m-d h:i A') }}</p>
+
                     </div>
             
                     <p>{{ $c->comment }}</p>
@@ -130,7 +155,7 @@
                         <span class="cursor-pointer hover:text-blue-400">Reply</span>
                     </div>
                 </div>
-                @endforeach         
+            @endforeach 
             </div>
         </div>
     </div>

@@ -52,10 +52,19 @@
                 <div class="flex justify-center items-center">
                     <div class="mb-4">
                         <div class="flex items-center">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" class="hidden peer" required>
-                                <label for="star{{ $i }}" class=" cursor-pointer text-gray-400 peer-checked:text-yellow-500 text-7xl mx-1">★</label>
-                            @endfor
+                            <div class="mt-4">
+                              
+                                <label for="rating" :value="('Rating')" />
+                                <div id="rating-stars" class="flex space-x-2 mt-2">
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="1">★</span>
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="2">★</span>
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="3">★</span>
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="4">★</span>
+                                    <span class="star text-7xl cursor-pointer text-gray-400" data-value="5">★</span>
+                                </div>
+                                <input type="hidden" name="rating" id="rating" value="{{ old('rating') }}" required>
+                    
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,16 +92,27 @@
                 <div class="bg-gray-300 p-4 rounded-lg">
                     <div class="flex justify-between">
                         <p class="font-bold">{{ $c->user->name }}</p>
-                        <p class="font-bold">{{ \Carbon\Carbon::parse($c->created_at)->format('Y-m-d') }}</p>
+                        <p class="font-bold">{{ \Carbon\Carbon::parse($c->created_at)->format('Y-m-d h:i A') }}</p>
                     </div>
             
                     <p>{{ $c->comment }}</p>
                     <div class="flex items-center text-sm text-gray-400 mt-2">
-                        {{-- <span class="mr-2">{{ $c->rating }} <span class="text-yellow-400">★</span></span> --}}
                         <span class="cursor-pointer hover:text-blue-400">Reply</span>
+            
+                        @if ($c->id_user == auth()->id()) 
+                            <form action="{{ route('subcriber.comment.detail-film', $c->id_comments) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="cursor-pointer text-red-500 hover:text-red-700 ml-2">
+                                    Hapus
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             @endforeach
+            
+            
             
 
             </div>
@@ -103,5 +123,33 @@
  
     
     @endsection
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let stars = document.querySelectorAll(".star");
+            let ratingInput = document.getElementById("rating");
+
+            if (stars.length > 0) { // Pastikan elemen ada sebelum diproses
+                stars.forEach(star => {
+                    star.addEventListener("click", function () {
+                        let rating = this.getAttribute("data-value");
+                        ratingInput.value = rating;
+
+                        stars.forEach(s => {
+                            s.classList.toggle("text-yellow-400", s.getAttribute("data-value") <= rating);
+                            s.classList.toggle("text-gray-400", s.getAttribute("data-value") > rating);
+                        });
+                    });
+                });
+
+                let savedRating = ratingInput.value;
+                if (savedRating > 0) {
+                    stars.forEach(s => {
+                        s.classList.toggle("text-yellow-400", s.getAttribute("data-value") <= savedRating);
+                        s.classList.toggle("text-gray-400", s.getAttribute("data-value") > savedRating);
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>
