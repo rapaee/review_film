@@ -5,6 +5,7 @@ namespace App\Http\Controllers\anonymous;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Film;
+use App\Models\Genre;
 use App\Models\Genre_relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,13 +17,16 @@ class homeAnonymous extends Controller
      */
     public function index()
     {
-        // Ambil data Genre_relation berdasarkan genre tertentu
-        $gl = Genre_relation::whereHas('genre', function ($query) {
-            $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
-        })->get();
+        // // Ambil data Genre_relation berdasarkan genre tertentu
+        // $gl = Genre_relation::whereHas('genre', function ($query) {
+        //     $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
+        // })->get();
+
+        $genre = Genre::all();
         
-        $datafilm = Film::all();
+        $datafilm = Film::orderByDesc('tahun_rilis')->get();
         $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
+
         $comments = Comment::with('film')
         ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
         ->groupBy('id_film')
@@ -30,17 +34,14 @@ class homeAnonymous extends Controller
     
         
     
-        return view('anonymous/home', compact('datafilm', 'gl','terbaru','comments'));
+        return view('anonymous/home', compact('datafilm','terbaru','comments', 'genre'));
     }
     
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+  
 
     /**
      * Store a newly created resource in storage.

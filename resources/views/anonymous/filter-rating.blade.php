@@ -10,7 +10,7 @@
     @extends('navbar-guest.navbar')
     @section('navbar-guest')
     <div class=" w-full md:w-10/12 flex justify-center items-center mx-auto">
-        <div class="p-5 w-full mt-20">
+        <div class="p-5 w-full mt-32">
             <!-- Header -->
             <div class="bg-white w-full md:w-[1205px] ml-0 md:ml-2.5 p-2 flex justify-center md:justify-normal mb-4">
                 <h1 class="text-xl font-bold mb-4">Daftar Film Populer Review Film</h1>

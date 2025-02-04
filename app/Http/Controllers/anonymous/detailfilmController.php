@@ -5,6 +5,7 @@ namespace App\Http\Controllers\anonymous;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Film;
+use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -20,9 +21,10 @@ class detailfilmController extends Controller
         ->orderByDesc('created_at')
         ->get();
         $datafilm = Film::findOrFail($id);
+        $genre = Genre::all();
     
         // Ensure $comment is an array or collection
-        return view('anonymous/detail-film', compact('datafilm', 'comment', 'user'));
+        return view('anonymous/detail-film', compact('datafilm', 'comment', 'user','genre'));
     }
     
 

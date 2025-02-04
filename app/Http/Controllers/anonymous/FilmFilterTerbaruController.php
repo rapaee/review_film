@@ -4,6 +4,7 @@ namespace App\Http\Controllers\anonymous;
 
 use App\Http\Controllers\Controller;
 use App\Models\Film;
+use App\Models\Genre;
 use App\Models\Genre_relation;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,8 @@ class FilmFilterTerbaruController extends Controller
         ->orderByDesc('film.tahun_rilis')
         ->select('genre_relations.*') // Memilih semua data dari genre_relations
         ->get();
-        return view('anonymous.filter-terbaru',compact('terbaru'));
+        $genre = Genre::all();
+        return view('anonymous.filter-terbaru',compact('terbaru','genre'));
     }
 
     /**

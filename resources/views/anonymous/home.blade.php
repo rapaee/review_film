@@ -7,15 +7,17 @@
     <title>Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </head>
 
 
 <body class="bg-gray-100">
     @extends('navbar-guest.navbar')
     @section('navbar-guest')
-        <div class=" flex flex-col justify-center items-center bg-black p-5">
+        <div data-aos="fade-bottom" class=" flex flex-col justify-center items-center bg-black p-5 ">
             <!-- Tombol navigasi -->
-            <div class="flex justify-between w-full max-w-4xl mt-80">
+            <div class="flex justify-between w-full max-w-4xl mt-[400px]">
                 <button id="prevBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
@@ -25,7 +27,7 @@
             </div>
             
             <!-- Container untuk film -->
-            <div class="film-container pr-[500px] md:pr-0 flex space-x-4 mt-8 overflow-x-hidden scrollbar-thin absolute ml-[500px] md:ml-0 scrollbar-thumb-gray-500 scrollbar-track-gray-300 max-w-4xl">
+            <div class="film-container pr-[500px] md:pr-0 flex space-x-4 mt-20 overflow-x-hidden scrollbar-thin absolute ml-[500px] md:ml-0 scrollbar-thumb-gray-500 scrollbar-track-gray-300 max-w-4xl">
                 @foreach($datafilm as $film)
                 <a href="{{ route('anonymous.detail-film', ['id' => $film->id_film]) }}">
                     <div class="relative flex-shrink-0 min-w-[144px]">
@@ -41,7 +43,7 @@
         </div>
 
 
-        <div class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-5">
+        <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-5">
             <div class="p-3 w-full">
                 <!-- Header film terbaru -->
                 <div class="flex justify-between items-center mb-2">
@@ -51,7 +53,7 @@
                     </button>
                 </div>
         
-                <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
+                <div  class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
                     @foreach ($terbaru as $poster)
                     <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}" class="w-full md:w-[110px] group">
                         <div class="relative flex-shrink-0">
@@ -82,7 +84,7 @@
 
 
       
-        <div class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-8 mb-10">
+        <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-8 mb-10">
             <div class="p-3 w-full">
                 <!-- Header -->
                 <div class="flex justify-between items-center mb-4">
@@ -115,12 +117,40 @@
 
             </div>
         </div>
+
+        <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-8 mb-10">
+            <div  data-aos-anchor-placement="bottom-bottom" class="p-3 w-full">
+                <!-- Header -->
+        
+                <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
+                    @foreach ($datafilm as $poster)
+                    <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}" class="w-full md:w-[110px] group">
+                        <div class="relative flex-shrink-0">
+                            <!-- Gambar Poster -->
+                            <img src="{{ asset('storage/' . $poster->poster) }}" alt="{{ $poster->judul }}" 
+                                 class="w-full md:w-[130px] h-32 md:h-[170px] group-hover:opacity-75 transition-transform-300">
+                            
+                            <!-- Judul dan Tahun Rilis -->
+                            <p class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md">
+                                {{ $poster->judul }} <br> ({{ $poster->tahun_rilis }})
+                            </p> 
+                
+                            <!-- Overlay Efek Hover -->
+                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 ease-in-out"></div>
+                        </div> 
+                    </a>
+                @endforeach
+                
+                </div>
+
+            </div>
+        </div>
         
         
 
          
 
-<footer class="bg-white dark:bg-[#17153B]">
+<footer data-aos="fade-up" class="bg-white dark:bg-[#17153B]">
     <div class="mx-auto w-full max-w-screen-xl">
       <div class="grid grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-4">
         <div>
@@ -231,6 +261,8 @@
         
 
         <script>
+            AOS.init();
+
             document.addEventListener('DOMContentLoaded', () => {
                 const filmContainer = document.querySelector('.film-container');
                 const prevBtn = document.getElementById('prevBtn');

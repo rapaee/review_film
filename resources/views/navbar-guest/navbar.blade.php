@@ -1,21 +1,18 @@
-<nav class="bg-white border-gray-200 dark:bg-[#17153B] w-full fixed z-50">
+<nav class="bg-white border-gray-200 dark:bg-[#17153B] w-full fixed z-50 top-0">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <!-- Logo and Text -->
+        <!-- Logo -->
         <a href="{{ route('anonymous.home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="https://cdn-icons-png.flaticon.com/128/1146/1146203.png" 
-                 alt="" 
-                 class="w-8 h-8 filter invert md:block"> <!-- Hidden on small screens -->
+                 alt="" class="w-8 h-8 filter invert md:block">
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white hidden md:block">
-                Review Film
-            </span> <!-- Hidden on small screens -->
+                Paee Films
+            </span>
         </a>
-        
+
+        <!-- Search & Buttons -->
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-4">
-            <!-- Search Form -->
             <form class="max-w-md mx-auto">
-                <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
-                    Search
-                </label>
+                
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-2 pointer-events-none">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -28,61 +25,109 @@
                            required>
                 </div>
             </form>
-  
-            <!-- Buttons -->
-            <a href="{{ route('login') }}">
-            <button type="button" 
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Login
-            </button>
-            </a>
 
-            {{-- <button data-collapse-toggle="navbar-cta" type="button" 
-                    class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" 
-                    aria-controls="navbar-cta" 
-                    aria-expanded="false">
-                <span class="sr-only">Open main menu</span>
-                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-                </svg>
-            </button> --}}
+            <a href="{{ route('login') }}">
+                <button type="button" 
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-3 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    Login
+                </button>
+            </a>
         </div>
-        
-        <!-- Navbar Links -->
-        {{-- <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
-            <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-[#17153B] dark:border-gray-700">
-                <li>
-                    <a href="{{ route('anonymous.home') }}" class="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent {{ Route::currentRouteName() == 'anonymous.home' ? 'md:text-blue-700, md:dark:text-blue-500' : '' }}" aria-current="page">Home</a>
-                </li>
-                <li>
-                    <a href="" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 {{ Route::currentRouteName() == 'subcriber.film' ? 'md:text-blue-700, md:dark:text-blue-500' : '' }}">Film</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Bookmark</a>
-                </li>
-            </ul>
-        </div> --}}
     </div>
     
-  </nav>
- 
-
-
-  
+    <div id="navbar" class="bg-[#1d1353] flex flex-wrap justify-center md:justify-normal">
+        <!-- Dropdown 1 -->
+        <div class="relative ml-0 md:ml-32">
+            <button id="dropdownDelayButton" class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
+                <img src="https://cdn-icons-png.flaticon.com/128/974/974476.png" alt="" class="w-5 h-5 filter invert">
+                <span>Genre</span>
+                <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt="" class="w-3 h-3 filter invert">
+            </button>
     
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-      const toggleButton = document.querySelector('[data-collapse-toggle="navbar-cta"]');
-      const navbar = document.getElementById('navbar-cta');
-  
-      if (toggleButton && navbar) {
-          toggleButton.addEventListener('click', () => {
-              navbar.classList.toggle('hidden');
-          });
-      }
-  });
-  
-    </script>
+            <!-- Dropdown menu -->
+            <div id="dropdownDelay" class="absolute w-64 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
+                <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                    @foreach ($genre as $g)
+                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">{{ $g->title }}</a></li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    
+        <!-- Dropdown 2 -->
+        <div class="relative">
+            <button id="dropdownDelayButton2" class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
+                <img src="https://cdn-icons-png.flaticon.com/128/535/535234.png" alt="" class="w-5 h-5 filter invert">
+                <span>Paee</span>
+                <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt="" class="w-3 h-3 filter invert">
+            </button>
+    
+            <!-- Dropdown menu -->
+            <div id="dropdownDelay2" class="absolute md:-ml-0 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
+                <ul class="flex gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">Terbaru</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">Popular</a></li>
+                </ul>
+            </div>
+        </div>
+    
+        <!-- Dropdown 3 -->
+        <div class="relative">
+            <button id="dropdownDelayButton3" class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
+                <img src="https://cdn-icons-png.flaticon.com/128/2370/2370264.png" alt="" class="w-5 h-5 filter invert">
+                <span>Tahun</span>
+                <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt="" class="w-3 h-3 filter invert">
+            </button>
+    
+            <!-- Dropdown menu -->
+            <div id="dropdownDelay3" class="absolute -ml-[75px] md:-ml-0 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
+                <ul class="flex gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">Terbaru</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">Popular</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Fungsi untuk menangani dropdown
+    const handleDropdown = (dropdownButtonId, dropdownMenuId) => {
+        const dropdownButton = document.getElementById(dropdownButtonId);
+        const dropdownMenu = document.getElementById(dropdownMenuId);
+
+        dropdownButton.addEventListener('mouseenter', () => {
+            dropdownMenu.classList.remove('hidden');
+        });
+
+        dropdownButton.addEventListener('mouseleave', () => {
+            setTimeout(() => {
+                if (!dropdownMenu.matches(':hover')) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            }, 0.5); // Ganti angka ini untuk mengatur delay
+        });
+
+        dropdownMenu.addEventListener('mouseleave', () => {
+            dropdownMenu.classList.add('hidden');
+        });
+
+        dropdownMenu.addEventListener('mouseenter', () => {
+            dropdownMenu.classList.remove('hidden');
+        });
+    };
+
+    // Panggil fungsi handleDropdown untuk masing-masing ID dropdown
+    handleDropdown('dropdownDelayButton', 'dropdownDelay');
+    handleDropdown('dropdownDelayButton2', 'dropdownDelay2');
+    handleDropdown('dropdownDelayButton3', 'dropdownDelay3');
+});
+
+</script>
+
      <div class="">
       @yield('navbar-guest')
   </div>
