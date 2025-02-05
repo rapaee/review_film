@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\anonymous\detailfilmController;
 use App\Http\Controllers\anonymous\filmFilterRatingController;
 use App\Http\Controllers\anonymous\FilmFilterTerbaruController;
+use App\Http\Controllers\anonymous\filmgenreController;
 use App\Http\Controllers\anonymous\homeAnonymous;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\author\homeController as AuthorHomeController;
@@ -16,12 +17,12 @@ use App\Http\Controllers\subcriber\detailFilmController as SubcriberDetailFilmCo
 use App\Http\Controllers\subcriber\filmController as SubcriberFilmController;
 use App\Http\Controllers\subcriber\filmFilterRatingController as SubcriberFilmFilterRatingController;
 use App\Http\Controllers\subcriber\FilmFilterTerbaruController as SubcriberFilmFilterTerbaruController;
+use App\Http\Controllers\subcriber\filmgenreController as SubcriberFilmgenreController;
 use App\Http\Controllers\subcriber\homeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [homeAnonymous::class,'index'])->name('anonymous.home');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -36,10 +37,11 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 //anonymous
-Route::get('anonymous/home', [homeAnonymous::class,'index'])->name('anonymous.home');
+
 Route::get('anonymous/detail-film{id}', [detailfilmController::class,'index'])->name('anonymous.detail-film');
 Route::get('anonymous/filter-terbaru', [FilmFilterTerbaruController::class,'index'])->name('anonymous.filter-terbaru');
 Route::get('anonymous/filter-rating', [filmFilterRatingController::class,'index'])->name('anonymous.filter-rating');
+Route::get('anonymous/film-genre/{id}', [filmgenreController::class, 'index'])->name('anonymous.film-genre');
 
 //subcriber
 Route::get('subcriber/home', [homeController::class,'index'])->name('subcriber.home');
@@ -49,6 +51,8 @@ Route::post('subcriber/detail-film', [SubcriberDetailFilmController::class, 'sto
 Route::get('subcriber/filter-terbaru', [SubcriberFilmFilterTerbaruController::class,'index'])->name('subcriber.filter-terbaru');
 Route::get('subcriber/filter-rating', [SubcriberFilmFilterRatingController::class,'index'])->name('subcriber.filter-rating');
 Route::delete('subcriber/detail-film/{id}', [SubcriberDetailFilmController::class, 'destroy'])->name('subcriber.comment.detail-film');
+Route::get('subcriber/film-genre/{id}', [SubcriberFilmgenreController::class, 'index'])->name('subcriber.film-genre');
+
 
 
 

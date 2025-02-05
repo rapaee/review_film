@@ -15,6 +15,11 @@ class filmFilterRatingController extends Controller
      */
     public function index()
     {
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
+        ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+        ->groupBy('genre_relations.id_genre', 'genre.title')
+        ->get();
+        
         $comments = Comment::with('film')
         ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
         ->groupBy('id_film')
@@ -27,7 +32,7 @@ class filmFilterRatingController extends Controller
         $films = Genre_relation::whereIn('id_film', $idFilms)->get();
 
         
-        return view('subcriber/filter-rating', compact('comments','films'));
+        return view('subcriber/filter-rating', compact('comments','films','genre'));
     }
 
     /**

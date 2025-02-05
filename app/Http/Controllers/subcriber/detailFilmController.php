@@ -5,6 +5,7 @@ namespace App\Http\Controllers\subcriber;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Film;
+use App\Models\Genre_relation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,11 @@ class detailFilmController extends Controller
      */
     public function index($id)
     {
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
+        ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+        ->groupBy('genre_relations.id_genre', 'genre.title')
+        ->get();
+        
         $user = User::all();
         $comment = Comment::where('id_film', $id)
         ->orderByDesc('created_at')
@@ -24,7 +30,7 @@ class detailFilmController extends Controller
         $datafilm = Film::findOrFail($id);
     
         // Ensure $comment is an array or collection
-        return view('subcriber/detail-film', compact('datafilm', 'comment', 'user'));
+        return view('subcriber/detail-film', compact('datafilm', 'comment', 'user','genre'));
     }
     
 

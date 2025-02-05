@@ -22,7 +22,12 @@ class homeAnonymous extends Controller
         //     $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
         // })->get();
 
-        $genre = Genre::all();
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
+        ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+        ->groupBy('genre_relations.id_genre', 'genre.title')
+        ->get();
+        
+
         
         $datafilm = Film::orderByDesc('tahun_rilis')->get();
         $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();

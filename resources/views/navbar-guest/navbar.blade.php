@@ -48,8 +48,13 @@
             <div id="dropdownDelay" class="absolute w-64 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
                 <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
                     @foreach ($genre as $g)
-                        <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">{{ $g->title }}</a></li>
-                    @endforeach
+                    <li>
+                        <a href="{{ route('anonymous.film-genre', ['id' => $g->id_genre]) }}" 
+                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
+                           {{ $g->title }}
+                        </a>
+                    </li>
+                @endforeach
                 </ul>
             </div>
         </div>

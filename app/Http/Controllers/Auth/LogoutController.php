@@ -22,6 +22,6 @@ class LogoutController extends Controller
         $request->session()->regenerateToken();
 
         // Redirect to a custom URL after logout
-        return redirect('/anonymous/home'); // Ganti dengan URL tujuan Anda
+        return redirect('/'); // Ganti dengan URL tujuan Anda
     }
 }

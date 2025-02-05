@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Film Populer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </head>
 <body class="bg-gray-100">
     @extends('navbar-subcriber.navbar')
     @section('navbar-subcriber')
-    <div class=" w-full md:w-10/12 flex justify-center items-center mx-auto">
-        <div class="p-5 w-full mt-20">
+    <div data-aos="fade-up"   class=" w-full md:w-10/12 flex justify-center items-center mx-auto">
+        <div class="p-5 w-full mt-32">
             <!-- Header -->
             <div class="bg-white w-full md:w-[1205px] ml-0 md:ml-2.5 p-2 flex justify-center md:justify-normal mb-4">
                 <h1 class="text-xl font-bold mb-4">Daftar Film Populer Review Film</h1>
@@ -55,5 +57,8 @@
 
    
     @endsection
+    <script>
+        AOS.init();
+</script>
 </body>
 </html>

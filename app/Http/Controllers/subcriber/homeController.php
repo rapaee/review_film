@@ -16,6 +16,12 @@ class homeController extends Controller
      */
     public function index()
     {
+
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
+        ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+        ->groupBy('genre_relations.id_genre', 'genre.title')
+        ->get();
+        
         // Ambil data Genre_relation berdasarkan genre tertentu
         $gl = Genre_relation::whereHas('genre', function ($query) {
             $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
@@ -30,7 +36,7 @@ class homeController extends Controller
     
 
     
-        return view('subcriber/home', compact('datafilm', 'gl','terbaru','comments'));
+        return view('subcriber/home', compact('datafilm', 'gl','terbaru','comments','genre'));
     }
     
 
