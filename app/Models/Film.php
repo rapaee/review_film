@@ -14,9 +14,13 @@ class Film extends Model
 
     // Kolom-kolom yang dapat diisi secara mass assignment
     protected $fillable = [
-        'judul', 'poster', 'deskripsi', 'tahun_rilis', 'durasi', 'pencipta', 'trailer'
+        'judul', 'poster', 'deskripsi', 'tahun_rilis', 'durasi', 'pencipta', 'trailer', 'id_users', 'kategori_umur'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_users', 'id');
+    }    
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'genres_relations', 'id_film', 'id_genre');
@@ -29,6 +33,6 @@ class Film extends Model
 
     public function castings()
     {
-        return $this->hasMany(Casting::class, 'id_film');
+        return $this->hasMany(Casting::class, 'id_film', 'id_film');
     }
 }

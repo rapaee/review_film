@@ -20,7 +20,11 @@ return new class extends Migration
             $table->integer('durasi');
             $table->string('pencipta');
             $table->string('trailer');
+            $table->string('kategori_umur');
+            $table->integer('id_users')->unsigned();
             $table->timestamps();
+
+            $table->foreign('id_users')->references('id')->on('users');
         });
     }
 

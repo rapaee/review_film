@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('castings', function (Blueprint $table) {
             $table->increments('id_castings');
             $table->string('nama_panggung');
-            $table->string('nama_alsi');
+            $table->string('nama_asli');
             $table->integer('id_film')->unsigned();
             $table->timestamps();
 

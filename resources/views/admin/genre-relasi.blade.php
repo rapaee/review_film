@@ -55,32 +55,30 @@
             </tr>
         </thead>
         <tbody>
-            <tbody>
-                @foreach ($gl as $item)
-                    <tr class="border-b dark:border-gray-400">
-                        <td class="px-6 py-3">{{ $item->film->judul }}</td>
-                        <td class="px-6 py-3">{{ $item->genre->title }}</td>
-                        <td class="px-2 py-4 flex justify-end items-center gap-3">
-                            <form action="{{ route('admin.genre-relasi.delete', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-white bg-red-600 hover:bg-red-700 p-2 h-8 mt-3 rounded w-16">
-                                   <p class="-mt-0.5">Delete</p>
-                                </button>
-                            </form>
-                            <button 
-                            class="text-white bg-green-600 hover:bg-green-700 py-1 rounded h-8 w-16" 
-                            onclick="showEditPopup('{{ route('admin.genre-relasi.update', $item->id) }}', '{{ $item->id_film }}', '{{ $item->id_genre }}')">
-                            Edit
+            @foreach ($gl as $judul => $items)
+                <tr class="border-b dark:border-gray-400">
+                    <td class="px-6 py-3">{{ $judul }}</td>
+                    <td class="px-6 py-3">
+                        {{ $items->pluck('genre.title')->implode(', ') }}
+                    </td>
+                    <td class="px-2 py-4 flex justify-end items-center gap-3">
+                        <form action="{{ route('admin.genre-relasi.delete', $items->first()->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-white bg-red-600 hover:bg-red-700 p-2 h-8 mt-3 rounded w-16">
+                               <p class="-mt-0.5">Delete</p>
                             </button>
-                        
-                        
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-            
+                        </form>
+                        <button 
+                        class="text-white bg-green-600 hover:bg-green-700 py-1 rounded h-8 w-16" 
+                        onclick="showEditPopup('{{ route('admin.genre-relasi.update', $items->first()->id) }}', '{{ $items->first()->id_film }}', '{{ $items->first()->id_genre }}')">
+                        Edit
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
+        
     </table>
     
 </div>

@@ -15,7 +15,9 @@ class GenreRelationController extends Controller
      */
     public function index()
     {
-        $gl = Genre_relation::all();
+        $gl = \App\Models\Genre_relation::with(['film', 'genre'])
+        ->get()
+        ->groupBy('film.judul');
         $genre = Genre::all();
         $film = Film::all();
         return view('admin.genre-relasi', compact('film','genre','gl'));

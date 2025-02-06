@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Film;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class filmController extends Controller
 {
@@ -40,6 +41,7 @@ class filmController extends Controller
             'deskripsi' => 'required|string',
             'tahun_rilis' => 'required|integer|min:1900|max:' . date('Y'),
             'durasi' => 'required|integer|min:1', // Validasi sebagai integer dengan minimal 1 menit
+            'kategori_umur' => 'required|string|in:SU,13+,17+,21+',
             'poster' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'trailer' => 'required|mimes:mp4,mov,avi,wmv',
         ]);
@@ -61,14 +63,17 @@ class filmController extends Controller
         $film->judul = $request->judul;
         $film->pencipta = $request->pencipta;
         $film->deskripsi = $request->deskripsi;
+        $film->kategori_umur = $request->kategori_umur;
         $film->tahun_rilis = $request->tahun_rilis;
         $film->durasi = $durasiMenit; // Simpan durasi dalam menit sebagai integer
         $film->poster = $posterPath;
         $film->trailer = $trailerPath;
+        $film->id_users = Auth::id(); // Menyimpan ID user saat ini
         $film->save();
     
         return redirect()->route('admin.film')->with('success', 'Film berhasil ditambahkan!');
     }
+    
     
     
 
@@ -93,6 +98,7 @@ class filmController extends Controller
         'pencipta' => 'required|string|max:255',
         'deskripsi' => 'required|string',
         'tahun_rilis' => 'required|integer|min:1900|max:' . date('Y'),
+        'kategori_umur' => 'required|string|in:SU,13+,17+,21+',
         'durasi' => 'required|string|max:50',
         'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         'trailer' => 'nullable|mimes:mp4,mov,avi,wmv',
@@ -107,6 +113,7 @@ class filmController extends Controller
     $film->deskripsi = $validated['deskripsi'];
     $film->tahun_rilis = $validated['tahun_rilis'];
     $film->durasi = $validated['durasi'];
+    $film->kategori_umur = $validated['kategori_umur'];
 
     // Periksa jika file poster diunggah
     if ($request->hasFile('poster')) {
