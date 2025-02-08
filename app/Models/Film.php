@@ -23,7 +23,7 @@ class Film extends Model
     }    
     public function genres()
     {
-        return $this->belongsToMany(Genre::class, 'genres_relations', 'id_film', 'id_genre');
+        return $this->belongsToMany(Genre::class, 'genre_relations', 'id_film', 'id_genre');
     }
 
     public function comments()

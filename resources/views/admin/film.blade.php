@@ -83,9 +83,7 @@
                     
                         <a class="text-sm" href="{{ route('admin.film-detail', ['id' => $film->id_film]) }}">
                         <button 
-                            class="text-white bg-yellow-600 hover:bg-yellow-700 rounded w-16 h-8 flex items-center justify-center"
-                            onclick="showEditFilmPopup">
-                          
+                            class="text-white bg-yellow-600 hover:bg-yellow-700 rounded w-16 h-8 flex items-center justify-center">
                                 Detail
                             </button>
                         </a>

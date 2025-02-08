@@ -15,12 +15,16 @@ class GenreRelationController extends Controller
      */
     public function index()
     {
-        $gl = \App\Models\Genre_relation::with(['film', 'genre'])
+        
+        $gl =Genre_relation::with(['film', 'genre'])
         ->get()
         ->groupBy('film.judul');
+        
         $genre = Genre::all();
         $film = Film::all();
-        return view('admin.genre-relasi', compact('film','genre','gl'));
+        // $selectedGenres = $film->genres->pluck('id_genre')->toArray();
+        
+        return view('admin.genre-relasi', compact('film','genre','gl',));
     }
 
     /**
@@ -36,21 +40,27 @@ class GenreRelationController extends Controller
      */
     public function store(Request $request)
     {
+        
         // Validasi input
         $request->validate([
             'id_film' => 'required|integer|exists:film,id_film', // Mengacu pada primary key di tabel film
-            'id_genre' => 'required|integer|exists:genre,id_genre', // Mengacu pada primary key di tabel genre
+            'id_genre' => 'required|array', // Harus berupa array
+            'id_genre.*' => 'integer|exists:genre,id_genre', // Setiap elemen dalam array harus valid
         ]);
     
-        // Simpan data ke tabel
-        $filmGenre = new Genre_relation();
-        $filmGenre->id_film = $request->id_film;
-        $filmGenre->id_genre = $request->id_genre;
-        $filmGenre->save();
+        // Loop untuk menyimpan setiap genre yang dipilih
+        foreach ($request->id_genre as $genre_id) {
+            $filmGenre = new Genre_relation();
+            $filmGenre->id_film = $request->id_film;
+            $filmGenre->id_genre = $genre_id;
+            $filmGenre->save();
+        }
     
         // Redirect dengan pesan sukses
         return redirect()->route('admin.genre-relasi')->with('success', 'Genre berhasil ditambahkan!');
     }
+    
+    
     
 
     /**
@@ -58,7 +68,7 @@ class GenreRelationController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
@@ -66,30 +76,38 @@ class GenreRelationController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $film = Film::findOrFail($id);
+        $genre = Genre::all();
+        $filmList = Film::all(); // Tambahkan ini
+    
+        // Ambil semua id_genre yang sudah terkait dengan film
+        $selectedGenres = Genre_relation::where('id_film', $id)
+            ->pluck('id_genre')
+            ->toArray();
+    
+        return view('admin.edit-genre-relasi', compact('film', 'genre', 'selectedGenres', 'filmList'));
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-          // Validasi data yang masuk
-          $validated = $request->validate([
-            'id_film' => 'required|integer|exists:film,id_film', // Mengacu pada primary key di tabel film
-            'id_genre' => 'required|integer|exists:genre,id_genre', // Mengacu pada primary key di tabel genre
+        // Validasi data
+        $request->validate([
+            'film' => 'required|exists:film,id_film',
+            'id_genre' => 'array',
+            'id_genre.*' => 'exists:genre,id_genre'
         ]);
 
-        // Cari genre berdasarkan ID
-        $genre = Genre_relation::findOrFail($id);
+        // Cari film berdasarkan ID
+        $film = Film::findOrFail($id);
 
-        // Update data genre
-        $genre->id_film = $validated['id_film'];
-        $genre->id_genre = $validated['id_genre'];
-        $genre->save(); // Simpan perubahan
+        // Update genre-film di pivot table
+        $film->genres()->sync($request->id_genre ?? []);
 
-        // Redirect ke halaman yang sesuai setelah update berhasil
-        return redirect()->route('admin.genre-relasi')->with('success', 'Genre updated successfully!');
+        return redirect()->route('admin.genre-relasi')->with('success', 'Data genre berhasil diperbarui!');
     }
 
 
@@ -97,13 +115,18 @@ class GenreRelationController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    {
-        try {
-            $genre = Genre_relation::findOrFail($id); // Menangkap exception jika data tidak ditemukan
-            $genre->delete();
-            return redirect()->route('admin.genre-relasi')->with('success', 'Data buku berhasil dihapus.');
-        } catch (\Exception $e) {
-            return redirect()->route('admin.genre-relasi')->with('error', 'Data buku tidak ditemukan atau terjadi kesalahan.');
-        }
+{
+    try {
+        // Cari data berdasarkan ID
+        $genreRelation = Genre_relation::findOrFail($id);
+        
+        // Hapus semua genre yang terkait dengan film yang sama
+        Genre_relation::where('id_film', $genreRelation->id_film)->delete();
+        
+        return redirect()->route('admin.genre-relasi')->with('success', 'Semua genre terkait berhasil dihapus.');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.genre-relasi')->with('error', 'Data tidak ditemukan atau terjadi kesalahan.');
     }
+}
+
 }

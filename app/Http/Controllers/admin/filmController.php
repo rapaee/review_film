@@ -140,11 +140,18 @@ class filmController extends Controller
     public function destroy($id_film)
     {
         try {
-            $film  = Film::findOrFail($id_film); // Menangkap exception jika data tidak ditemukan
+            $film = Film::findOrFail($id_film);
+    
+            // Hapus semua genre yang berelasi dengan film ini
+            $film->genres()->delete();
+    
+            // Hapus film setelah genre terhapus
             $film->delete();
-            return redirect()->route('admin.film')->with('success', 'Data buku berhasil dihapus.');
+    
+            return redirect()->route('admin.film')->with('success', 'Data film berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.film')->with('error', 'Data buku tidak ditemukan atau terjadi kesalahan.');
+            return redirect()->route('admin.film')->with('error', 'Data film tidak ditemukan atau terjadi kesalahan.');
         }
     }
+    
 }

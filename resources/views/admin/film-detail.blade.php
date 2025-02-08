@@ -14,10 +14,10 @@
     @extends('navbar-admin.navbar')
     @section('navbar-admin')
     {{-- <section class="bg-center w-full bg-no-repeat bg-cover -mt-6 bg-[url('{{ asset('storage/' . $datafilm->poster) }}')] bg-gray-700 bg-blend-multiply"> --}}
-        {{-- <a href="{{ route('admin.film') }}" class="flex items-center">
-            <img src="https://cdn-icons-png.flaticon.com/128/16026/16026444.png" alt="" class="w-10 h-10">
+        <a href="{{ route('admin.film') }}" class="flex items-center absolute border py-2 px-5 rounded-lg ml-5 hover:bg-gray-100">
+            <img src="https://cdn-icons-png.flaticon.com/128/16026/16026444.png" alt="" class="w-6 h-6">
             <p>Kembali</p>
-        </a> --}}
+        </a>
         <div class="px-4 mx-auto max-w-screen-xl h-[500px] text-center py-24 lg:py-56">
 
             <div class="flex flex-col items-center md:flex-row -mt-0 md:-mt-36 md:max-w-9/12">
@@ -58,11 +58,12 @@
                    <div class="flex justify-center items-center md:justify-start">
                    
                     <div x-data="{ open: false }" class="flex">
+                        
                         <!-- Tombol untuk membuka modal -->
                         <button @click="open = true" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-black rounded-md w-40 border border-gray-200 hover:bg-gray-900">
                             Lihat Trailer
                         </button>
-
+                      
                         <div x-data="{ open: false }">
                             <button @click="open = true" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-black rounded-md w-40 border border-gray-200 hover:bg-gray-900">
                                 Castings
@@ -73,7 +74,7 @@
                                     <h2 class="text-xl font-semibold mb-4">Tambah Castings</h2>
                                     <form id="castingForm" action="{{ route('admin.film-detail.casting') }}" method="POST">
                                         @csrf
-                                        <div class="mb-4">
+                                        <div class="mb-4 hidden">
                                             <label for="id_film" class="block text-sm font-medium text-gray-700 text-left">ID Film</label>
                                             <input type="text" id="id_film" name="id_film" class="mt-1 p-2 w-full border border-gray-300 rounded-md" value="{{ $id }}" readonly>
                                         </div>
@@ -131,7 +132,7 @@
             </div>
 
         </div>
-    </section>
+    {{-- </section> --}}
 
     @endsection
     <script>

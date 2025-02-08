@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('id_users')->unsigned();
             $table->timestamps();
 
-            $table->foreign('id_users')->references('id')->on('users');
+            $table->foreign('id_users')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

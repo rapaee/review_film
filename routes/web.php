@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\DetailGenreRelationController;
 use App\Http\Controllers\admin\filmController;
 use App\Http\Controllers\admin\FilmDetailController;
 use App\Http\Controllers\admin\GenreController;
@@ -34,6 +35,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin/home', [AdminHomeController::class,'index'])->name('admin.home');
     Route::get('admin/film-detail/{id}', [FilmDetailController::class,'index'])->name('admin.film-detail');
     Route::post('admin/film-detail', [FilmDetailController::class, 'store'])->name('admin.film-detail.casting');
+    Route::get('/admin/edit-genre-relasi/{id}', [GenreRelationController::class, 'edit'])->name('admin.edit-genre-relasi');
+    Route::put('admin/edit-genre-relasi/{id}', [GenreRelationController::class, 'update'])->name('admin.edit-genre-relasi.update');
+
         
     Route::get('admin/film', [filmController::class,'index'])->name('admin.film');
     Route::post('admin/film', [filmController::class,'store'])->name('admin.input-film.store');

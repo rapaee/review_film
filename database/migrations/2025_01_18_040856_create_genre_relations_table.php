@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('id_genre')->unsigned();
             $table->timestamps();
 
-            $table->foreign('id_film')->references('id_film')->on('film');
-            $table->foreign('id_genre')->references('id_genre')->on('genre');
+            $table->foreign('id_film')->references('id_film')->on('film')->onDelete('cascade');
+            $table->foreign('id_genre')->references('id_genre')->on('genre')->onDelete('cascade');
         });
     }
 

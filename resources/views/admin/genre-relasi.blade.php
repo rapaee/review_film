@@ -69,11 +69,14 @@
                                <p class="-mt-0.5">Delete</p>
                             </button>
                         </form>
-                        <button 
-                        class="text-white bg-green-600 hover:bg-green-700 py-1 rounded h-8 w-16" 
-                        onclick="showEditPopup('{{ route('admin.genre-relasi.update', $items->first()->id) }}', '{{ $items->first()->id_film }}', '{{ $items->first()->id_genre }}')">
-                        Edit
-                        </button>
+                        <a href="{{ route('admin.edit-genre-relasi', ['id' => $film->first()->id_film]) }}">
+                            <button 
+                            class="text-white bg-green-600 hover:bg-green-700 py-1 rounded h-8 w-16">
+                                Edit
+                            </button>
+                        </a>
+                        
+                    
                     </td>
                 </tr>
             @endforeach
@@ -83,100 +86,6 @@
     
 </div>
 <script>
-
-function showEditPopup(updateUrl, id_film, id_genre) {
-    Swal.fire({
-        title: 'Edit Genre',
-        html: `
-            <form id="editGenreForm" action="${updateUrl}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="mb-3 text-left">
-                    <label for="id_film" class="block text-sm font-medium text-gray-700">Judul Film:</label>
-                    <select id="id_filmz" name="id_film" tabindex="4" 
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="">Pilih Film</option>
-                        @foreach($film as $filmItem)
-                            <option value="{{ $filmItem->id_film }}" 
-                                ${id_film == "{{ $filmItem->id_film }}" ? 'selected' : ''}>
-                                {{ $filmItem->judul }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_film')
-                        <span class="text-red-700">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3 text-left">
-                    <label for="id_genre" class="block text-sm font-medium text-gray-700">Genre:</label>
-                    <select id="id_genre" name="id_genre" tabindex="4" 
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="">Pilih Genre</option>
-                        @foreach($genre as $genreItem)
-                            <option value="{{ $genreItem->id_genre }}" 
-                                ${id_genre == "{{ $genreItem->id_genre }}" ? 'selected' : ''}>
-                                {{ $genreItem->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_genre')
-                        <span class="text-red-700">{{ $message }}</span>
-                    @enderror
-                </div>
-            </form>
-        `,
-        showCancelButton: true,
-        confirmButtonText: 'Submit',
-        cancelButtonText: 'Batal',
-        cancelButtonColor: '#ff0000',
-        confirmButtonColor: '#008000',
-        preConfirm: () => {
-            document.getElementById('editGenreForm').submit();
-        }
-    });
-}
-    document.getElementById('openModal').addEventListener('click', function () {
-        Swal.fire({
-            title: 'Tambah Genre Relasi',
-            html: `
-                <form id="addFilmForm" action="{{ route('admin.genre-relasi.store') }}" method="POST">
-                    @csrf
-                    <div class="mb-3 text-left">
-                        <label for="Film" class="block text-sm font-medium text-gray-700">Judul:</label>
-                        <select id="id_film" name="id_film" tabindex="4" class="select2 mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="">Pilih Film</option>
-                            @foreach($film as $item)
-                                <option value="{{ $item->id_film }}" {{ old('id_film') == $item->id_film ? 'selected' : '' }}>{{ $item->judul }}</option>
-                            @endforeach
-                        </select>
-                        @error('id_film')
-                            <span class="text-red-700">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="mb-3 text-left">
-                        <label for="Genre" class="block text-sm font-medium text-gray-700">Judul:</label>
-                        <select id="id_genre" name="id_genre" tabindex="4" class="select2 mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="">Pilih Genre</option>
-                            @foreach($genre as $item)
-                                <option value="{{ $item->id_genre }}" {{ old('id_genre') == $item->id_genre ? 'selected' : '' }}>{{ $item->title }}</option>
-                            @endforeach
-                        </select>
-                        @error('id_genre')
-                            <span class="text-red-700">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </form>
-            `,
-            showCancelButton: true,
-            confirmButtonText: 'Submit',
-            cancelButtonText: 'Batal',
-            cancelButtonColor: '#ff0000',  // Merah untuk tombol Batal
-            confirmButtonColor: '#008000', // Hijau untuk tombol Submit
-            preConfirm: () => {
-                document.getElementById('addFilmForm').submit();
-            }
-        });
-    });
 
     
     document.addEventListener('DOMContentLoaded', function () {
