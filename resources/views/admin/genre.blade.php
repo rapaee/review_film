@@ -8,6 +8,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        ::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* Untuk Firefox */
+            html {
+                scrollbar-width: none;
+            }
+    </style>
 </head>
 <body>
     @extends('navbar-admin.navbar')
@@ -26,8 +36,8 @@
             <input type="search" id="default-search" class="block w-3/12 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 " placeholder="Search" />
         </div>
     </form>
-    <button id="openModal" class="text-blue-700 hover:text-white border focus:ring-blue-300 font-medium rounded-lg text-sm w-24 h-12 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500">
-        Tambah
+    <button id="openModal" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm h-12 w-12 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">
+        <img src="https://cdn-icons-png.flaticon.com/128/992/992651.png" alt="" class="w-8 h-8 filter invert">
     </button>
 </div>
 
@@ -45,16 +55,18 @@
             <tr class="border-b dark:border-gray-400">
                 <td class="px-6 py-4">{{ $g->title }}</td>
                 <td class="px-6 py-4">{{ $g->slug }}</td>
-                <td class="px-2 py-4 flex justify-end gap-3">
-                    <form action="{{ route('admin.genre.delete', $g->id_genre) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                <td class="px-2 py-4 flex justify-center items-center gap-3">
+                    <form id="delete-form-{{ $g->id_genre }}" action="{{ route('admin.genre.delete', $g->id_genre) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-white bg-red-600 hover:bg-red-700 py-1 rounded w-16">Delete</button>
+                        <button type="button" class="text-white bg-red-600 flex justify-center hover:bg-red-700 py-1 h-8 rounded w-14 delete-btn" data-id="{{ $g->id_genre }}">
+                            <img src="https://cdn-icons-png.flaticon.com/128/542/542724.png" alt="" class="w-5 h-5 filter invert">
+                        </button>
                     </form>
                     <button 
-                            class="text-white bg-green-600 hover:bg-green-700 py-1 rounded px-4" 
+                            class="text-white bg-green-600 hover:bg-green-700 py-1 w-14 h-8 rounded px-4 flex justify-center" 
                             onclick="showEditPopup('{{ route('admin.edit-genre.update', $g->id_genre) }}', '{{ $g->title }}', '{{ $g->slug }}')">
-                            Edit
+                            <img src="https://cdn-icons-png.flaticon.com/128/3597/3597088.png" alt="" class="w-5 h-5 filter invert">
                     </button>
                 </td>
             </tr>
@@ -64,7 +76,31 @@
 </div>
 
 <script>
+ @if ($errors->any())
 
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('openModal').click();
+});
+@endif
+
+// Notifikasi sukses atau error dari session
+@if(session('success'))
+Swal.fire({
+    icon: 'success',
+    title: 'Sukses!',
+    text: "{{ session('success') }}",
+    timer: 1000,
+    showConfirmButton: false
+});
+@elseif(session('error'))
+Swal.fire({
+    icon: 'error',
+    title: 'Gagal!',
+    text: "{{ session('error') }}",
+    timer: 1000,
+    showConfirmButton: false
+});
+@endif
 
 function showEditPopup(updateUrl, title, slug) {
             Swal.fire({
@@ -144,6 +180,29 @@ function showEditPopup(updateUrl, title, slug) {
             });
         });
     });
+
+    //alert button delete
+    document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            let userId = this.getAttribute('data-id');
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + userId).submit();
+                }
+            });
+        });
+    });
+});
 </script>
 @endsection
 </body>

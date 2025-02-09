@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\admin\detailDashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $user = User::all();
-        return view('admin.user',compact('user'));
+        return view('admin.detail-dashboard.user',compact('user'));
     }
 
     /**
@@ -35,25 +35,23 @@ class UserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed|min:6',
         ]);
-        
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'subcriber', // default 'petugas' jika usertype tidak diisi
-        ]);
-        
-       // Kirim event registrasi
-       event(new Registered($user));
     
-       // Tambahkan flash message untuk notifikasi berhasil
-       return redirect()->route('admin.user')->with('registerSuccess', 'Registrasi berhasil. Silakan login.');
+        try {
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+    
+            return redirect()->back()->with('success', 'User berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menambahkan produk: ' . $e->getMessage());
+        }
     }
-
     /**
      * Display the specified resource.
      */
@@ -100,7 +98,7 @@ class UserController extends Controller
         $user->update($updateData);
 
         // Redirect ke halaman utama dengan pesan sukses
-        return redirect()->route('admin.user')->with('success', 'Data petugas berhasil diperbarui.');
+        return redirect()->route('admin.user')->with('success', 'Data User berhasil diperbarui.');
     }
     
 

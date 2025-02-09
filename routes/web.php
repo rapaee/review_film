@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\admin\DetailGenreRelationController;
+use App\Http\Controllers\admin\CastingsController;
+use App\Http\Controllers\admin\detailDashboard\UserController as DetailDashboardUserController;
 use App\Http\Controllers\admin\filmController;
 use App\Http\Controllers\admin\FilmDetailController;
 use App\Http\Controllers\admin\GenreController;
 use App\Http\Controllers\admin\GenreRelationController;
 use App\Http\Controllers\admin\homeController as AdminHomeController;
-use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\anonymous\detailfilmController;
 use App\Http\Controllers\anonymous\filmFilterRatingController;
 use App\Http\Controllers\anonymous\FilmFilterTerbaruController;
@@ -37,6 +37,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('admin/film-detail', [FilmDetailController::class, 'store'])->name('admin.film-detail.casting');
     Route::get('/admin/edit-genre-relasi/{id}', [GenreRelationController::class, 'edit'])->name('admin.edit-genre-relasi');
     Route::put('admin/edit-genre-relasi/{id}', [GenreRelationController::class, 'update'])->name('admin.edit-genre-relasi.update');
+    Route::get('/admin/edit-genre-castings-film-detail/{id}', [CastingsController::class, 'edit'])->name('admin.edit-castings-film-detail.edit');
+    Route::put('/admin/edit-genre-castings-film-detail/{id_castings}', [CastingsController::class, 'update'])->name('admin.edit-castings-film-detail.update');
+
 
         
     Route::get('admin/film', [filmController::class,'index'])->name('admin.film');
@@ -54,10 +57,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('admin/genre-relasi/{id}', [GenreRelationController::class, 'update'])->name('admin.genre-relasi.update');
     Route::delete('admin/genre-relasi/{id}', [GenreRelationController::class, 'destroy'])->name('admin.genre-relasi.delete');
 
-    Route::get('admin/user', [UserController::class,'index'])->name('admin.user');
-    Route::post('admin/user', [UserController::class,'store'])->name('admin.user.store');
-    Route::put('admin/user/{id}', [UserController::class,'update'])->name('admin.user.update');
-    Route::delete('admin/user/{id}', [UserController::class, 'destroy'])->name('admin.user.delete');
+    Route::get('admin/detail-dashboard/user', [DetailDashboardUserController::class,'index'])->name('admin.user');
+    Route::post('admin/detail-dashboard/user', [DetailDashboardUserController::class,'store'])->name('admin.user.store');
+    Route::put('admin/detail-dashboard/user/{id}', [DetailDashboardUserController::class,'update'])->name('admin.user.update');
+    Route::delete('admin/detail-dashboard/user/{id}', [DetailDashboardUserController::class, 'destroy'])->name('admin.user.delete');
 
 });
 

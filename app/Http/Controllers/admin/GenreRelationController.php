@@ -22,7 +22,6 @@ class GenreRelationController extends Controller
         
         $genre = Genre::all();
         $film = Film::all();
-        // $selectedGenres = $film->genres->pluck('id_genre')->toArray();
         
         return view('admin.genre-relasi', compact('film','genre','gl',));
     }
@@ -74,19 +73,16 @@ class GenreRelationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $film = Film::findOrFail($id);
-        $genre = Genre::all();
-        $filmList = Film::all(); // Tambahkan ini
-    
-        // Ambil semua id_genre yang sudah terkait dengan film
-        $selectedGenres = Genre_relation::where('id_film', $id)
-            ->pluck('id_genre')
-            ->toArray();
-    
-        return view('admin.edit-genre-relasi', compact('film', 'genre', 'selectedGenres', 'filmList'));
+        $film = Film::findOrFail($id); // Ambil data film berdasarkan ID
+        $filmList = Film::all(); // Ambil semua film untuk dropdown
+        $genre = Genre::all(); // Ambil semua genre
+        $selectedGenres = $film->genres->pluck('id_genre')->toArray(); // Ambil genre yang sudah dipilih
+        
+        return view('admin.edit-genre-relasi', compact('film', 'filmList', 'genre', 'selectedGenres'));
     }
+    
     
 
     /**

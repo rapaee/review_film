@@ -27,7 +27,7 @@
                     <h5 class="text-md text-left tracking-tight uppercase text-gray-900 dark:text-black"> Pencipta : {{ $datafilm->pencipta}}</h5>
                     {{-- <h5 class="text-md text-left tracking-tight uppercase text-gray-900 dark:text-black">( {{ $datafilm->kategori_umur }} )</h5> --}}
                     <h5 class="mb-2 text-md text-left tracking-tight uppercase text-gray-900 dark:text-black"> Tahun Rilis ({{ $datafilm->tahun_rilis }}) ({{ $datafilm->kategori_umur }})</h5>
-
+                    
                     <div class="flex flex-col gap-2">
                         @if($datafilm->castings->isNotEmpty())
                             @foreach($datafilm->castings as $casting)
@@ -35,9 +35,11 @@
                                     <h5 class="text-md tracking-tight uppercase text-gray-900 dark:text-black">
                                         Pemeran {{ $casting->nama_panggung }} ({{ $casting->nama_asli }})
                                     </h5>
-                                    <button class="  px-3 text-white bg-blue-500 rounded hover:bg-blue-600">
+                                   <a href="{{ route('admin.edit-castings-film-detail.edit',['id' => $casting->id_castings]) }}">
+                                    <button class="  px-3 text-white bg-green-700 rounded hover:bg-green-800">
                                         <i class="fas fa-pencil w-5 h-5"></i>
                                     </button>
+                                   </a>
                                 </div>
                             @endforeach
                         @else

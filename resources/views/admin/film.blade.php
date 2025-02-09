@@ -9,15 +9,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        ::-webkit-scrollbar {
+                display: none;
+            }
 
+            /* Untuk Firefox */
+            html {
+                scrollbar-width: none;
+            }
+    </style>
 </head>
 <body>
     @extends('navbar-admin.navbar')
     @section('navbar-admin')
        
     <h1 class="flex justify-center font-bold mb-4 mt-2 text-2xl">TABLE FILM</h1>
-<div class="flex justify-between mb-3">
+<div class="flex justify-between">
     <form class="flex-grow me-4 ml-2 ">   
         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div class="relative">
@@ -31,9 +39,9 @@
         </div>
     </form>
     <div class="flex gap-2">
-        <button id="openModal" class="text-blue-700 hover:text-white border focus:ring-blue-300 font-medium rounded-lg text-sm w-24 h-12 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500">
-            Tambah
-          </button>
+        <button id="openModal" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm h-12 w-12 flex justify-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-3">
+            <img src="https://cdn-icons-png.flaticon.com/128/992/992651.png" alt="" class="w-8 h-8 filter invert">
+        </button>
          
     </div>
 </div>
@@ -67,25 +75,18 @@
                         <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-16 mx-auto">
                     </td>
                     <td class="flex mt-3 justify-center items-center gap-3">
-                        <form action="{{ route('admin.film.delete', $film->id_film) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                        <form id="delete-form-{{ $film->id_film }}" action="{{ route('admin.film.delete', $film->id_film) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="mt-4 text-white bg-red-600 hover:bg-red-700 rounded w-16 h-8 flex items-center justify-center">
-                                <p class="text-sm">Delete</p>
+                            <button type="button" class="mt-4 text-white bg-red-600 hover:bg-red-700 rounded w-14 h-8 flex items-center justify-center delete-btn" data-id="{{ $film->id_film }}">
+                                <img src="https://cdn-icons-png.flaticon.com/128/542/542724.png" alt="" class="w-5 h-5 filter invert">
                             </button>
                         </form>
-                    
-                        <button 
-                        class="text-white bg-green-600 hover:bg-green-700 rounded w-16 h-8 flex items-center justify-center"
-                        onclick="showEditFilmPopup('{{ route('admin.edit-film.update', $film->id_film) }}', '{{ $film->judul }}', '{{ $film->pencipta }}', '{{ $film->deskripsi }}', '{{ $film->tahun_rilis }}', '{{ $film->durasi }}', '{{ $film->poster }}', '{{ $film->trailer }}','{{ $film->kategori_umur }}')">
-                        <p class="text-sm">Edit</p>
-                        </button>
-                    
                         <a class="text-sm" href="{{ route('admin.film-detail', ['id' => $film->id_film]) }}">
                         <button 
-                            class="text-white bg-yellow-600 hover:bg-yellow-700 rounded w-16 h-8 flex items-center justify-center">
-                                Detail
-                            </button>
+                            class="text-white bg-yellow-600 hover:bg-yellow-700 rounded w-14 h-8 flex items-center justify-center">
+                            <img src="https://cdn-icons-png.flaticon.com/128/159/159604.png" alt="" class="w-5 h-5 filter invert">
+                        </button>
                         </a>
                     </td>
                     
@@ -97,6 +98,119 @@
     
 </div>
 <script>
+    
+     @if ($errors->any())
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('openModal').click();
+});
+@endif
+
+// Notifikasi sukses atau error dari session
+@if(session('success'))
+Swal.fire({
+    icon: 'success',
+    title: 'Sukses!',
+    text: "{{ session('success') }}",
+    timer: 1000,
+    showConfirmButton: false
+});
+@elseif(session('error'))
+Swal.fire({
+    icon: 'error',
+    title: 'Gagal!',
+    text: "{{ session('error') }}",
+    timer: 1000,
+    showConfirmButton: false
+});
+@endif
+
+
+document.getElementById('openModal').addEventListener('click', function () {
+    Swal.fire({
+        title: 'Tambah Film',
+        html: `
+            <form id="addFilmForm" action="{{ route('admin.input-film.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="id_users" value="{{ Auth::id() }}">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="mb-3 text-left">
+                        <label for="judul" class="block mb-2 text-sm font-medium text-gray-900">Judul</label>
+                        <input type="text" name="judul" id="judul" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        @error('judul')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 text-left">
+                        <label for="pencipta" class="block mb-2 text-sm font-medium text-gray-900">Pencipta</label>
+                        <input type="text" name="pencipta" id="pencipta" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                         @error('pencipta')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 text-left col-span-2">
+                        <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
+                        <textarea name="deskripsi" id="deskripsi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required></textarea>
+                         @error('deskripsil')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 text-left">
+                        <label for="tahun_rilis" class="block mb-2 text-sm font-medium text-gray-900">Tahun Rilis</label>
+                        <input type="number" name="tahun_rilis" id="tahun_rilis" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                         @error('tahun_rilis')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 text-left">
+                        <label for="durasi" class="block mb-2 text-sm font-medium text-gray-900">Durasi</label>
+                        <input type="text" name="durasi" id="durasi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                         @error('durasi')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                     <div class="mb-3 text-left">
+                        <label for="kategori_umur" class="block mb-2 text-sm font-medium text-gray-900">Kategori Umur</label>
+                         <select name="kategori_umur" id="kategori_umur" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            <option value="SU">Semua Umur</option>
+                            <option value="13+">13+</option>
+                            <option value="17+">17+</option>
+                            <option value="21+">21+</option>
+                         </select>
+                          @error('kategori_umur')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 text-left">
+                        <label for="poster" class="block mb-2 text-sm font-medium text-gray-900">Poster</label>
+                        <input type="file" name="poster" id="poster" accept="image/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                         @error('poster')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 text-left">
+                        <label for="trailer" class="block mb-2 text-sm font-medium text-gray-900">Trailer</label>
+                        <input type="file" name="trailer" id="trailer" accept="video/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                         @error('trailer')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+            </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Batal',
+        cancelButtonColor: '#ff0000',
+        confirmButtonColor: '#008000',
+        preConfirm: () => {
+            document.getElementById('addFilmForm').submit();
+        }
+    });
+});
+
+
 function showEditFilmPopup(updateUrl, judul, pencipta, deskripsi, tahun_rilis, durasi, poster, trailer, kategori_umur) {
     Swal.fire({
         title: 'Edit Film',
@@ -162,66 +276,6 @@ function showEditFilmPopup(updateUrl, judul, pencipta, deskripsi, tahun_rilis, d
 }
 
 
-document.getElementById('openModal').addEventListener('click', function () {
-    Swal.fire({
-        title: 'Tambah Film',
-        html: `
-            <form id="addFilmForm" action="{{ route('admin.input-film.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="id_users" value="{{ Auth::id() }}">
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="mb-3 text-left">
-                        <label for="judul" class="block mb-2 text-sm font-medium text-gray-900">Judul</label>
-                        <input type="text" name="judul" id="judul" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
-                    </div>
-                    <div class="mb-3 text-left">
-                        <label for="pencipta" class="block mb-2 text-sm font-medium text-gray-900">Pencipta</label>
-                        <input type="text" name="pencipta" id="pencipta" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
-                    </div>
-                    <div class="mb-3 text-left col-span-2">
-                        <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900">Deskripsi</label>
-                        <textarea name="deskripsi" id="deskripsi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required></textarea>
-                    </div>
-                    <div class="mb-3 text-left">
-                        <label for="tahun_rilis" class="block mb-2 text-sm font-medium text-gray-900">Tahun Rilis</label>
-                        <input type="number" name="tahun_rilis" id="tahun_rilis" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
-                    </div>
-                    <div class="mb-3 text-left">
-                        <label for="durasi" class="block mb-2 text-sm font-medium text-gray-900">Durasi</label>
-                        <input type="text" name="durasi" id="durasi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
-                    </div>
-                     <div class="mb-3 text-left">
-                        <label for="kategori_umur" class="block mb-2 text-sm font-medium text-gray-900">Kategori Umur</label>
-                         <select name="kategori_umur" id="kategori_umur" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
-                            <option value="SU">Semua Umur</option>
-                            <option value="13+">13+</option>
-                            <option value="17+">17+</option>
-                            <option value="21+">21+</option>
-                         </select>
-                    </div>
-                    <div class="mb-3 text-left">
-                        <label for="poster" class="block mb-2 text-sm font-medium text-gray-900">Poster</label>
-                        <input type="file" name="poster" id="poster" accept="image/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
-                    </div>
-                    <div class="mb-3 text-left">
-                        <label for="trailer" class="block mb-2 text-sm font-medium text-gray-900">Trailer</label>
-                        <input type="file" name="trailer" id="trailer" accept="video/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
-                    </div>
-                </div>
-            </form>
-        `,
-        showCancelButton: true,
-        confirmButtonText: 'Submit',
-        cancelButtonText: 'Batal',
-        cancelButtonColor: '#ff0000',
-        confirmButtonColor: '#008000',
-        preConfirm: () => {
-            document.getElementById('addFilmForm').submit();
-        }
-    });
-});
-
 
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('default-search');
@@ -241,6 +295,28 @@ document.getElementById('openModal').addEventListener('click', function () {
             });
         });
     });
+    //alert button delete
+    document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            let userId = this.getAttribute('data-id');
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + userId).submit();
+                }
+            });
+        });
+    });
+});
 </script>
     @endsection
 </body>
