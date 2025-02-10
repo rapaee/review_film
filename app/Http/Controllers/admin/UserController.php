@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin\detailDashboard;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $user = User::all();
-        return view('admin.detail-dashboard.user',compact('user'));
+        return view('admin.user',compact('user'));
     }
 
     /**

@@ -20,10 +20,6 @@
 <body>
     @extends('navbar-admin.navbar')
     @section('navbar-admin')
-    <a href="{{ route('admin.home') }}" class="flex items-center absolute border py-2 px-5 rounded-lg ml-2 hover:bg-gray-100">
-        <img src="https://cdn-icons-png.flaticon.com/128/16026/16026444.png" alt="" class="w-6 h-6">
-        <p>Kembali</p>
-    </a>
     <h1 class="flex justify-center font-bold mb-16 mt-2 text-2xl">TABLE USER</h1>
 <div class="flex justify-between mb-3">
     <form class="flex-grow me-4 ml-2">   

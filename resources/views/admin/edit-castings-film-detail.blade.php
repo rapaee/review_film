@@ -20,7 +20,7 @@
         @csrf
         @method('PUT')
         
-        <div class="mb-4 ">
+        <div class="mb-4 hidden">
             <label for="id_film" class="block text-sm font-medium text-gray-700 text-left">ID Film</label>
             <input type="text" id="id_film" name="id_film" class="mt-1 p-2 w-full border border-gray-300 rounded-md" value="{{ old('id_film',$casting->film->id_film) }}" readonly>
         </div>

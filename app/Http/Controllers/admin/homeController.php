@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Casting;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class homeController extends Controller
     public function index()
     {
         $userCount = User::all()->count();
-        return view('admin.home', compact('userCount'));
+        $castingsCount = Casting::all()->count();
+        return view('admin.home', compact('userCount','castingsCount'));
         
     }
 

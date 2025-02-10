@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\anonymous;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Comment;
 use App\Models\Film;
 use App\Models\Genre;
@@ -22,6 +23,8 @@ class homeAnonymous extends Controller
         //     $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
         // })->get();
 
+        $banner = Banner::all();
+
         $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
         ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
         ->groupBy('genre_relations.id_genre', 'genre.title')
@@ -39,7 +42,7 @@ class homeAnonymous extends Controller
     
         
     
-        return view('anonymous/home', compact('datafilm','terbaru','comments', 'genre'));
+        return view('anonymous/home', compact('datafilm','terbaru','comments', 'genre','banner'));
     }
     
 

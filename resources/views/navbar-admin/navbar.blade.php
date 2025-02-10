@@ -70,6 +70,14 @@
          </a>
          </li>
          <li>
+          <a href="{{ route('admin.user') }}" class="flex items-center w-56 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group  {{ request()->routeIs('admin.user') ? 'bg-gray-700 text-white' : '' }}">
+            <div class="flex items-center">
+                <img src="https://cdn-icons-png.flaticon.com/128/1077/1077114.png" alt="" class="w-5 h-5 filter invert">
+                <span class="ms-3 text-white">User</span>
+            </div>                
+         </a>
+         </li>
+         <li>
           <a href="{{ route('admin.film') }}" class="flex items-center w-56 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group  {{ request()->routeIs('admin.film') ? 'bg-gray-700 text-white' : '' }}">
             <div class="flex items-center">
                 <img src="https://cdn-icons-png.flaticon.com/128/1101/1101793.png" alt="Icon" class="w-5 h-5 filter invert">
@@ -94,10 +102,18 @@
          </a>
          </li>
          <li>
-          <a href="" class="flex items-center w-56 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group  {{ request()->routeIs('') ? 'bg-gray-700 text-white' : '' }}">
+          <a href="{{ route('admin.castings') }}" class="flex items-center w-56 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group  {{ request()->routeIs('admin.castings') ? 'bg-gray-700 text-white' : '' }}">
             <div class="flex items-center">
-                <img src="https://cdn-icons-png.flaticon.com/128/8274/8274095.png" alt="Icon" class="w-5 h-5 filter invert">
+              <img src="https://cdn-icons-png.flaticon.com/128/2893/2893811.png" alt="" class="w-5 h-5 filter invert">
                 <span class="ms-3 text-white">Castings</span>
+            </div>                
+         </a>
+         </li>
+         <li>
+          <a href="{{ route('admin.banner') }}" class="flex items-center w-56 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group  {{ request()->routeIs('admin.banner') ? 'bg-gray-700 text-white' : '' }}">
+            <div class="flex items-center">
+              <img src="  https://cdn-icons-png.flaticon.com/128/7320/7320184.png" alt="" class="w-5 h-5 filter invert">
+                <span class="ms-3 text-white">Banner</span>
             </div>                
          </a>
          </li>

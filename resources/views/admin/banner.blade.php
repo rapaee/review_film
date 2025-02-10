@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Castings</title>
+    <title>BANNER</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -20,7 +20,7 @@
 <body>
     @extends('navbar-admin.navbar')
     @section('navbar-admin')
-    <h1 class="flex justify-center font-bold mb-16 mt-2 text-2xl">TABLE CASTINGS</h1>
+    <h1 class="flex justify-center font-bold mb-16 mt-2 text-2xl">TABLE BANNER</h1>
 <div class="flex justify-between mb-3">
     <form class="flex-grow me-4 ml-2">   
         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -46,100 +46,82 @@
     <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center">
         <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black">
             <tr>
-                <th scope="col" class="px-6 py-3">Film</th>
-                <th scope="col" class="px-6 py-3">Nama Panggung</th>
-                <th scope="col" class="px-6 py-3">Nama Asli</th>
+                <th scope="col" class="px-6 py-3">Gambar</th>
                 <th scope="col" class="px-6 py-3"><span class="sr-only">Edit</span></th>
             </tr>
         </thead>
         <tbody>
-            @foreach ( $casting as $c )
+            @foreach ( $banner as $b )
             <tr class="bg-white border-b dark:border-gray-400">
-                <td class="px-6 py-4">{{ $c->film->judul }}</td>
-                <td class="px-6 py-4">{{ $c->nama_panggung }}</td>
-                <td class="px-6 py-4">{{ $c->nama_asli }}</td>
+                <td class="px-6 py-4 text-center">
+                    <img src="{{ asset('storage/' . $b->gambar) }}" alt="Gambar" class="w-8 h-8 rounded mx-auto">
+                </td>
+                
                 <td class="px-2 py-4 flex justify-center gap-3">
-                    <form id="delete-form-{{ $c->id_castings }}" action="{{ route('admin.castings.delete', $c->id_castings) }}" method="POST">
+                    <form id="delete-form-{{ $b->id }}" action="{{ route('admin.banner.delete', $b->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="button" class="text-white bg-red-600 flex justify-center hover:bg-red-700 py-1 h-8 rounded w-14 delete-btn" data-id="{{ $c->id_castings }}">
+                        <button type="button" class="text-white bg-red-600 flex justify-center hover:bg-red-700 py-1 h-8 rounded w-14 delete-btn" data-id="{{ $b->id }}">
                             <img src="https://cdn-icons-png.flaticon.com/128/542/542724.png" alt="" class="w-5 h-5 filter invert">
                         </button>
                     </form>
                     <button 
                         class="text-white bg-green-600 hover:bg-green-700 py-1 w-14 h-8 rounded px-4 flex justify-center" 
-                        onclick="showEditUserPopup('{{ route('admin.castings.update', $c->id_castings) }}', '{{ $c->film->id_film }}', '{{ $c->nama_panggung }}', '{{ $c->nama_asli }}')">
+                        onclick="showEditUserPopup('{{ route('admin.banner.update', $b->id) }}', '{{ $b->gambar }}')">
                         <img src="https://cdn-icons-png.flaticon.com/128/3597/3597088.png" alt="" class="w-5 h-5 filter invert">
                     </button>
-
+    
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+    
 </div>
 
 
 <script>
-    @if ($errors->any())
+//     @if ($errors->any())
 
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('openModal').click();
-    });
-    @endif
+// document.addEventListener('DOMContentLoaded', function () {
+//     document.getElementById('openModal').click();
+// });
+// @endif
 
-  // Notifikasi sukses atau error dari session
-    @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Sukses!',
-        text: "{{ session('success') }}",
-        timer: 1000,
-        showConfirmButton: false
-    });
-    @elseif(session('error'))
-    Swal.fire({
-        icon: 'error',
-        title: 'Gagal!',
-        text: "{{ session('error') }}",
-        timer: 1000,
-        showConfirmButton: false
-    });
-    @endif
+// // Notifikasi sukses atau error dari session
+// @if(session('success'))
+// Swal.fire({
+//     icon: 'success',
+//     title: 'Sukses!',
+//     text: "{{ session('success') }}",
+//     timer: 1000,
+//     showConfirmButton: false
+// });
+// @elseif(session('error'))
+// Swal.fire({
+//     icon: 'error',
+//     title: 'Gagal!',
+//     text: "{{ session('error') }}",
+//     timer: 1000,
+//     showConfirmButton: false
+// });
+// @endif
     
 document.getElementById('openModal').addEventListener('click', function () {
     Swal.fire({
         title: 'FORM TAMBAH CASTINGS',
         html: `
-            <form action="{{ route('admin.castings.store') }}" method="POST" id="userForm" class="text-left">
-                @csrf
-                <div class="mb-3">
-                    <label for="id_film" class="block mb-2 text-sm font-medium text-gray-900">Film</label>
-                   <select class="w-full border-gray-500 rounded-lg shadow-sm focus:ring focus:ring-blue-200 p-2" id="id_film" name="id_film">
-                        <option value="" selected disabled>Pilih Judul Film</option>
-                        @foreach($film as $f)
-                        <option value="{{ $f->id_film }}">{{ $f->judul }}</option>
-                        @endforeach
-                    </select>
-                    @error('id_Film')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label for="nama_panggung" class="block mb-2 text-sm font-medium text-gray-900">Nama Panggung</label>
-                    <input type="nama_panggung" name="nama_panggung" id="nama_panggung" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
-                    @error('nama_panggung')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label for="nama_asli" class="block mb-2 text-sm font-medium text-gray-900">Nama Asli</label>
-                    <input type="nama_asli" name="nama_asli" id="nama_asli" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
-                    @error('nama_asli')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-            </form>
+         <form action="{{ route('admin.banner.store') }}" method="POST" enctype="multipart/form-data" id="userForm" class="text-left">
+            @csrf
+            <div class="mb-3">
+                <label for="gambar" class="block mb-2 text-sm font-medium text-gray-900">Gambar</label>
+                <input type="file" name="gambar" id="gambar" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+                @error('gambar')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+        </form>
+
         `,
         showCancelButton: true,
         confirmButtonText: 'Submit',
@@ -156,26 +138,16 @@ document.getElementById('openModal').addEventListener('click', function () {
 
 
 
-function showEditUserPopup(updateUrl, id_film, nama_panggung, nama_asli ) {
+function showEditUserPopup(updateUrl, gambar ) {
     Swal.fire({
-        title: 'Edit Castings',
+        title: 'Edit Banner',
         html: `
-            <form id="showEditPopup" action="${updateUrl}" method="POST">
+            <form id="showEditPopup" action="${updateUrl}" method="POST" enctype="multipart/form-data">
                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="_method" value="PUT">
-                <div class="mb-3 text-left hidden">
-                    <label for="id_film" class="block mb-2 text-sm font-medium text-gray-900">FIlm</label>
-                    <input type="text" name="id_film" id="id_film" value="${id_film}" 
-                           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
-                </div>
-                <div class="mb-3 text-left">
-                    <label for="nama_panggung" class="block mb-2 text-sm font-medium text-gray-900">Nama Panggung</label>
-                    <input type="nama_panggung" name="nama_panggung" id="nama_panggung" value="${nama_panggung}" 
-                           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
-                </div>
                  <div class="mb-3 text-left">
-                    <label for="nama_asli" class="block mb-2 text-sm font-medium text-gray-900">Nama Asli</label>
-                    <input type="nama_asli" name="nama_asli" id="nama_asli" value="${nama_asli}" 
+                    <label for="gambar" class="block mb-2 text-sm font-medium text-gray-900">Gambar</label>
+                    <input type="file" name="gambar" id="gambar" value="${gambar}" 
                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                 </div>
             </form>
