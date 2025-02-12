@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
 
     switch ($role) {
         case 'admin':
-            return redirect('/');
+            return redirect('');
         case 'subcriber':
             return redirect('/');
         case 'author':
