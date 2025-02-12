@@ -19,11 +19,6 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\author\homeController as AuthorHomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\subcriber\detailFilmController as SubcriberDetailFilmController;
-use App\Http\Controllers\subcriber\filmController as SubcriberFilmController;
-use App\Http\Controllers\subcriber\filmFilterRatingController as SubcriberFilmFilterRatingController;
-use App\Http\Controllers\subcriber\FilmFilterTerbaruController as SubcriberFilmFilterTerbaruController;
-use App\Http\Controllers\subcriber\filmgenreController as SubcriberFilmgenreController;
-use App\Http\Controllers\subcriber\homeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [homeAnonymous::class,'index'])->name('anonymous.home');
@@ -53,7 +48,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/banner', [BannerController::class, 'store'])->name('admin.banner.store');
     Route::put('/admin/banner/{id}', [BannerController::class, 'update'])->name('admin.banner.update');
     Route::delete('/admin/banner/{id}', [BannerController::class, 'destroy'])->name('admin.banner.delete');
-    
         
     Route::get('admin/film', [filmController::class,'index'])->name('admin.film');
     Route::post('admin/film', [filmController::class,'store'])->name('admin.input-film.store');
@@ -78,19 +72,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 // Rute yang hanya bisa diakses oleh pengguna dengan peran "user" atau "admin"
-Route::middleware(['auth', 'role:subcriber'])->group(function () {
-    //subcriber
-Route::get('subcriber/home', [homeController::class,'index'])->name('subcriber.home');
-Route::get('subcriber/film', [SubcriberFilmController::class,'index'])->name('subcriber.film');
-Route::get('subcriber/detail-film{id}', [SubcriberDetailFilmController::class,'index'])->name('subcriber.detail-film');
-Route::post('subcriber/detail-film', [SubcriberDetailFilmController::class, 'store'])->middleware('auth')->name('subcriber.coment');
-Route::get('subcriber/filter-terbaru', [SubcriberFilmFilterTerbaruController::class,'index'])->name('subcriber.filter-terbaru');
-Route::get('subcriber/filter-rating', [SubcriberFilmFilterRatingController::class,'index'])->name('subcriber.filter-rating');
-Route::delete('subcriber/detail-film/{id}', [SubcriberDetailFilmController::class, 'destroy'])->name('subcriber.comment.detail-film');
-Route::get('subcriber/film-genre/{id}', [SubcriberFilmgenreController::class, 'index'])->name('subcriber.film-genre');
+Route::middleware(['auth', 'role:admin,author,subcriber'])->group(function () {
+    Route::post('subcriber/detail-film', [SubcriberDetailFilmController::class, 'store'])
+        ->name('subcriber.coment');
+    Route::delete('subcriber/detail-film/{id}', [SubcriberDetailFilmController::class, 'destroy'])->name('subcriber.comment.detail-film');
 });
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

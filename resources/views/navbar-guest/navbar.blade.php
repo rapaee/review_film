@@ -1,3 +1,13 @@
+<style>
+    #dropdown-user {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 200px;
+  z-index: 50;
+}
+
+</style>
 <nav class="bg-white border-gray-200 dark:bg-[#17153B] w-full fixed z-50 top-0">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <!-- Logo -->
@@ -26,12 +36,49 @@
                 </div>
             </form>
 
+        @guest
             <a href="{{ route('login') }}">
                 <button type="button" 
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-3 dark:bg-blue-600 dark:hover:bg-blue-700">
                     Login
                 </button>
             </a>
+        @endguest
+        
+        @auth
+            <div class="flex items-center ms-3">
+                <div>
+                    <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                        <span class="sr-only">Open user menu</span>
+                        <img class="w-8 h-8 rounded-full" src="https://cdn-icons-png.flaticon.com/128/149/149071.png" alt="user photo">
+                    </button>
+                </div>
+                <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                    <div class="px-4 py-3" role="none">
+                        <p class="text-sm text-gray-900 dark:text-white" role="none">
+                            {{ Auth::user()->name }}
+                        </p>
+                        <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                            {{ Auth::user()->email }}
+                        </p>  
+                    </div>
+                    <ul class="py-1" role="none">
+                        @if(Auth::user()->role === 'admin')
+                        <a href="{{ route('admin.home') }}">
+                            <li class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">Admin</li>
+                        </a>
+                        @endif
+                        <li class="cursor-pointer">
+                            <form method="POST" action="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" onclick="this.closest('form').submit();">
+                                @csrf
+                                <span>Log out</span>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        @endauth
+        
         </div>
     </div>
     
@@ -131,6 +178,22 @@ document.addEventListener('DOMContentLoaded', () => {
     handleDropdown('dropdownDelayButton3', 'dropdownDelay3');
 });
 
+  //open profile
+  document.addEventListener('DOMContentLoaded', function() {
+  const button = document.querySelector('[data-dropdown-toggle="dropdown-user"]');
+  const dropdown = document.getElementById('dropdown-user');
+
+  button.addEventListener('click', function() {
+    dropdown.classList.toggle('hidden');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+});
 </script>
 
      <div class="">

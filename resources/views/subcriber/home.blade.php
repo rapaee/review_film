@@ -36,51 +36,62 @@
 </style>
 </head>
 <body class="bg-gray-100">
-    @extends('navbar-subcriber.navbar')
-    @section('navbar-subcriber')
+    @extends('navbar-guest.navbar')
+    @section('navbar-guest')
 
-    <div div data-aos="fade-left" class="swiper mySwiper mb-10">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">Slide 1</div>
-          <div class="swiper-slide">Slide 2</div>
-          <div class="swiper-slide">Slide 3</div>
-          <div class="swiper-slide">Slide 4</div>
-          <div class="swiper-slide">Slide 5</div>
-          <div class="swiper-slide">Slide 6</div>
-          <div class="swiper-slide">Slide 7</div>
-          <div class="swiper-slide">Slide 8</div>
-          <div class="swiper-slide">Slide 9</div>
+    <div class="swiper mySwiper mb-10">
+        <div class="swiper-wrapper mt-[115px]">
+            @foreach ($banner as $b)  
+                <div class="swiper-slide">
+                    <img src="{{ asset('storage/' . $b->gambar) }}" alt="" class="w-full h-auto">
+                </div>
+            @endforeach
         </div>
+        <!-- Tombol Next dan Prev harus di luar swiper-wrapper -->
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
-      </div>
-
-    <div data-aos="fade-up" class=" flex flex-col justify-center items-center bg-black p-5">
-        <!-- Tombol navigasi -->
-        <div class="flex justify-between w-full max-w-4xl mt-80">
-            <button id="prevBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
-                <i class="fa-solid fa-chevron-left"></i>
-            </button>
-            <button id="nextBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
-                <i class="fa-solid fa-chevron-right"></i>
-            </button>
-        </div>
-        
-        <!-- Container untuk film -->
-        <div class="film-container pr-[500px] md:pr-0 flex space-x-4 mt-8 overflow-x-hidden scrollbar-thin absolute ml-[500px] md:ml-0 scrollbar-thumb-gray-500 scrollbar-track-gray-300 max-w-4xl">
-            @foreach($datafilm as $film)
-            <a href="{{ route('subcriber.detail-film', ['id' => $film->id_film]) }}">
-                <div class="relative flex-shrink-0 min-w-[144px]">
-                    <img src="{{ asset('storage/' . $film->poster) }}" alt="{{ $film->judul }}" class="w-36 md:w-36 h-56">
-                    <p class="absolute bottom-0 left-0 w-full text-center bg-black bg-opacity-50 text-white p-1">
-                        {{ $film->judul }} <br> ({{ $film->tahun_rilis }})
-                    </p>
-                </div>
-            </a>
-        @endforeach
-        
-        </div>
     </div>
+    
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var swiper = new Swiper(".mySwiper", {
+            loop: true, // Agar bisa terus berputar
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    });
+</script>
+
+<div data-aos="fade-up" class="flex flex-col justify-center items-center bg-black p-5">
+   
+
+    <!-- Container untuk film -->
+    <div class="film-container flex space-x-4 mt-8 overflow-hidden relative max-w-4xl snap-x snap-mandatory">
+        @foreach($datafilm as $film)
+        <a href="{{ route('anonymous.detail-film', ['id' => $film->id_film]) }}">
+            <div class="relative flex-shrink-0 min-w-[144px] snap-center">
+                <img src="{{ asset('storage/' . $film->poster) }}" alt="{{ $film->judul }}" class="w-36 md:w-36 h-56">
+                <p class="absolute bottom-0 left-0 w-full text-center bg-black bg-opacity-50 text-white p-1">
+                    {{ $film->judul }} <br> ({{ $film->tahun_rilis }})
+                </p>
+            </div>
+        </a>
+        @endforeach
+    </div>
+     <!-- Tombol navigasi -->
+     <div class="flex justify-between w-full max-w-4xl mt-8">
+        <button id="prevBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button id="nextBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
 
 
     <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-5">
@@ -316,27 +327,20 @@ navigation: {
 
     <script>
           AOS.init();
-        document.addEventListener('DOMContentLoaded', () => {
-            const filmContainer = document.querySelector('.film-container');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
+          document.addEventListener("DOMContentLoaded", function () {
+                const container = document.querySelector(".film-container");
+                const prevBtn = document.getElementById("prevBtn");
+                const nextBtn = document.getElementById("nextBtn");
+                const itemWidth = 160; // Lebar elemen film (termasuk margin)
 
-            // Fungsi untuk scroll kiri
-            prevBtn.addEventListener('click', () => {
-                filmContainer.scrollBy({
-                    left: -300, // Scroll ke kiri sejauh 300px
-                    behavior: 'smooth',
+                nextBtn.addEventListener("click", function () {
+                    container.scrollBy({ left: itemWidth, behavior: "smooth" });
+                });
+
+                prevBtn.addEventListener("click", function () {
+                    container.scrollBy({ left: -itemWidth, behavior: "smooth" });
                 });
             });
-
-            // Fungsi untuk scroll kanan
-            nextBtn.addEventListener('click', () => {
-                filmContainer.scrollBy({
-                    left: 300, // Scroll ke kanan sejauh 300px
-                    behavior: 'smooth',
-                });
-            });
-        });
     </script>
     @endsection
 </body>

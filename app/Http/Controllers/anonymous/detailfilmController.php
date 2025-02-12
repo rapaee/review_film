@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\anonymous;
 
 use App\Http\Controllers\Controller;
+use App\Models\Casting;
 use App\Models\Comment;
 use App\Models\Film;
 use App\Models\Genre;
@@ -15,17 +16,19 @@ class detailfilmController extends Controller
      * Display a listing of the resource.
      */
     public function index($id)
-    {
-        $user = User::all();
-        $comment = Comment::where('id_film', $id)
+{
+    $user = User::all();
+    $comment = Comment::where('id_film', $id)
         ->orderByDesc('created_at')
         ->get();
-        $datafilm = Film::findOrFail($id);
-        $genre = Genre::all();
-    
-        // Ensure $comment is an array or collection
-        return view('anonymous/detail-film', compact('datafilm', 'comment', 'user','genre'));
-    }
+    $datafilm = Film::findOrFail($id);
+    $listgenre = Genre::all();
+    $genre = Genre::all();
+    $casting = Casting::where('id_film', $id)->get(); // Filter casting berdasarkan id_film
+
+    return view('anonymous/detail-film', compact('datafilm', 'comment', 'user', 'genre', 'casting','listgenre'));
+}
+
     
 
     /**

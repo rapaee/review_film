@@ -64,7 +64,7 @@
                                 </div>
                                 <input type="hidden" name="rating" id="rating" value="{{ old('rating') }}" required>
                     
-                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>

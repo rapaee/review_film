@@ -47,9 +47,15 @@ class detailFilmController extends Controller
      */
     public function store(Request $request)
     {
+        $allowedRoles = ['admin', 'author', 'subcriber'];
+    
+        if (!in_array(Auth::user()->role, $allowedRoles)) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk berkomentar.');
+        }
+    
         $request->validate([
             'comment' => 'required|string',
-            'rating' => '|integer|min:1|max:5',
+            'rating' => 'integer|min:1|max:5',
             'id_film' => 'required|exists:film,id_film',
         ]);
     
@@ -60,9 +66,9 @@ class detailFilmController extends Controller
             'id_film' => $request->id_film,
         ]);
     
-        return redirect()->route('subcriber.detail-film', $request->id_film)->with('success', 'Komentar berhasil ditambahkan!');
-
+        return redirect()->route('anonymous.detail-film', $request->id_film)->with('success', 'Komentar berhasil ditambahkan!');
     }
+    
     
 
     /**
