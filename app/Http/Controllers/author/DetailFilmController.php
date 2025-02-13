@@ -1,45 +1,36 @@
 <?php
 
-namespace App\Http\Controllers\subcriber;
+namespace App\Http\Controllers\author;
 
 use App\Http\Controllers\Controller;
-use App\Models\Banner;
 use App\Models\Comment;
 use App\Models\Film;
 use App\Models\Genre_relation;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class homeController extends Controller
+class DetailFilmController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        $banner = Banner::all();
         $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
-        ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
-        ->groupBy('genre_relations.id_genre', 'genre.title')
-        ->get();
+            ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+            ->groupBy('genre_relations.id_genre', 'genre.title')
+            ->get();
         
-        // Ambil data Genre_relation berdasarkan genre tertentu
-        $gl = Genre_relation::whereHas('genre', function ($query) {
-            $query->whereIn('title', ['Action', 'Romance', 'Fantasi']);
-        })->get();
-        
-        $datafilm = Film::all();
-        $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
-        $comments = Comment::with('film')
-        ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
-        ->groupBy('id_film')
-        ->get();
+        $user = User::all();
+        $comment = Comment::where('id_film', $id)
+            ->orderByDesc('created_at')
+            ->get();
     
-
+       $datafilm = Film::with('castings')->find($id);
     
-        return view('subcriber/home', compact('datafilm', 'gl','terbaru','comments','genre','banner'));
+        // Kirim $id ke view
+        return view('author.detail-film', compact('datafilm', 'comment', 'user', 'genre', 'id'));
     }
-    
 
     /**
      * Show the form for creating a new resource.

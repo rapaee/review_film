@@ -45,7 +45,7 @@ class AuthenticatedSessionController extends Controller
         case 'subcriber':
             return redirect('/');
         case 'author':
-            return redirect('author/home');
+            return redirect('/');
         default:
             logger('Unknown usertype: ' . $role);
             session()->flash('error', 'Jenis pengguna tidak dikenali!');

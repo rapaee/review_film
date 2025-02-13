@@ -52,7 +52,26 @@
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
       <ul class="space-y-2 font-medium">
+        @if(Auth::user()->role === 'author')
+        <li>
+          <a href="{{ route('author.home') }}" class="flex items-center w-56 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group  {{ request()->routeIs('author.home') ? 'bg-gray-700 text-white' : '' }}">
+            <div class="flex items-center">
+                <img src="https://cdn-icons-png.flaticon.com/128/617/617333.png" alt="Icon" class="w-5 h-5 filter invert">
+                <span class="ms-3 text-white">Dashboard</span>
+            </div>                
+         </a>
+         </li>
          <li>
+          <a href="{{ route('author.film') }}" class="flex items-center w-56 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group  {{ request()->routeIs('author.film') ? 'bg-gray-700 text-white' : '' }}">
+            <div class="flex items-center">
+                <img src="https://cdn-icons-png.flaticon.com/128/1101/1101793.png" alt="Icon" class="w-5 h-5 filter invert">
+                <span class="ms-3 text-white">Film</span>
+            </div>                
+         </a>
+         </li>
+        @endif
+        @if(Auth::user()->role === 'admin')
+        <li>
           <a href="{{ route('admin.home') }}" class="flex items-center w-56 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group  {{ request()->routeIs('admin.home') ? 'bg-gray-700 text-white' : '' }}">
             <div class="flex items-center">
                 <img src="https://cdn-icons-png.flaticon.com/128/617/617333.png" alt="Icon" class="w-5 h-5 filter invert">
@@ -108,6 +127,8 @@
             </div>                
          </a>
          </li>
+        @endif
+         
       </ul>
    </div>
 </aside>

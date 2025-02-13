@@ -67,37 +67,33 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($films as $film)
-                <tr class="border-b dark:border-gray-400">
-                    <td class="px-6 py-3 text-center">{{ $film->judul }}</td>
-                    <td class="px-6 py-3 text-center">{{ $film->pencipta }}</td>
-                    <td class="px-6 py-3 text-center">
-                        <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-16 mx-auto">
-                    </td>
-                    <td class="flex mt-3 justify-center items-center gap-3">
-                        <form id="delete-form-{{ $film->id_film }}" action="{{ route('admin.film.delete', $film->id_film) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="mt-4 text-white bg-red-600 hover:bg-red-700 rounded w-14 h-8 flex items-center justify-center delete-btn" data-id="{{ $film->id_film }}">
-                                <img src="https://cdn-icons-png.flaticon.com/128/542/542724.png" alt="" class="w-5 h-5 filter invert">
-                            </button>
-                        </form>
-                        <button onclick="showEditFilmPopup('{{ route('admin.edit-film.update', $film->id_film) }}', '{{ $film->judul }}', '{{ $film->pencipta }}', '{{ $film->deskripsi }}', '{{ $film->tahun_rilis }}', '{{ $film->durasi }}', '{{ $film->poster }}', '{{ $film->trailer }}', '{{ $film->kategori_umur }}')"
-                            class="text-white bg-green-600 hover:bg-green-700 rounded w-14 h-8 flex items-center justify-center">
-                            <img src="https://cdn-icons-png.flaticon.com/128/3597/3597088.png" alt="" class="w-5 h-5 filter invert">
+            @foreach ($film as $film)
+            <tr class="border-b dark:border-gray-400">
+                <td class="px-6 py-3 text-center">{{ $film->judul }}</td>
+                <td class="px-6 py-3 text-center">{{ $film->pencipta }}</td>
+                <td class="px-6 py-3 text-center">
+                    <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-16 mx-auto">
+                </td>
+                <td class="flex mt-3 justify-center items-center gap-3">
+                    <form id="delete-form-{{ $film->id_film }}" action="{{ route('author.film.delete', $film->id_film) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="mt-4 text-white bg-red-600 hover:bg-red-700 rounded w-14 h-8 flex items-center justify-center delete-btn" data-id="{{ $film->id_film }}">
+                            <img src="https://cdn-icons-png.flaticon.com/128/542/542724.png" alt="" class="w-5 h-5 filter invert">
                         </button>
-                        
-                        <a class="text-sm" href="{{ route('admin.film-detail', ['id' => $film->id_film]) }}">
-                        <button 
-                            class="text-white bg-yellow-600 hover:bg-yellow-700 rounded w-14 h-8 flex items-center justify-center">
+                    </form>
+                    <button onclick="showEditFilmPopup('{{ route('author.edit-film.update', $film->id_film) }}', '{{ $film->judul }}', '{{ $film->pencipta }}', '{{ $film->deskripsi }}', '{{ $film->tahun_rilis }}', '{{ $film->durasi }}', '{{ $film->poster }}', '{{ $film->trailer }}', '{{ $film->kategori_umur }}')"
+                        class="text-white bg-green-600 hover:bg-green-700 rounded w-14 h-8 flex items-center justify-center">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3597/3597088.png" alt="" class="w-5 h-5 filter invert">
+                    </button>
+                    <a class="text-sm" href="{{ route('author.detail-film', ['id' => $film->id_film]) }}">
+                        <button class="text-white bg-yellow-600 hover:bg-yellow-700 rounded w-14 h-8 flex items-center justify-center">
                             <img src="https://cdn-icons-png.flaticon.com/128/159/159604.png" alt="" class="w-5 h-5 filter invert">
                         </button>
-                        </a>
-
-                    </td>
-                    
-                </tr>
-            @endforeach
+                    </a>
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
     
@@ -136,7 +132,7 @@ document.getElementById('openModal').addEventListener('click', function () {
     Swal.fire({
         title: 'Tambah Film',
         html: `
-            <form id="addFilmForm" action="{{ route('admin.input-film.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="addFilmForm" action="{{ route('author.input-film.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id_users" value="{{ Auth::id() }}">
 

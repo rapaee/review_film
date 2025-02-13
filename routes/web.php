@@ -16,6 +16,8 @@ use App\Http\Controllers\anonymous\FilmFilterTerbaruController;
 use App\Http\Controllers\anonymous\filmgenreController;
 use App\Http\Controllers\anonymous\homeAnonymous;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\author\DetailFilmController as AuthorDetailFilmController;
+use App\Http\Controllers\author\FilmController as AuthorFilmController;
 use App\Http\Controllers\author\homeController as AuthorHomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\subcriber\detailFilmController as SubcriberDetailFilmController;
@@ -51,7 +53,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         
     Route::get('admin/film', [filmController::class,'index'])->name('admin.film');
     Route::post('admin/film', [filmController::class,'store'])->name('admin.input-film.store');
-    Route::put('admin/edit-film/{id_film}', [filmController::class, 'update'])->name('admin.edit-film.update');
+    Route::put('admin/film/{id_film}', [filmController::class, 'update'])->name('admin.edit-film.update');
     Route::delete('admin/film/{id_film}', [filmController::class, 'destroy'])->name('admin.film.delete');
 
     Route::get('admin/genre', [GenreController::class,'index'])->name('admin.genre');
@@ -93,14 +95,25 @@ Route::get('anonymous/filter-terbaru', [FilmFilterTerbaruController::class,'inde
 Route::get('anonymous/filter-rating', [filmFilterRatingController::class,'index'])->name('anonymous.filter-rating');
 Route::get('anonymous/film-genre/{id}', [filmgenreController::class, 'index'])->name('anonymous.film-genre');
 
-
-
-
-
-
-
-//author
+Route::middleware(['auth', 'role:author'])->group(function () {
+  //author
 Route::get('author/home', [AuthorHomeController::class,'index'])->name('author.home');
+Route::get('author/film', [AuthorFilmController::class,'index'])->name('author.film');
+Route::post('author/film', [AuthorFilmController::class,'store'])->name('author.input-film.store');
+Route::put('author/film/{id_film}', [AuthorFilmController::class, 'update'])->name('author.edit-film.update');
+Route::delete('author/film/{id_film}', [AuthorFilmController::class, 'destroy'])->name('author.film.delete');
+
+
+Route::get('author/detail-film/{id}', [AuthorDetailFilmController::class,'index'])->name('author.detail-film');
+
+
+});
+
+
+
+
+
+
 
 
 
