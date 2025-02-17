@@ -47,31 +47,45 @@ class homeAnonymous extends Controller
     
     public function search(Request $request)
     {
-       // Pastikan $search sudah diisi dengan benar (misalnya melalui input form)
+        // Ambil kata kunci pencarian dari request
         $search = request('search'); 
-
+    
+        // Ambil film berdasarkan pencarian judul
         $film = Film::where('judul', 'LIKE', "%{$search}%")->get();
-
-
-        
+    
+        // Ambil ID film yang ditemukan
+        $filmIds = $film->pluck('id_film');
+    
+        // Ambil genre berdasarkan ID film yang ditemukan
+        $filmGenres = Genre_relation::whereIn('id_film', $filmIds)
+            ->with('genre') // Pastikan relasi ke tabel genre sudah ada
+            ->get()
+            ->groupBy('id_film');
+    
+        // Ambil semua data banner
         $banner = Banner::all();
-
-        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
-        ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
-        ->groupBy('genre_relations.id_genre', 'genre.title')
-        ->get();
-        
-
-        
+    
+        // Ambil daftar genre unik yang tersedia
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title') // Pastikan field benar
+            ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+            ->groupBy('genre_relations.id_genre', 'genre.title')
+            ->get();
+    
+        // Ambil semua film berdasarkan tahun rilis
         $datafilm = Film::orderByDesc('tahun_rilis')->get();
+    
+        // Ambil 9 film terbaru berdasarkan tahun rilis
         $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
-
+    
+        // Ambil komentar dengan rating tertinggi untuk setiap film
         $comments = Comment::with('film')
-        ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
-        ->groupBy('id_film')
-        ->get();
-        
-        return view('anonymous/search-film', compact('film','datafilm','terbaru','comments', 'genre','banner'));
+            ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
+            ->groupBy('id_film')
+            ->get();
+    
+        return view('anonymous/search-film', compact(
+            'film', 'datafilm', 'terbaru', 'comments', 'genre', 'banner', 'filmGenres'
+        ));
     }
     
     

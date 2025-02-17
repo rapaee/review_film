@@ -21,7 +21,7 @@
 
         <!-- Search & Buttons -->
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-4">
-            <form class="max-w-md mx-auto" action="search" method="GET">
+            <form class="max-w-md mx-auto" action="{{ route('search') }}" method="GET">
                 <div class="relative">
                     <input type="search" id="default-search" name="search" value="{{ request('search') }}" 
                     class="block w-[200px] md:w-[400px] p-3 ps-2 md:ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none" 

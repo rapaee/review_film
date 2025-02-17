@@ -41,7 +41,7 @@
         <div class="swiper-wrapper">
             @foreach ($banner as $b)  
                 <div class="swiper-slide">
-                    <img src="{{ asset('storage/' . $b->gambar) }}" alt="" class="w-full h-auto">
+                    <img src="{{ asset('storage/' . $b->gambar) }}" alt="" class="w-full md:w-full h-[100px] md:h-auto object-none md:object-contain">
                 </div>
             @endforeach
         </div>
@@ -50,19 +50,22 @@
         <div class="swiper-button-prev"></div>
     </div>
     
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var swiper = new Swiper(".mySwiper", {
-            loop: true, // Agar bisa terus berputar
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var swiper = new Swiper(".mySwiper", {
+                loop: true, // Agar bisa terus berputar
+                autoplay: {
+                    delay: 3000, // Geser otomatis setiap 3 detik
+                    disableOnInteraction: false, // Tetap autoplay meskipun ada interaksi user
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+            });
         });
-    });
-</script>
+    </script>
+    
 
     
 

@@ -97,7 +97,7 @@ Route::get('anonymous/filter-terbaru', [FilmFilterTerbaruController::class,'inde
 Route::get('anonymous/filter-rating', [filmFilterRatingController::class,'index'])->name('anonymous.filter-rating');
 Route::get('anonymous/film-genre/{id}', [filmgenreController::class, 'index'])->name('anonymous.film-genre');
 
-Route::get('search', [homeAnonymous::class, 'search']);
+Route::get('search', [homeAnonymous::class, 'search'])->name('search');
 Route::get('anonymous/search-film', [homeAnonymous::class, 'search'])->name('anonymous.film-search');
 
 

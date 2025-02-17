@@ -26,14 +26,25 @@
         @else
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach($film as $f)
+               <a href="{{ route('anonymous.detail-film', ['id' => $f->id_film]) }}">
                 <div class="bg-white shadow-md rounded-lg overflow-hidden">
                     <img src="{{ asset('storage/' . $f->poster) }}" alt="{{ $f->judul }}" class="w-full h-56 object-cover">
                     <div class="p-4">
                         <h3 class="text-lg font-semibold">{{ $f->judul }}</h3>
-                        <p class="text-gray-500">Tahun Rilis: {{ $f->tahun_rilis }}</p>
-                        <a href="" class="text-blue-500 hover:underline">Lihat Detail</a>
+                        <p class="text-gray-500">Tahun Rilis ( {{ $f->tahun_rilis }} )
+                            <br>
+                            <span class="text-red-500">
+                                @if(isset($filmGenres[$f->id_film]))
+                                    {{ $filmGenres[$f->id_film]->pluck('genre.title')->implode(', ') }}
+                                @else
+                                    Tidak ada genre
+                                @endif
+                            </span>
+                        </p>
+                        
                     </div>
                 </div>
+               </a>
             @endforeach
             
             </div>

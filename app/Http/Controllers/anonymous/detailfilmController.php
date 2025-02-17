@@ -29,7 +29,7 @@ class detailfilmController extends Controller
     return view('anonymous/detail-film', compact('datafilm', 'comment', 'user', 'genre', 'casting','listgenre'));
 }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
