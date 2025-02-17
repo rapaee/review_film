@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $datafilm->judul }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     @extends('navbar-guest.navbar')
@@ -19,9 +21,31 @@
                     <p class="mb-3 font-normal text-center text-white md:text-gray-400 md:text-left">{{ $datafilm->deskripsi }}</p>
 
                    <div class="flex justify-center items-center md:justify-start">
-                    <a href="{{ asset('storage/' . $datafilm->trailer) }}" target="_blank"" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-md w-40 border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                        Trailer
-                    </a>
+            
+                    <div x-data="{ open: false }">
+                        <!-- Tombol untuk membuka modal -->
+                        <button @click="open = true" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-black rounded-md w-40 border border-gray-200 hover:bg-gray-900">
+                            Lihat Trailer
+                        </button>
+                    
+                        <!-- Modal Trailer -->
+                        <div x-show="open" x-cloak class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="relative ml-52 rounded-lg w-[90%] md:w-[800px] flex flex-col items-center">
+                                <!-- Tombol Close -->
+                                <button @click="open = false; $refs.trailer.pause(); $refs.trailer.currentTime = 0;" class="absolute top-2 right-2 cursor-pointer text-gray-500 z-50 hover:text-gray-800">
+                                    ✖
+                                </button>
+                    
+                                <!-- Video Trailer -->
+                                <video controls class="w-full rounded" x-ref="trailer">
+                                    <source src="{{ asset('storage/' . $datafilm->trailer) }}" type="video/mp4">
+                                    Browser tidak mendukung video.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
                     <hr style="  border: none; border-left: 2px solid gray; height: 50px;">
                     <p class=" ml-2 mb-3 font-normal text-left text-white md:text-gray-500">
                         @php
@@ -96,13 +120,17 @@
                     <div id="loginPopup" class="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
                         <div class="bg-white p-4 rounded-lg shadow-lg">
                             <p class="text-sm text-gray-700">Anda harus login dulu untuk memposting komentar.</p>
-                            <div class="mt-4 flex justify-end">
-                                <button onclick="closePopup()" class="px-4 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-800">
-                                    OK
+                            <div class="mt-4 flex justify-end space-x-2">
+                                <a href="/login" class="px-4 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-800">
+                                    Login
+                                </a>
+                                <button id="closePopupBtn" class="px-4 py-2 text-white bg-gray-500 rounded-lg hover:bg-gray-600">
+                                    Tutup
                                 </button>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
          </form>
@@ -115,14 +143,33 @@
                     <p class="font-bold">{{ \Carbon\Carbon::parse($c->created_at)->format('Y-m-d h:i A') }}</p>
                 </div>
                 <p>{{ $c->comment }}</p>
-                <div class="flex items-center text-sm text-gray-400 mt-2">
-                    <span class="cursor-pointer hover:text-blue-400">Reply</span>
-                </div>
             </div>
             @endforeach
         </div>
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const loginPopup = document.getElementById('loginPopup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+
+    function checkLogin(event) {
+        event.preventDefault();
+        loginPopup.classList.remove('hidden');
+    }
+
+    function closePopupAndReload() {
+        loginPopup.classList.add('hidden');
+        setTimeout(() => {
+            location.reload();
+        }, 100); // Beri jeda 100ms agar animasi berjalan sebelum reload
+    }
+
+    closePopupBtn.addEventListener('click', closePopupAndReload);
+    window.checkLogin = checkLogin;
+});
+</script>
+
 @endguest
 
 {{-- Subscriber (Tampil jika sudah login) --}}
@@ -172,18 +219,20 @@
                     <p class="font-bold">{{ $c->user->name }}</p>
                     <p class="font-bold">{{ \Carbon\Carbon::parse($c->created_at)->format('Y-m-d h:i A') }}</p>
                 </div>
-                <p>{{ $c->comment }}</p>
-                <div class="flex items-center text-sm text-gray-400 mt-2">
-                    <span class="cursor-pointer hover:text-blue-400">Reply</span>
+                <div class="flex">
+                    <p>{{ $c->comment }}</p>
                     @if ($c->id_user == auth()->id()) 
-                        <form action="{{ route('subcriber.comment.detail-film', $c->id_comments) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="cursor-pointer text-red-500 hover:text-red-700 ml-2">
-                                Hapus
-                            </button>
-                        </form>
+                    <form action="{{ route('subcriber.comment.detail-film', $c->id_comments) }}" method="POST" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="cursor-pointer text-red-500 hover:text-red-700 ml-2">
+                            Hapus
+                        </button>
+                    </form>
                     @endif
+                </div>
+                <div class="flex items-center text-sm text-gray-400 mt-2">
+                   
                 </div>
             </div>
             @endforeach

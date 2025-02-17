@@ -18,9 +18,12 @@ use App\Http\Controllers\anonymous\homeAnonymous;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\author\DetailFilmController as AuthorDetailFilmController;
 use App\Http\Controllers\author\FilmController as AuthorFilmController;
+use App\Http\Controllers\author\GenreRelationController as AuthorGenreRelationController;
 use App\Http\Controllers\author\homeController as AuthorHomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\subcriber\detailFilmController as SubcriberDetailFilmController;
+use App\Models\Film;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [homeAnonymous::class,'index'])->name('anonymous.home');
@@ -35,8 +38,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin/home', [AdminHomeController::class,'index'])->name('admin.home');
     Route::get('admin/film-detail/{id}', [FilmDetailController::class,'index'])->name('admin.film-detail');
     Route::post('admin/film-detail', [FilmDetailController::class, 'store'])->name('admin.film-detail.casting');
-    Route::get('/admin/edit-genre-relasi/{id}', [GenreRelationController::class, 'edit'])->name('admin.edit-genre-relasi');
-    Route::put('admin/edit-genre-relasi/{id}', [GenreRelationController::class, 'update'])->name('admin.edit-genre-relasi.update');
 
     Route::get('admin/castings', [CastingsController::class,'index'])->name('admin.castings');
     Route::post('admin/castings', [CastingsController::class,'store'])->name('admin.castings.store');
@@ -63,7 +64,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('admin/genre-relasi', [GenreRelationController::class,'index'])->name('admin.genre-relasi');
     Route::post('admin/genre-relasi', [GenreRelationController::class,'store'])->name('admin.genre-relasi.store');
-    Route::put('admin/genre-relasi/{id}', [GenreRelationController::class, 'update'])->name('admin.genre-relasi.update');
+    Route::get('/admin/edit-genre-relasi/{id}', [GenreRelationController::class, 'edit'])->name('admin.edit-genre-relasi');
+    Route::put('admin/edit-genre-relasi/{id}', [GenreRelationController::class, 'update'])->name('admin.edit-genre-relasi.update');
     Route::delete('admin/genre-relasi/{id}', [GenreRelationController::class, 'destroy'])->name('admin.genre-relasi.delete');
 
     Route::get('admin/user', [UserController::class,'index'])->name('admin.user');
@@ -95,6 +97,10 @@ Route::get('anonymous/filter-terbaru', [FilmFilterTerbaruController::class,'inde
 Route::get('anonymous/filter-rating', [filmFilterRatingController::class,'index'])->name('anonymous.filter-rating');
 Route::get('anonymous/film-genre/{id}', [filmgenreController::class, 'index'])->name('anonymous.film-genre');
 
+Route::get('search', [homeAnonymous::class, 'search']);
+Route::get('anonymous/search-film', [homeAnonymous::class, 'search'])->name('anonymous.film-search');
+
+
 Route::middleware(['auth', 'role:author'])->group(function () {
   //author
 Route::get('author/home', [AuthorHomeController::class,'index'])->name('author.home');
@@ -102,6 +108,12 @@ Route::get('author/film', [AuthorFilmController::class,'index'])->name('author.f
 Route::post('author/film', [AuthorFilmController::class,'store'])->name('author.input-film.store');
 Route::put('author/film/{id_film}', [AuthorFilmController::class, 'update'])->name('author.edit-film.update');
 Route::delete('author/film/{id_film}', [AuthorFilmController::class, 'destroy'])->name('author.film.delete');
+
+Route::get('author/genre-relasi', [AuthorGenreRelationController::class,'index'])->name('author.genre-relasi');
+Route::post('author/genre-relasi', [AuthorGenreRelationController::class,'store'])->name('author.genre-relasi.store');
+Route::delete('author/genre-relasi/{id}', [AuthorGenreRelationController::class, 'destroy'])->name('author.genre-relasi.delete');
+Route::get('author/edit-genre-relasi/{id}', [AuthorGenreRelationController::class, 'edit'])->name('author.edit-genre-relasi');
+Route::put('author/edit-genre-relasi/{id}', [AuthorGenreRelationController::class, 'update'])->name('author.edit-genre-relasi.update');
 
 
 Route::get('author/detail-film/{id}', [AuthorDetailFilmController::class,'index'])->name('author.detail-film');

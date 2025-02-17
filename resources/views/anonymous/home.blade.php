@@ -91,12 +91,7 @@
             <i class="fa-solid fa-chevron-right"></i>
         </button>
     </div>
-</div>
-
-
-
-
-      
+</div>      
 
         <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-5">
             <div class="p-3 w-full">
@@ -157,6 +152,22 @@
                             <img src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" 
                                  class="w-full md:w-[130px] h-32 md:h-[170px] group-hover:opacity-75 transition-transform-300">
                             
+                            <!-- Ikon Bintang -->
+                            <div class="absolute top-2 right-2 flex justify-center items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.285 3.945a1 1 0 00.95.69h4.15c.969 0 1.372 1.24.588 1.81l-3.356 2.438a1 1 0 00-.364 1.118l1.285 3.945c.3.921-.755 1.688-1.538 1.118L10 14.347l-3.951 2.844c-.783.57-1.837-.197-1.538-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.076 8.372c-.784-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.285-3.945z" />
+                                </svg>
+                                <p class="text-yellow-500 text-md">7.9</p>
+                            </div>
+
+                            {{-- <!-- Ikon Bintang -->
+                            <div class="absolute top-2 right-2 flex justify-center items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.285 3.945a1 1 0 00.95.69h4.15c.969 0 1.372 1.24.588 1.81l-3.356 2.438a1 1 0 00-.364 1.118l1.285 3.945c.3.921-.755 1.688-1.538 1.118L10 14.347l-3.951 2.844c-.783.57-1.837-.197-1.538-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.076 8.372c-.784-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.285-3.945z" />
+                                </svg>
+                                <p class="text-yellow-500 text-md">7.9</p>
+                            </div>--}}
+
                             <!-- Judul dan Tahun Rilis -->
                             <p class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md">
                                 {{ $poster->film->judul }} <br> ({{ $poster->film->tahun_rilis }})
@@ -166,12 +177,11 @@
                             <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 ease-in-out"></div>
                         </div> 
                     </a>
-                @endforeach
-                
+                    @endforeach
                 </div>
-
             </div>
         </div>
+        
 
         <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-8 mb-10">
             <div  data-aos-anchor-placement="bottom-bottom" class="p-3 w-full">
@@ -200,10 +210,7 @@
 
             </div>
         </div>
-        
-        
 
-         
 
 <footer data-aos="fade-up" class="bg-white dark:bg-[#17153B]">
     <div class="mx-auto w-full max-w-screen-xl">

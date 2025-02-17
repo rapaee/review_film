@@ -21,20 +21,23 @@
 
         <!-- Search & Buttons -->
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-4">
-            <form class="max-w-md mx-auto">
-                
+            <form class="max-w-md mx-auto" action="search" method="GET">
                 <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-2 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
-                    </div>
-                    <input type="search" id="default-search" 
-                           class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                           placeholder="Cari judul film ..." 
-                           required>
+                    <input type="search" id="default-search" name="search" value="{{ request('search') }}" 
+                    class="block w-[200px] md:w-[400px] p-3 ps-2 md:ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none" 
+                    placeholder="Cari judul film" autocomplete="off" required>
+                    <button type="submit" 
+                    class="absolute inset-y-0 end-0 flex items-center justify-center bg-blue-600 hover:bg-blue-700 rounded-r-md text-white dark:text-gray-400 p-3 md:p-5">
+                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </button>
+                
+                    
                 </div>
             </form>
+            
+            
 
         @guest
             <a href="{{ route('login') }}">
@@ -111,22 +114,6 @@
             </div>
         </div>
     
-        <!-- Dropdown 2 -->
-        <div class="relative">
-            <button id="dropdownDelayButton2" class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
-                <img src="https://cdn-icons-png.flaticon.com/128/535/535234.png" alt="" class="w-5 h-5 filter invert">
-                <span>Paee</span>
-                <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt="" class="w-3 h-3 filter invert">
-            </button>
-    
-            <!-- Dropdown menu -->
-            <div id="dropdownDelay2" class="absolute md:-ml-0 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
-                <ul class="flex gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">Terbaru</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">Popular</a></li>
-                </ul>
-            </div>
-        </div>
     
         <!-- Dropdown 3 -->
         <div class="relative">
@@ -179,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Panggil fungsi handleDropdown untuk masing-masing ID dropdown
     handleDropdown('dropdownDelayButton', 'dropdownDelay');
-    handleDropdown('dropdownDelayButton2', 'dropdownDelay2');
     handleDropdown('dropdownDelayButton3', 'dropdownDelay3');
 });
 

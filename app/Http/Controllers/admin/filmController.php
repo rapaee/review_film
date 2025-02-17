@@ -149,6 +149,11 @@ class filmController extends Controller
     try {
         $film = Film::findOrFail($id_film);
 
+        // Cek dan hapus data terkait dari tabel 'comments' yang memiliki FK ke film
+        if ($film->comments()->count() > 0) {
+            $film->comments()->delete();  // Hapus semua komentar terkait
+        }
+
         // Hapus file trailer dan gambar jika ada di storage/app/public/posters
         if ($film->trailer && Storage::disk('public')->exists($film->trailer)) {
             Storage::disk('public')->delete($film->trailer);
@@ -156,12 +161,11 @@ class filmController extends Controller
         if ($film->poster && Storage::disk('public')->exists($film->poster)) {
             Storage::disk('public')->delete($film->poster);
         }
-        
 
         // Hapus semua genre yang berelasi dengan film ini
         $film->genres()->delete();
 
-        // Hapus film setelah genre dan file terkait terhapus
+        // Hapus film setelah data terkait terhapus
         $film->delete();
 
         return redirect()->route('admin.film')->with('success', 'Data film berhasil dihapus.');
@@ -169,6 +173,7 @@ class filmController extends Controller
         return redirect()->route('admin.film')->with('error', 'Data film tidak ditemukan atau terjadi kesalahan.');
     }
 }
+
 
     
 }
