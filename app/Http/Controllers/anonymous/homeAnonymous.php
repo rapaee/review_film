@@ -29,10 +29,9 @@ class homeAnonymous extends Controller
         ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
         ->groupBy('genre_relations.id_genre', 'genre.title')
         ->get();
-        
-
-        
+        $Film = Film::all();
         $datafilm = Film::orderByDesc('tahun_rilis')->get();
+        $dataFilm = Film::orderByDesc('tahun_rilis')->get();
         $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
 
         $comments = Comment::with('film')
@@ -42,7 +41,7 @@ class homeAnonymous extends Controller
         
         
     
-        return view('anonymous/home', compact('datafilm','terbaru','comments', 'genre','banner'));
+        return view('anonymous/home', compact('Film','datafilm','dataFilm','terbaru','comments', 'genre','banner'));
     }
     
     public function search(Request $request)
@@ -70,7 +69,8 @@ class homeAnonymous extends Controller
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
             ->groupBy('genre_relations.id_genre', 'genre.title')
             ->get();
-    
+         // Ambil semua film berdasarkan tahun rilis
+         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
         // Ambil semua film berdasarkan tahun rilis
         $datafilm = Film::orderByDesc('tahun_rilis')->get();
     
@@ -84,11 +84,37 @@ class homeAnonymous extends Controller
             ->get();
     
         return view('anonymous/search-film', compact(
-            'film', 'datafilm', 'terbaru', 'comments', 'genre', 'banner', 'filmGenres'
+            'film', 'datafilm', 'terbaru', 'comments', 'genre', 'banner','dataFilm', 'filmGenres'
         ));
     }
     
+    public function filterByYear($tahun)
+    {
+         // Ambil semua data banner
+         $banner = Banner::all();
     
+         // Ambil daftar genre unik yang tersedia
+         $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title') // Pastikan field benar
+             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+             ->groupBy('genre_relations.id_genre', 'genre.title')
+             ->get();
+     
+         // Ambil semua film berdasarkan tahun rilis
+         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
+     
+         // Ambil 9 film terbaru berdasarkan tahun rilis
+         $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
+     
+         // Ambil komentar dengan rating tertinggi untuk setiap film
+         $comments = Comment::with('film')
+             ->select('id_film', DB::raw('MAX(rating) as max_rating')) // Ambil rating tertinggi
+             ->groupBy('id_film')
+             ->get();
+
+
+        $films = Film::where('tahun_rilis', $tahun)->get();
+        return view('anonymous/tahun-rilis', compact('films', 'tahun', 'dataFilm', 'terbaru', 'comments', 'genre', 'banner'));
+    }
     
 
     /**

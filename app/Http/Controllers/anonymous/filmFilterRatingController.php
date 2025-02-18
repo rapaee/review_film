@@ -4,6 +4,7 @@ namespace App\Http\Controllers\anonymous;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\Film;
 use App\Models\Genre;
 use App\Models\Genre_relation;
 use Illuminate\Http\Request;
@@ -26,9 +27,9 @@ class filmFilterRatingController extends Controller
         $genre = Genre::all();
         // Ambil data film berdasarkan ID yang ada di komentar
         $films = Genre_relation::whereIn('id_film', $idFilms)->get();
-
+        $dataFilm = Film::orderByDesc('tahun_rilis')->get();
         
-        return view('anonymous/filter-rating', compact('comments','films','genre'));
+        return view('anonymous/filter-rating', compact('dataFilm','comments','films','genre'));
     }
 
     /**

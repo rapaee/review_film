@@ -22,7 +22,7 @@ class filmgenreController extends Controller
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
             ->groupBy('genre_relations.id_genre', 'genre.title')
             ->get();
-    
+        $dataFilm = Film::orderByDesc('tahun_rilis')->get();
         // Ambil film tanpa duplikasi, lalu gabungkan genre dalam satu array
         $films = Film::select('film.id_film', 'film.judul', 'film.poster', 'film.tahun_rilis')
             ->join('genre_relations', 'film.id_film', '=', 'genre_relations.id_film')
@@ -39,7 +39,7 @@ class filmgenreController extends Controller
             });
     
             // $datafilm = Film::orderByDesc('tahun_rilis')->get();
-        return view('anonymous.film-genre', compact('genre', 'films', 'selectedGenre'));
+        return view('anonymous.film-genre', compact('dataFilm','genre', 'films', 'selectedGenre'));
     }
     
 

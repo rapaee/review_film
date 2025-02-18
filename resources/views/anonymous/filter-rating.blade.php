@@ -9,20 +9,14 @@
 <body class="bg-gray-100">
     @extends('navbar-guest.navbar')
     @section('navbar-guest')
-    <div class=" w-full md:w-10/12 flex justify-center items-center mx-auto">
-        <div class="p-5 w-full mt-32">
-            <!-- Header -->
-            <div class="bg-white w-full md:w-[1205px] ml-0 md:ml-2.5 p-2 flex justify-center md:justify-normal mb-4">
-                <h1 class="text-xl font-bold mb-4">Daftar Film Populer Review Film</h1>
-            </div>
-    
-            <div class="grid grid-cols-3 gap-3 justify-center md:flex md:flex-wrap">
-                @foreach ($comments as $poster)
-                <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}" class="bg-white md:pb-12 pb-20 w-full md:w-[140px] group">
-                    <div class="relative flex-shrink-0">
+    <div class="container mx-auto px-4 py-6">
+        <h2 class="text-2xl font-bold mb-5 mt-32">Film Populer Review Film</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            @foreach ($comments as $poster)
+                <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}" class="bg-white shadow-md rounded-lg overflow-hidden group">
+                    <div class="relative">
                         <!-- Gambar Poster -->
-                        <img src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" 
-                             class="w-full md:w-[150px] h-40 md:h-[200px] group-hover:opacity-75 transition-transform-300">
+                        <img src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" class="w-full h-56 object-cover group-hover:opacity-75 transition-all">
                         
                         @php
                             // Cari film berdasarkan id_film dari poster
@@ -30,27 +24,31 @@
                         @endphp
                         
                         @if ($film)
-                            <div class="flex justify-center items-center text-center">
+                            <div class="p-4">
                                 <!-- Judul dan Tahun Rilis -->
-                                <p class="font-bold md:text-md text-xs">
-                                    {{ $film->film->judul }} <br> ({{ $film->film->tahun_rilis }})
-                                </p> 
+                                <h3 class="text-lg font-semibold">{{ $film->film->judul }}</h3>
+                                <p class="text-gray-500">Tahun Rilis ({{ $film->film->tahun_rilis }})</p>
+                                
+                                <!-- Menampilkan semua genre -->
+                                <p class="text-red-500 text-sm">
+                                    @if(isset($film->genre))
+                                        {{ $film->genre->title }}
+                                    @else
+                                        Tidak ada genre
+                                    @endif
+                                </p>
                             </div>
-                             <!-- Menampilkan semua genre -->
-                            <p class="flex justify-center text-red-600 md:text-xs text-xs">
-                                {{ $film->genre->title }}
-                            </p> 
                         @endif
-                       
-                    </div> 
+                    </div>
                 </a>
             @endforeach
-            
-
-            </div>
-                         
         </div>
+        
+        @empty($comments)
+            <p class="text-gray-500"></p>
+        @endforelse
     </div>
+    
 
 
    

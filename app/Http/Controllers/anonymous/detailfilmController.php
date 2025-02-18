@@ -9,6 +9,7 @@ use App\Models\Film;
 use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class detailfilmController extends Controller
 {
@@ -21,14 +22,19 @@ class detailfilmController extends Controller
     $comment = Comment::where('id_film', $id)
         ->orderByDesc('created_at')
         ->get();
+    $dataFilm = Film::orderByDesc('tahun_rilis')->get();
     $datafilm = Film::findOrFail($id);
     $listgenre = Genre::all();
     $genre = Genre::all();
     $casting = Casting::where('id_film', $id)->get(); // Filter casting berdasarkan id_film
+     // Ambil semua data komentar dan rating
+     $comments = Comment::all();
+     $hasCommented = Auth::check() ? Comment::where('id_user', Auth::user()->id )->where('id_film', $id)->exists() : false;
 
-    return view('anonymous/detail-film', compact('datafilm', 'comment', 'user', 'genre', 'casting','listgenre'));
+     // Hitung rata-rata rating
+     $averageRating = $comments->avg('rating'); // rating adalah nama kolom rating di tabel comments
+    return view('anonymous/detail-film', compact('hasCommented','averageRating','dataFilm','datafilm', 'comment', 'user', 'genre', 'casting','listgenre'));
 }
-
 
 
     /**

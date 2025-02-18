@@ -37,108 +37,89 @@
 <body class="bg-gray-100">
     @extends('navbar-guest.navbar')
     @section('navbar-guest')
-    <div class="swiper mySwiper mb-10 mt-[115px]">
-        <div class="swiper-wrapper">
-            @foreach ($banner as $b)  
-                <div class="swiper-slide">
-                    <img src="{{ asset('storage/' . $b->gambar) }}" alt="" class="w-full md:w-full h-[100px] md:h-auto object-none md:object-contain">
-                </div>
-            @endforeach
-        </div>
-        <!-- Tombol Next dan Prev harus di luar swiper-wrapper -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-    </div>
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var swiper = new Swiper(".mySwiper", {
-                loop: true, // Agar bisa terus berputar
-                autoplay: {
-                    delay: 3000, // Geser otomatis setiap 3 detik
-                    disableOnInteraction: false, // Tetap autoplay meskipun ada interaksi user
-                },
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
-            });
-        });
-    </script>
-    
-
-    
-
-<div data-aos="fade-up" class="flex flex-col justify-center items-center bg-black p-5">
+  
+     <div
+     id="carouselExampleIndicators"
+     class="relative mt-20 md:mt-20"
+     data-twe-carousel-init
+     data-twe-ride="carousel">
+     
+     <!--Carousel indicators-->
+     <div
+       class="absolute bottom-0 left-0 right-0 z-[2] mx-[15%] mb-4 flex list-none justify-center p-0"
+       data-twe-carousel-indicators>
+       @foreach ($banner as $key => $b)
+         <button
+           type="button"
+           data-twe-target="#carouselExampleIndicators"
+           data-twe-slide-to="{{ $key }}"
+           class="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none {{ $loop->first ? 'data-twe-carousel-active' : '' }}"
+           aria-label="Slide {{ $key + 1 }}">
+         </button>
+       @endforeach
+     </div>
+   
+     <!--Carousel items-->
+     <div class="relative w-full overflow-hidden after:clear-both after:block after:content-['']">
+       @foreach ($banner as $key => $b)  
+         <div
+           class="relative float-left w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none {{ $loop->first ? 'data-twe-carousel-active' : '' }}"
+           data-twe-carousel-item>
+           <img src="{{ asset('storage/' . $b->gambar) }}" alt="Slide {{ $key + 1 }}" class="block w-full ">
+         </div>
+       @endforeach
+     </div>
+   
+     <!--Carousel controls - prev item-->
+     <button
+       class="absolute bottom-0 left-0 top-0 z-[1] flex w-[15%] items-center justify-center border-0 bg-none p-0 text-center text-white opacity-50 transition-opacity duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:text-white hover:no-underline hover:opacity-90 hover:outline-none focus:text-white focus:no-underline focus:opacity-90 focus:outline-none motion-reduce:transition-none"
+       type="button"
+       data-twe-target="#carouselExampleIndicators"
+       data-twe-slide="prev">
+       <span class="inline-block h-8 w-8">
+         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+         </svg>
+       </span>
+       <span class="sr-only">Previous</span>
+     </button>
+   
+     <!--Carousel controls - next item-->
+     <button
+       class="absolute bottom-0 right-0 top-0 z-[1] flex w-[15%] items-center justify-center border-0 bg-none p-0 text-center text-black opacity-50 transition-opacity duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:text-white hover:no-underline hover:opacity-90 hover:outline-none focus:text-white focus:no-underline focus:opacity-90 focus:outline-none motion-reduce:transition-none"
+       type="button"
+       data-twe-target="#carouselExampleIndicators"
+       data-twe-slide="next">
+       <span class="inline-block h-8 w-8">
+         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+           <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+         </svg>
+       </span>
+       <span class="sr-only">Next</span>
+     </button>
+   </div>
    
 
-    <!-- Container untuk film -->
-    <div class="film-container flex space-x-4 mt-8 overflow-hidden relative max-w-4xl snap-x snap-mandatory">
-        @foreach($datafilm as $film)
-        <a href="{{ route('anonymous.detail-film', ['id' => $film->id_film]) }}">
-            <div class="relative flex-shrink-0 min-w-[144px] snap-center">
-                <img src="{{ asset('storage/' . $film->poster) }}" alt="{{ $film->judul }}" class="w-36 md:w-36 h-56">
-                <p class="absolute bottom-0 left-0 w-full text-center bg-black bg-opacity-50 text-white p-1">
-                    {{ $film->judul }} <br> ({{ $film->tahun_rilis }})
-                </p>
+
+   <div data-aos="fade-up" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
+    @foreach ($datafilm as $poster)
+        <div class="max-w-sm bg-black border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-200">
+            <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}">
+                <img class="rounded-t-lg w-full h-52 object-cover" src="{{ asset('storage/' . $poster->poster) }}" alt="{{ $poster->judul }}" />
+                <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}">
+                <div class="p-4">
+                        <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-black">{{ $poster->judul }}</h5>
+                        <p class="mb-3 text-sm text-gray-700 dark:text-gray-400">Tahun Rilis ( {{ $poster->tahun_rilis }} )</p>
+                    </div>
+                </a>
             </div>
         </a>
-        @endforeach
-    </div>
-     <!-- Tombol navigasi -->
-     <div class="flex justify-between w-full max-w-4xl mt-8">
-        <button id="prevBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <button id="nextBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
-    </div>
-</div>      
-
-        <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-5">
-            <div class="p-3 w-full">
-                <!-- Header film terbaru -->
-                <div class="flex justify-between items-center mb-2">
-                    <h1 class="text-xl font-bold">TERBARU</h1>
-                    <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">
-                        <a href="{{ route('anonymous.filter-terbaru') }}">SEMUA</a>
-                    </button>
-                </div>
-        
-                <div  class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
-                    @foreach ($terbaru as $poster)
-                    <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}" class="w-full md:w-[110px] group">
-                        <div class="relative flex-shrink-0">
-                            <!-- Gambar Poster -->
-                            <img src="{{ asset('storage/' . $poster->poster) }}" alt="{{ $poster->judul }}" 
-                                 class="w-full md:w-[130px] h-32 md:h-[170px] group-hover:opacity-75 transition-transform-300">
-                            
-                            <!-- Judul dan Tahun Rilis (Mobile Text) -->
-                            <p class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md hidden group-hover:block md:hidden">
-                                {{ $poster->judul }} <br> ({{ $poster->tahun_rilis }})
-                            </p> 
-                            
-                            <!-- Judul dan Tahun Rilis (Desktop Text) -->
-                            <p class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md md:block hidden">
-                                {{ $poster->judul }} <br> ({{ $poster->tahun_rilis }})
-                            </p>
-        
-                            <!-- Overlay Efek Hover -->
-                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 ease-in-out"></div>
-                        </div> 
-                    </a>
-                    @endforeach
-                </div>
-                             
-            </div>
-        </div>
-        
-
+    @endforeach
+</div>
 
       
-        <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-8 mb-10">
-            <div class="p-3 w-full">
+        <div data-aos="fade-up" class="rounded-md bg-white w-full md:w-[1480px] flex justify-center items-center mx-auto mt-8 mb-12">
+            <div class="p-5 w-full">
                 <!-- Header -->
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-xl font-bold">Paling Populer</h1>
@@ -185,34 +166,6 @@
             </div>
         </div>
         
-
-        <div data-aos="fade-up" class="bg-white w-full md:w-10/12 flex justify-center items-center mx-auto mt-8 mb-10">
-            <div  data-aos-anchor-placement="bottom-bottom" class="p-3 w-full">
-                <!-- Header -->
-        
-                <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
-                    @foreach ($datafilm as $poster)
-                    <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}" class="w-full md:w-[110px] group">
-                        <div class="relative flex-shrink-0">
-                            <!-- Gambar Poster -->
-                            <img src="{{ asset('storage/' . $poster->poster) }}" alt="{{ $poster->judul }}" 
-                                 class="w-full md:w-[130px] h-32 md:h-[170px] group-hover:opacity-75 transition-transform-300">
-                            
-                            <!-- Judul dan Tahun Rilis -->
-                            <p class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md">
-                                {{ $poster->judul }} <br> ({{ $poster->tahun_rilis }})
-                            </p> 
-                
-                            <!-- Overlay Efek Hover -->
-                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 ease-in-out"></div>
-                        </div> 
-                    </a>
-                @endforeach
-                
-                </div>
-
-            </div>
-        </div>
 
 
 <footer data-aos="fade-up" class="bg-white dark:bg-[#17153B]">
@@ -336,23 +289,95 @@
 </script>
 
         <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+  const carousel = document.querySelector("#carouselExampleIndicators");
+  const items = carousel.querySelectorAll("[data-twe-carousel-item]");
+  const indicators = carousel.querySelectorAll("[data-twe-carousel-indicators] button");
+  const prevButton = carousel.querySelector("[data-twe-slide='prev']");
+  const nextButton = carousel.querySelector("[data-twe-slide='next']");
+  let currentIndex = 0;
+  let autoSlide;
+
+  function updateCarousel(index) {
+    items.forEach((item, i) => {
+      item.classList.toggle("hidden", i !== index);
+    });
+    indicators.forEach((indicator, i) => {
+      indicator.classList.toggle("opacity-100", i === index);
+      indicator.classList.toggle("opacity-50", i !== index);
+    });
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % items.length;
+    updateCarousel(currentIndex);
+  }
+
+  prevButton.addEventListener("click", function () {
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    updateCarousel(currentIndex);
+    resetAutoSlide();
+  });
+
+  nextButton.addEventListener("click", function () {
+    nextSlide();
+    resetAutoSlide();
+  });
+
+  indicators.forEach((indicator, i) => {
+    indicator.addEventListener("click", function () {
+      currentIndex = i;
+      updateCarousel(currentIndex);
+      resetAutoSlide();
+    });
+  });
+
+  function startAutoSlide() {
+    autoSlide = setInterval(nextSlide, 5000);
+  }
+
+  function resetAutoSlide() {
+    clearInterval(autoSlide);
+    startAutoSlide();
+  }
+
+  startAutoSlide();
+  updateCarousel(currentIndex);
+});
+
             AOS.init();
 
             document.addEventListener("DOMContentLoaded", function () {
-                const container = document.querySelector(".film-container");
-                const prevBtn = document.getElementById("prevBtn");
-                const nextBtn = document.getElementById("nextBtn");
-                const itemWidth = 160; // Lebar elemen film (termasuk margin)
+    const container = document.querySelector(".film-container");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-                nextBtn.addEventListener("click", function () {
-                    container.scrollBy({ left: itemWidth, behavior: "smooth" });
-                });
+    function getItemWidth() {
+        // Ambil lebar elemen pertama sebagai referensi
+        const firstItem = container.querySelector(".film-item");
+        return firstItem ? firstItem.offsetWidth + 16 : 160; // Tambahkan margin (sesuaikan jika perlu)
+    }
 
-                prevBtn.addEventListener("click", function () {
-                    container.scrollBy({ left: -itemWidth, behavior: "smooth" });
-                });
-            });
-           
+    function updateScroll(direction) {
+        const itemWidth = getItemWidth();
+        container.scrollBy({ left: direction * itemWidth, behavior: "smooth" });
+    }
+
+    nextBtn.addEventListener("click", function () {
+        updateScroll(1);
+    });
+
+    prevBtn.addEventListener("click", function () {
+        updateScroll(-1);
+    });
+
+    // Tambahkan event listener untuk menangani perubahan ukuran layar
+    window.addEventListener("resize", function () {
+        getItemWidth(); // Pastikan nilai diperbarui sesuai layar
+    });
+});
+
         </script>
     @endsection
 </body>

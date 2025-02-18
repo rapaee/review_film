@@ -125,9 +125,15 @@
     
             <!-- Dropdown menu -->
             <div id="dropdownDelay3" class="absolute -ml-[75px] md:-ml-0 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
-                <ul class="flex gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">Terbaru</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">Popular</a></li>
+                <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                    @foreach ($dataFilm->unique('tahun_rilis') as $d)    
+                    <li>
+                        <a href="{{ route('anonymous.tahun-rilis', $d->tahun_rilis) }}" 
+                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
+                            {{ $d->tahun_rilis }}
+                        </a>
+                    </li>
+                @endforeach
                 </ul>
             </div>
         </div>
