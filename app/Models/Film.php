@@ -30,7 +30,7 @@ class Film extends Model
     {
         return $this->hasMany(Comment::class, 'id_film');
     }
-
+   
     public function castings()
     {
         return $this->hasMany(Casting::class, 'id_film', 'id_film');

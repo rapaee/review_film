@@ -10,7 +10,7 @@
 <body>
     @extends('navbar-admin.navbar')
     @section('navbar-admin')
-        <h1>Auhtor</h1>
+        <h1 class="mt-52">Auhtor</h1>
     @endsection
 </body>
 </html>

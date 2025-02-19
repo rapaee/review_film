@@ -49,4 +49,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Film::class, 'id_users');
     }
+    // public function isSubscriber()
+    // {
+    //     return $this->role === 'subcriber';
+    // }
 }

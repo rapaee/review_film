@@ -37,7 +37,7 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100">
     @extends('navbar-guest.navbar')
     @section('navbar-guest')
     <section class="bg-center w-full bg-no-repeat bg-cover mb-20 bg-[url('{{ asset('storage/' . $datafilm->poster) }}')] bg-gray-700 bg-blend-multiply">
@@ -49,9 +49,31 @@
                     <h5 class="mb-2 text-2xl font-bold text-left tracking-tight uppercase text-gray-900 dark:text-white">{{ $datafilm->judul }}</h5>
                     <p class="mb-2 font-normal text-center text-white md:text-white md:text-left">{{ $datafilm->deskripsi }}</p>
                     <div class="flex space-x-2 mb-2">
-                        @for ($i = 1; $i <= 5; $i++)
-                        <span class="star text-7xl {{ $averageRating >= $i ? 'text-yellow-400' : 'text-gray-400' }} pointer-events-none" data-value="{{ $i }}">★</span>
-                        @endfor
+                        @foreach ($films as $film)
+                        @php
+                            $filteredComments = $film->comments->filter(function ($comment) {
+                                return $comment->user->role === 'subcriber'; // Hanya hitung rating dari subscriber
+                            });
+                    
+                            $averageRating = $filteredComments->avg('rating'); // Ambil rata-rata rating subscriber saja
+                        @endphp
+                    
+                        <div class="film-rating">
+                            <h3 class="text-lg font-semibold">{{ $film->title }}</h3>
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= floor($averageRating))
+                                    <i class="star fas fa-star text-3xl text-yellow-400 pointer-events-none" data-value="{{ $i }}"></i>
+                                @elseif ($i == ceil($averageRating) && fmod($averageRating, 1) >= 0.5)
+                                    <i class="star fas fa-star-half-stroke text-3xl text-yellow-400 pointer-events-none" data-value="{{ $i }}"></i>
+                                @else
+                                    <i class="star fas fa-star text-3xl text-gray-400 pointer-events-none" data-value="{{ $i }}"></i>
+                                @endif
+                            @endfor
+                        </div>
+                    @endforeach
+                    
+                    
+
                     
                     </div>
                     
@@ -122,7 +144,7 @@
    {{-- Anonymous (Tampil jika belum login) --}}
 @guest
 <div class="w-full mx-auto mt-10">
-    <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
         <h2 class="text-xl font-bold mb-4">Komentar</h2>
 
         <form>
@@ -130,11 +152,11 @@
                 <div class="flex items-center">
                     <label for="rating">
                     <div id="rating-stars" class="flex space-x-2 mt-2">
-                        <span class="star text-7xl cursor-pointer text-gray-400" data-value="1">★</span>
-                        <span class="star text-7xl cursor-pointer text-gray-400" data-value="2">★</span>
-                        <span class="star text-7xl cursor-pointer text-gray-400" data-value="3">★</span>
-                        <span class="star text-7xl cursor-pointer text-gray-400" data-value="4">★</span>
-                        <span class="star text-7xl cursor-pointer text-gray-400" data-value="5">★</span>
+                        <i class="star text-7xl cursor-pointer text-gray-400" data-value="1">★</i>
+                        <i class="star text-7xl cursor-pointer text-gray-400" data-value="2">★</i>
+                        <i class="star text-7xl cursor-pointer text-gray-400" data-value="3">★</i>
+                        <i class="star text-7xl cursor-pointer text-gray-400" data-value="4">★</i>
+                        <i class="star text-7xl cursor-pointer text-gray-400" data-value="5">★</i>
                     </div>
                     <input type="hidden" name="rating" id="rating">
                 </div>
@@ -191,7 +213,7 @@
                     </p>
 
                     </div>
-                    <p class="font-bold">{{ $c->created_at->diffForHumans() }}</p>
+                   
                   
                 </div>
                 <p>{{ $c->comment }}</p>
@@ -214,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
         loginPopup.classList.add('hidden');
         setTimeout(() => {
             location.reload();
-        }, 100); // Beri jeda 100ms agar animasi berjalan sebelum reload
+white); // Beri jeda 100ms agar animasi berjalan sebelum reload
     }
 
     closePopupBtn.addEventListener('click', closePopupAndReload);
@@ -265,12 +287,12 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         </form>
     @else
-        <p class="text-center text-gray-600 mb-4">Anda sudah memberikan komentar untuk film ini.</p>
+        <p class="text-center text-gray-600 mb-4"></p>
     @endif
     
         <div class="space-y-6">
             @foreach ($comment as $c)
-            <div class="bg-gray-300 p-4 rounded-lg">
+            <div class="bg-white p-4 rounded-lg">
                 <div class="flex justify-between">
                     <div class="flex gap-3">
                         <p class="font-bold">{{ $c->user->name }}</p>
@@ -290,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
                         </div>
                         <div class="flex gap-3 items-center justify-center">
-                            <p class="font-bold">{{ $c->created_at->diffForHumans() }}</p>
+                            <p class="font-bold">{{ $c->created_at->diffForHumans()  }}</p>
                             <div class="dropdown">
                                 @if ($c->id_user == auth()->id()) 
                                 <i class="fas fa-ellipsis-v" onclick="toggleDropdown()"></i>

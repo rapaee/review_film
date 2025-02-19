@@ -193,7 +193,7 @@ document.getElementById('openModal').addEventListener('click', function () {
                     </div>
                     <div class="mb-3 text-left">
                         <label for="trailer" class="block mb-2 text-sm font-medium text-gray-900">Trailer</label>
-                        <input type="file" name="trailer" id="trailer" accept="video/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        <input type="text" name="trailer" id="trailer" accept="video/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
                          @error('trailer')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -253,16 +253,17 @@ function showEditFilmPopup(updateUrl, judul, pencipta, deskripsi, tahun_rilis, d
                     <input type="text" name="durasi" id="durasi" value="${durasi}" 
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                 </div>
-                <div class="mb-3 text-left">
+                <div class="mb-3 text-left">    
                     <label for="poster" class="block mb-2 text-sm font-medium text-gray-900">Poster</label>
                     <input type="file" name="poster" id="poster" accept="image/*" 
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                 </div>
-                <div class="mb-3 text-left">
+               <div class="mb-3 text-left">
                     <label for="trailer" class="block mb-2 text-sm font-medium text-gray-900">Trailer</label>
-                    <input type="file" name="trailer" id="trailer" accept="video/*" 
+                    <input type="text" name="trailer" id="trailer" value="${trailer}" 
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                 </div>
+
             </form>
         `,
         showCancelButton: true,

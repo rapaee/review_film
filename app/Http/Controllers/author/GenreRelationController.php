@@ -34,6 +34,9 @@ class GenreRelationController extends Controller
     // Ambil semua genre
     $genre = Genre::all();
 
+
+
+    
     return view('author.genre-relasi', compact('film', 'genre', 'gl'));
 }
 
