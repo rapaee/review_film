@@ -35,4 +35,5 @@ class Film extends Model
     {
         return $this->hasMany(Casting::class, 'id_film', 'id_film');
     }
+    
 }

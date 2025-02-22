@@ -72,10 +72,32 @@ class detailfilmController extends Controller
         //
     }
 
-        public function update(Request $request, string $id)
+    public function update(Request $request, string $id)
     {
-        //
+        // Validasi input
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+            'id_film' => 'required|exists:film,id_film',
+        ]);
+    
+        // Cari komentar berdasarkan ID
+        $comment = Comment::findOrFail($id);
+    
+        // Pastikan hanya pemilik komentar yang bisa mengedit
+        if (Auth::id() !== $comment->id_user) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk mengedit komentar ini.');
+        }
+    
+        // Update komentar
+        $comment->update([
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+    
+        return redirect()->back()->with('success', 'Komentar berhasil diperbarui.');
     }
+    
 
     public function destroy(string $id)
     {

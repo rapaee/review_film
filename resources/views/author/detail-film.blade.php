@@ -35,7 +35,7 @@
                                     <h5 class="text-md tracking-tight uppercase text-gray-900 dark:text-black">
                                         Pemeran {{ $casting->nama_panggung }} ({{ $casting->nama_asli }})
                                     </h5>
-                                   <a href="{{ route('admin.edit-castings-film-detail.edit',['id' => $casting->id_castings]) }}">
+                                   <a href="{{ route('author.edit-castings-detail-film.edit',['id' => $casting->id_castings]) }}">
                                     <button class="  px-3 text-white bg-green-700 rounded hover:bg-green-800">
                                         <i class="fas fa-pencil w-5 h-5"></i>
                                     </button>
@@ -74,7 +74,7 @@
                             <div x-show="open" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
                                 <div class="bg-white p-6 rounded-md w-96 relative">
                                     <h2 class="text-xl font-semibold mb-4">Tambah Castings</h2>
-                                    <form id="castingForm" action="{{ route('admin.film-detail.casting') }}" method="POST">
+                                    <form id="castingForm" action="{{ route('author.detail-film.casting') }}" method="POST">
                                         @csrf
                                         <div class="mb-4 hidden">
                                             <label for="id_film" class="block text-sm font-medium text-gray-700 text-left">ID Film</label>
@@ -112,22 +112,36 @@
                         <div x-show="open" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                             <div class="relative ml-52 rounded-lg w-[90%] md:w-[800px] flex flex-col items-center">
                                 <!-- Tombol Close -->
-                                <button @click="open = false" class="absolute top-2 right-2   cursor-pointer text-gray-500 z-50 hover:text-gray-800">
+                                <button @click="open = false; stopVideo()" class="absolute top-2 right-2 cursor-pointer text-gray-500 z-50 hover:text-gray-800">
                                     ✖
                                 </button>
                         
                                 <!-- Video Trailer -->
-                                <video controls class="w-full rounded">
-                                    <source src="{{ asset('storage/' . $datafilm->trailer) }}" type="video/mp4">
-                                    Browser tidak mendukung video.
-                                </video>
+                                <iframe 
+                                    id="trailerVideo"
+                                    width="100%" 
+                                    height="400" 
+                                    src="https://www.youtube.com/embed/{{ Str::afterLast($datafilm->trailer, '/') }}" 
+                                    frameborder="0" 
+                                    allowfullscreen 
+                                    class="w-full rounded">
+                                </iframe>
                             </div>
                         </div>
                         
+                        
+                        <script>
+                            function stopVideo() {
+                                const iframe = document.getElementById('trailerVideo');
+                                if (iframe) {
+                                    const iframeSrc = iframe.src;
+                                    iframe.src = iframeSrc; // Menghentikan video dengan mengatur ulang src
+                                }
+                            }
+                        </script>
+                        
+                        
                     </div>
-                 
-                    
-                   </div>
                 </div>
                 
                 

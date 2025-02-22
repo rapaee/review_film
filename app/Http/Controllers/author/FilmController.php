@@ -44,16 +44,16 @@ class FilmController extends Controller
                 'poster' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'trailer' => 'required|url',
             ]);
-    
+
             // Konversi durasi dari menit ke format jam:menit
             $durasiMenit = (int)$request->durasi;
             $hours = floor($durasiMenit / 60);
             $minutes = $durasiMenit % 60;
             $durasiFormatted = sprintf('%02d:%02d', $hours, $minutes); // Format sebagai "hh:mm"
-    
+
             // Simpan file poster
-            $posterPath = $request->file('poster')->store('posters','public');
-    
+            $posterPath = $request->file('poster')->store('posters', 'public');
+
             // Simpan data film ke database
             $film = new Film();
             $film->judul = $request->judul;
@@ -66,13 +66,13 @@ class FilmController extends Controller
             $film->trailer = $request->trailer;
             $film->id_users = Auth::id(); // Menyimpan ID user saat ini
             $film->save();
-    
+
             return redirect()->route('author.film')->with('success', 'Film berhasil ditambahkan!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menambahkan film: ' . $e->getMessage());
         }
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -94,48 +94,52 @@ class FilmController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id_film)
-{
-    // Validasi data yang masuk
-    $validated = $request->validate([
-        'judul' => 'required|string|max:255',
-        'pencipta' => 'required|string|max:255',
-        'deskripsi' => 'required|string',
-        'tahun_rilis' => 'required|integer|min:1900|max:' . date('Y'),
-        'kategori_umur' => 'required|string|in:SU,13+,17+,21+',
-        'durasi' => 'required|integer|min:1',
-        'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'trailer' => 'nullable|url',
-    ]);
+    {
+        // Validasi data yang masuk
+        $validated = $request->validate([
+            'judul' => 'required|string|max:255',
+            'pencipta' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'tahun_rilis' => 'required|integer|min:1900|max:' . date('Y'),
+            'kategori_umur' => 'required|string|in:SU,13+,17+,21+',
+            'durasi' => 'required|integer|min:1',
+            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'trailer' => 'nullable|url',
+        ]);
 
-    // Cari film berdasarkan ID
-    $film = Film::findOrFail($id_film);
+        // Cari film berdasarkan ID
+        $film = Film::findOrFail($id_film);
 
-    // Update data film
-    $film->judul = $validated['judul'];
-    $film->pencipta = $validated['pencipta'];
-    $film->deskripsi = $validated['deskripsi'];
-    $film->tahun_rilis = $validated['tahun_rilis'];
-    $film->durasi = $validated['durasi'];
-    $film->kategori_umur = $validated['kategori_umur'];
+        // Update data film
+        $film->judul = $validated['judul'];
+        $film->pencipta = $validated['pencipta'];
+        $film->deskripsi = $validated['deskripsi'];
+        $film->tahun_rilis = $validated['tahun_rilis'];
+        $film->durasi = $validated['durasi'];
+        $film->kategori_umur = $validated['kategori_umur'];
 
-    // Periksa jika file poster diunggah
-    if ($request->hasFile('poster')) {
-        $path = $request->file('poster')->store('posters', 'public');
-        $film->poster = $path;
+        // Periksa jika file poster diunggah
+        if ($request->hasFile('poster')) {
+            // Hapus poster lama jika ada
+            if ($film->poster && Storage::disk('public')->exists($film->poster)) {
+                Storage::disk('public')->delete($film->poster);
+            }
+
+            // Simpan poster baru
+            $path = $request->file('poster')->store('posters', 'public');
+            $film->poster = $path;
+        }
+
+        // Periksa jika trailer berupa URL
+        if ($request->trailer) {
+            $film->trailer = $validated['trailer'];
+        }
+
+        $film->save(); // Simpan perubahan
+
+        // Redirect ke halaman yang sesuai setelah update berhasil
+        return redirect()->route('author.film')->with('success', 'Film updated successfully!');
     }
-
-    // Periksa jika trailer berupa URL
-    if ($request->trailer) {
-        $film->trailer = $validated['trailer'];
-    }
-
-    $film->save(); // Simpan perubahan
-
-    // Redirect ke halaman yang sesuai setelah update berhasil
-    return redirect()->route('author.film')->with('success', 'Film updated successfully!');
-}
-
-    
 
     /**
      * Remove the specified resource from storage.
@@ -144,7 +148,12 @@ class FilmController extends Controller
     {
         try {
             $film = Film::findOrFail($id_film);
-    
+
+            // Cek dan hapus data terkait dari tabel 'comments' yang memiliki FK ke film
+            if ($film->comments()->count() > 0) {
+                $film->comments()->delete();  // Hapus semua komentar terkait
+            }
+
             // Hapus file trailer dan gambar jika ada di storage/app/public/posters
             if ($film->trailer && Storage::disk('public')->exists($film->trailer)) {
                 Storage::disk('public')->delete($film->trailer);
@@ -152,14 +161,13 @@ class FilmController extends Controller
             if ($film->poster && Storage::disk('public')->exists($film->poster)) {
                 Storage::disk('public')->delete($film->poster);
             }
+
+            // Hapus relasi genre dengan film ini (hapus record dari tabel pivot)
+            $film->genres()->detach();
             
-    
-            // Hapus semua genre yang berelasi dengan film ini
-            $film->genres()->delete();
-    
-            // Hapus film setelah genre dan file terkait terhapus
+            // Hapus film setelah data terkait terhapus
             $film->delete();
-    
+
             return redirect()->route('author.film')->with('success', 'Data film berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->route('author.film')->with('error', 'Data film tidak ditemukan atau terjadi kesalahan.');

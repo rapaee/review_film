@@ -85,21 +85,38 @@
                             Lihat Trailer
                         </button>
                     
-                        <!-- Modal Trailer -->
-                        <div x-show="open" x-cloak class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <!-- Modal -->
+                        <div x-show="open" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                             <div class="relative ml-52 rounded-lg w-[90%] md:w-[800px] flex flex-col items-center">
                                 <!-- Tombol Close -->
-                                <button @click="open = false; $refs.trailer.pause(); $refs.trailer.currentTime = 0;" class="absolute top-2 right-2 cursor-pointer text-gray-500 z-50 hover:text-gray-800">
+                                <button @click="open = false; stopVideo()" class="absolute top-2 right-2 cursor-pointer text-gray-500 z-50 hover:text-gray-800">
                                     ✖
                                 </button>
-                    
+                        
                                 <!-- Video Trailer -->
-                                <video controls class="w-full rounded" x-ref="trailer">
-                                    <source src="{{ asset('storage/' . $datafilm->trailer) }}" type="video/mp4">
-                                    Browser tidak mendukung video.
-                                </video>
+                                <iframe 
+                                    id="trailerVideo"
+                                    width="100%" 
+                                    height="400" 
+                                    src="https://www.youtube.com/embed/{{ Str::afterLast($datafilm->trailer, '/') }}" 
+                                    frameborder="0" 
+                                    allowfullscreen 
+                                    class="w-full rounded">
+                                </iframe>
                             </div>
                         </div>
+                        
+                        
+                        <script>
+                            function stopVideo() {
+                                const iframe = document.getElementById('trailerVideo');
+                                if (iframe) {
+                                    const iframeSrc = iframe.src;
+                                    iframe.src = iframeSrc; // Menghentikan video dengan mengatur ulang src
+                                }
+                            }
+                        </script>
+                        
                     </div>
                     
                     
@@ -290,78 +307,103 @@ white); // Beri jeda 100ms agar animasi berjalan sebelum reload
         <p class="text-center text-gray-600 mb-4"></p>
     @endif
     
-        <div class="space-y-6">
-            @foreach ($comment as $c)
-            <div class="bg-white p-4 rounded-lg">
-                <div class="flex justify-between">
-                    <div class="flex gap-3">
-                        <p class="font-bold">{{ $c->user->name }}</p>
-                        @php
-                            $rating = $c->rating; // Ambil rating dari database
-                        @endphp
-    
-                        <p class="font-bold text-sm text-yellow-500">
-                            @for ($i = 1; $i <= 5; $i++)
-                                @if ($i <= $rating)
-                                    <i class="fas fa-star"></i> {{-- Bintang penuh --}}
-                                @else
-                                    <i class="far fa-star"></i> {{-- Bintang kosong --}}
-                                @endif
-                            @endfor
-                        </p>
-    
+    <div class="space-y-6">
+    @foreach ($comment as $c)
+    <div class="bg-white p-4 rounded-lg" id="comment-{{ $c->id_comments }}">
+        <div class="flex justify-between">
+            <div class="flex gap-3">
+                <p class="font-bold">{{ $c->user->name }}</p>
+
+                @php
+                    $rating = $c->rating; // Ambil rating dari database
+                    $role = $c->user->role; // Ambil role dari user
+                @endphp
+
+                <p class="font-bold text-sm text-yellow-500">
+                    @if ($role === 'admin')
+                      <p class="text-sm -ml-4 text-red-500">( Admin )</p>
+                    @else
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <= $rating)
+                                <i class="fas fa-star"></i> {{-- Bintang penuh --}}
+                            @else
+                                <i class="far fa-star"></i> {{-- Bintang kosong --}}
+                            @endif
+                        @endfor
+                    @endif
+                </p>
+            </div>
+            <div class="flex gap-3 items-center justify-center">
+                <p class="font-bold">{{ $c->created_at->diffForHumans()  }}</p>
+                <div class="dropdown">
+                    @if ($c->id_user == auth()->id()) 
+                    <i class="fas fa-ellipsis-v cursor-pointer" onclick="toggleDropdown({{ $c->id_comments }})"></i>
+                    <div id="dropdownMenu-{{ $c->id_comments }}" class="dropdown-content bg-white p-2 rounded shadow-md w-20">
+                        <div class="flex flex-col gap-2">
+                            <button onclick="showEditForm({{ $c->id_comments }})" class="bg-white text-black px-4 py-2 rounded hover:bg-gray-200">
+                                Edit
+                            </button>
+                            <form action="{{ route('subcriber.comment.detail-film', $c->id_comments) }}" method="POST" class="w-full">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-white text-black px-4 py-2 rounded hover:bg-gray-200 w-full">
+                                    Hapus
+                                </button>
+                            </form>
                         </div>
-                        <div class="flex gap-3 items-center justify-center">
-                            <p class="font-bold">{{ $c->created_at->diffForHumans()  }}</p>
-                            <div class="dropdown">
-                                @if ($c->id_user == auth()->id()) 
-                                <i class="fas fa-ellipsis-v" onclick="toggleDropdown()"></i>
-                                <div id="dropdownMenu" class="dropdown-content">
-                                    <a href="#">Edit</a>
-                                    <a href="#">
-                                        <form action="{{ route('subcriber.comment.detail-film', $c->id_comments) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="cursor-pointer text-red-500 hover:text-red-700">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </a>
-                                </div>
-                                @endif
-                            </div>
-                            
-                            <script>
-                                function toggleDropdown() {
-                                    document.getElementById("dropdownMenu").classList.toggle("show");
-                                }
-                            
-                                // Tutup dropdown jika klik di luar
-                                window.onclick = function(event) {
-                                    if (!event.target.matches('.fas')) {
-                                        let dropdowns = document.getElementsByClassName("dropdown-content");
-                                        for (let i = 0; i < dropdowns.length; i++) {
-                                            let openDropdown = dropdowns[i];
-                                            if (openDropdown.classList.contains('show')) {
-                                                openDropdown.classList.remove('show');
-                                            }
-                                        }
-                                    }
-                                }
-                            </script>
-                        </div>
-                </div>
-                <div class="flex">
-                    <p>{{ $c->comment }}</p>
-                  
-                   
-                </div>
-                <div class="flex items-center text-sm text-gray-400 mt-2">
-                   
+                    </div>
+
+                    @endif
                 </div>
             </div>
-            @endforeach
         </div>
+        <div class="flex">
+            <p>{{ $c->comment }}</p>
+        </div>
+        <!-- Form edit akan muncul di sini -->
+        <div id="edit-form-{{ $c->id_comments }}" class="hidden w-full mt-4">
+            @if(session('success'))
+                <div class="p-4 mb-4 text-sm text-green-800 bg-green-200 rounded-lg">
+                    {{ session('success') }}
+                </div>
+            @endif
+            <form action="{{ route('subcriber.comment.update', $c->id_comments) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="flex justify-center items-center">
+                    <div class="mb-4">
+                        <div class="flex items-center">
+                            <div class="mt-4">
+                                <label for="rating"></label>
+                                <div id="rating-stars-{{ $c->id_comments }}" class="flex space-x-2 mt-2">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <span class="star text-7xl cursor-pointer text-gray-400" data-value="{{ $i }}" onclick="setRating({{ $i }}, {{ $c->id_comments }})">★</span>
+                                    @endfor
+                                </div>
+                                <input type="hidden" name="rating" id="rating-{{ $c->id_comments }}" value="{{ $c->rating }}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full mb-4 border border-gray-400 rounded-lg bg-gray-50 dark:bg-gray-200">
+                    <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-200">
+                        <label for="comment-{{ $c->id_comments }}" class="sr-only">Your comment</label>
+                        <textarea id="comment-{{ $c->id_comments }}" name="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white dark:bg-gray-200 dark:text-black dark:placeholder-gray-400" required>{{ $c->comment }}</textarea>
+                    </div>
+                    <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+                        <input type="hidden" name="id_film" value="{{ $datafilm->id_film }}">
+                        <button type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                            Update comment
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endforeach
+</div>
+
     </div>
 </div>
 @endauth
@@ -370,9 +412,100 @@ white); // Beri jeda 100ms agar animasi berjalan sebelum reload
  
     
     @endsection
-</body>
-</html>
+    
 <script>
+    // Fungsi untuk menampilkan dropdown
+    function toggleDropdown(commentId) {
+        document.getElementById("dropdownMenu-" + commentId).classList.toggle("show");
+    }
+
+    // Fungsi untuk menampilkan form edit
+    function showEditForm(commentId) {
+        // Sembunyikan semua form edit yang mungkin terbuka
+        document.querySelectorAll('[id^="edit-form-"]').forEach(form => {
+            form.classList.add('hidden');
+        });
+
+        // Tampilkan form edit yang dipilih
+        const editForm = document.getElementById("edit-form-" + commentId);
+        editForm.classList.remove('hidden');
+    }
+
+    // Fungsi untuk mengatur rating
+    function setRating(rating, commentId) {
+        document.getElementById("rating-" + commentId).value = rating;
+        const stars = document.querySelectorAll("#rating-stars-" + commentId + " .star");
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('text-yellow-500');
+                star.classList.remove('text-gray-400');
+            } else {
+                star.classList.remove('text-yellow-500');
+                star.classList.add('text-gray-400');
+            }
+        });
+    }
+
+    // Fungsi untuk menangani submit form edit
+    function handleEditFormSubmit(event, commentId) {
+        event.preventDefault(); // Mencegah reload halaman
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update tampilan komentar tanpa reload
+                const commentText = document.querySelector(`#comment-${commentId} p`);
+                const commentRating = document.querySelector(`#comment-${commentId} .font-bold.text-sm.text-yellow-500`);
+
+                if (commentText && commentRating) {
+                    commentText.textContent = formData.get('comment');
+                    const newRating = formData.get('rating');
+                    let starsHtml = '';
+                    for (let i = 1; i <= 5; i++) {
+                        if (i <= newRating) {
+                            starsHtml += '<i class="fas fa-star"></i>';
+                        } else {
+                            starsHtml += '<i class="far fa-star"></i>';
+                        }
+                    }
+                    commentRating.innerHTML = starsHtml;
+                }
+
+                // Sembunyikan form edit
+                document.getElementById("edit-form-" + commentId).classList.add('hidden');
+            } else {
+                alert('Gagal mengupdate komentar');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Tutup dropdown jika klik di luar
+    window.onclick = function(event) {
+        if (!event.target.matches('.fas')) {
+            let dropdowns = document.getElementsByClassName("dropdown-content");
+            for (let i = 0; i < dropdowns.length; i++) {
+                let openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
      document.addEventListener("DOMContentLoaded", function () {
             let stars = document.querySelectorAll(".star");
             let ratingInput = document.getElementById("rating");
@@ -399,4 +532,10 @@ white); // Beri jeda 100ms agar animasi berjalan sebelum reload
                 }
             }
         });
+
 </script>
+        
+</body>
+</html>
+
+

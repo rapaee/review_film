@@ -135,16 +135,16 @@
                                     class="w-full md:w-[130px] h-32 md:h-[170px] group-hover:opacity-75 transition-transform-300">
 
                                 <!-- Ikon Bintang -->
-                                    <div class="absolute top-2 right-2 flex justify-center items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500"
-                                            viewBox="0 0 20 20" fill="currentColor">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.285 3.945a1 1 0 00.95.69h4.15c.969 0 1.372 1.24.588 1.81l-3.356 2.438a1 1 0 00-.364 1.118l1.285 3.945c.3.921-.755 1.688-1.538 1.118L10 14.347l-3.951 2.844c-.783.57-1.837-.197-1.538-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.076 8.372c-.784-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.285-3.945z" />
-                                        </svg>
-                                        <div>
-                                            <p class="text-white">{{ $poster->film->averageRating ?? 'N/A' }}</p>
-                                        </div>
+                                <div class="absolute top-2 right-2 flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.285 3.945a1 1 0 00.95.69h4.15c.969 0 1.372 1.24.588 1.81l-3.356 2.438a1 1 0 00-.364 1.118l1.285 3.945c.3.921-.755 1.688-1.538 1.118L10 14.347l-3.951 2.844c-.783.57-1.837-.197-1.538-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.076 8.372c-.784-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.285-3.945z" />
+                                    </svg>
+                                    <div>
+                                        <p class="text-white">{{ $poster->film->averageRating ?? 'N/A' }}</p>
                                     </div>
+                                </div>
 
                                 <!-- Judul dan Tahun Rilis -->
                                 <p

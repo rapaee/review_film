@@ -15,30 +15,29 @@ class GenreRelationController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    // Ambil ID user yang sedang login
-    
-    $userId = Auth::id();
+    {
+        // Ambil ID user yang sedang login
 
-    // Ambil film yang hanya dimiliki oleh user yang login
-    $film = Film::where('id_users', $userId)->get();
+        $userId = Auth::id();
 
-    // Ambil genre berdasarkan film yang dimiliki oleh user
-    $gl = Genre_relation::whereHas('film', function ($query) use ($userId) {
-        $query->where('id_users', $userId);
-    })
-    ->with(['film', 'genre'])
-    ->get()
-    ->groupBy('film.judul');
+        // Ambil film yang hanya dimiliki oleh user yang login
+        $film = Film::where('id_users', $userId)->get();
 
-    // Ambil semua genre
-    $genre = Genre::all();
-
+        // Ambil genre berdasarkan film yang dimiliki oleh user
+        $gl = Genre_relation::whereHas('film', function ($query) use ($userId) {
+            $query->where('id_users', $userId);
+        })
+            ->with(['film', 'genre'])
+            ->get()
+            ->groupBy('genre.judul'); // Kelompokkan berdasarkan nama genre
+        // Ambil semua genre
+        $genre = Genre::all();
 
 
-    
-    return view('author.genre-relasi', compact('film', 'genre', 'gl'));
-}
+
+
+        return view('author.genre-relasi', compact('film', 'genre', 'gl'));
+    }
 
 
     /**
@@ -54,14 +53,14 @@ class GenreRelationController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         // Validasi input
         $request->validate([
             'id_film' => 'required|integer|exists:film,id_film', // Mengacu pada primary key di tabel film
             'id_genre' => 'required|array', // Harus berupa array
             'id_genre.*' => 'integer|exists:genre,id_genre', // Setiap elemen dalam array harus valid
         ]);
-    
+
         // Loop untuk menyimpan setiap genre yang dipilih
         foreach ($request->id_genre as $genre_id) {
             $filmGenre = new Genre_relation();
@@ -69,7 +68,7 @@ class GenreRelationController extends Controller
             $filmGenre->id_genre = $genre_id;
             $filmGenre->save();
         }
-    
+
         // Redirect dengan pesan sukses
         return redirect()->route('author.genre-relasi')->with('success', 'Genre berhasil ditambahkan!');
     }
@@ -91,11 +90,11 @@ class GenreRelationController extends Controller
         $filmList = Film::all(); // Ambil semua film untuk dropdown
         $genre = Genre::all(); // Ambil semua genre
         $selectedGenres = $film->genres->pluck('id_genre')->toArray(); // Ambil genre yang sudah dipilih
-        
+
         return view('author.edit-genre-relasi', compact('film', 'filmList', 'genre', 'selectedGenres'));
     }
-    
-    
+
+
 
     /**
      * Update the specified resource in storage.
@@ -123,17 +122,17 @@ class GenreRelationController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-{
-    try {
-        // Cari data berdasarkan ID
-        $genreRelation = Genre_relation::findOrFail($id);
-        
-        // Hapus semua genre yang terkait dengan film yang sama
-        Genre_relation::where('id_film', $genreRelation->id_film)->delete();
-        
-        return redirect()->route('author.genre-relasi')->with('success', 'Semua genre terkait berhasil dihapus.');
-    } catch (\Exception $e) {
-        return redirect()->route('author.genre-relasi')->with('error', 'Data tidak ditemukan atau terjadi kesalahan.');
+    {
+        try {
+            // Cari data berdasarkan ID
+            $genreRelation = Genre_relation::findOrFail($id);
+
+            // Hapus semua genre yang terkait dengan film yang sama
+            Genre_relation::where('id_film', $genreRelation->id_film)->delete();
+
+            return redirect()->route('author.genre-relasi')->with('success', 'Semua genre terkait berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('author.genre-relasi')->with('error', 'Data tidak ditemukan atau terjadi kesalahan.');
+        }
     }
-}
 }

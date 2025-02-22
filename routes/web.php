@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\admin\BannerController;
 use App\Http\Controllers\admin\CastingsController;
-use App\Http\Controllers\admin\detailDashboard\CastingsController as DetailDashboardCastingsController;
-use App\Http\Controllers\admin\detailDashboard\UserController as DetailDashboardUserController;
 use App\Http\Controllers\admin\filmController;
 use App\Http\Controllers\admin\FilmDetailController;
 use App\Http\Controllers\admin\GenreController;
@@ -29,9 +27,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [homeAnonymous::class,'index'])->name('anonymous.home');
 
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 // Rute yang hanya bisa diakses oleh pengguna dengan peran "admin"
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -80,14 +78,16 @@ Route::middleware(['auth', 'role:admin,author,subcriber'])->group(function () {
     Route::post('subcriber/detail-film', [SubcriberDetailFilmController::class, 'store'])
         ->name('subcriber.coment');
     Route::delete('subcriber/detail-film/{id}', [SubcriberDetailFilmController::class, 'destroy'])->name('subcriber.comment.detail-film');
+    Route::put('anonymous/detail-film/{id}', [detailfilmController::class, 'update'])->name('subcriber.comment.update');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+   
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'addProfilePicture'])->name('profile.upload');
 });
-
 require __DIR__.'/auth.php';
 
 //anonymous
@@ -114,8 +114,11 @@ Route::delete('author/genre-relasi/{id}', [AuthorGenreRelationController::class,
 Route::get('author/edit-genre-relasi/{id}', [AuthorGenreRelationController::class, 'edit'])->name('author.edit-genre-relasi');
 Route::put('author/edit-genre-relasi/{id}', [AuthorGenreRelationController::class, 'update'])->name('author.edit-genre-relasi.update');
 
-
 Route::get('author/detail-film/{id}', [AuthorDetailFilmController::class,'index'])->name('author.detail-film');
+Route::post('author/detail-film', [AuthorDetailFilmController::class, 'store'])->name('author.detail-film.casting');
+Route::get('author/edit-castings-detail-film/{id}', [AuthorDetailFilmController::class, 'edit'])->name('author.edit-castings-detail-film.edit');
+Route::put('author/edit-castings-detail-film/{id_castings}', [AuthorDetailFilmController::class, 'update'])->name('author.edit-castings-detail-film.update');
+
 
 
 });
