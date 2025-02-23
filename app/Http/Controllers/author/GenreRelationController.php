@@ -29,7 +29,7 @@ class GenreRelationController extends Controller
         })
             ->with(['film', 'genre'])
             ->get()
-            ->groupBy('genre.judul'); // Kelompokkan berdasarkan nama genre
+            ->groupBy('film.judul'); // Kelompokkan berdasarkan nama genre
         // Ambil semua genre
         $genre = Genre::all();
 

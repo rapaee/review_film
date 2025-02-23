@@ -19,13 +19,9 @@
         <!-- Foto Profil -->
         <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200 mb-5 cursor-pointer"
             id="profile-photo-container">
-            @if ($user->photo)
-                <img id="profile-photo" class="w-full h-full object-cover"
-                    src="{{ asset('storage/photos/' . $user->id_users . '/' . $user->photo) }}" alt="User Photo">
-            @else
-                <img id="profile-photo" class="w-full h-full object-cover"
-                    src="{{ asset('images/default-profile.jpg') }}" alt="Default User Photo">
-            @endif
+            <img class="w-full h-full object-cover"
+            src="{{ Auth::user()->photo ? asset('storage/photos/' . Auth::user()->photo) : 'https://cdn-icons-png.flaticon.com/128/149/149071.png' }}"
+            alt="user photo">
         </div>
 
 

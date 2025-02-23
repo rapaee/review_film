@@ -26,8 +26,9 @@
                             class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                             aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full"
-                                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+                            <img class="w-9 h-9 rounded-full object-cover"
+                            src="{{ Auth::user()->photo ? asset('storage/photos/' . Auth::user()->photo) : 'https://cdn-icons-png.flaticon.com/128/149/149071.png' }}"
+                            alt="user photo">
                         </button>
                     </div>
                     <div class="absolute right-0 mt-80 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow 
