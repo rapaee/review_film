@@ -10,7 +10,7 @@
     @extends('navbar-guest.navbar')
     @section('navbar-guest')
     <div class="container mx-auto px-4 py-6">
-        <h2 class="text-2xl font-bold mb-5 mt-32">Film Populer Review Film</h2>
+        <h2 class="text-2xl font-bold mb-5 mt-32">Film Populer Paee Films</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             @foreach ($comments as $poster)
                 <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}" class="bg-white shadow-md rounded-lg overflow-hidden group">
@@ -23,22 +23,18 @@
                             $film = $films->firstWhere('id_film', $poster->film->id_film);
                         @endphp
                         
-                        @if ($film)
-                            <div class="p-4">
-                                <!-- Judul dan Tahun Rilis -->
-                                <h3 class="text-lg font-semibold">{{ $film->film->judul }}</h3>
-                                <p class="text-gray-500">Tahun Rilis ({{ $film->film->tahun_rilis }})</p>
-                                
-                                <!-- Menampilkan semua genre -->
-                                <p class="text-red-500 text-sm">
-                                    @if(isset($film->genre))
-                                        {{ $film->genre->title }}
-                                    @else
-                                        Tidak ada genre
-                                    @endif
-                                </p>
-                            </div>
-                        @endif
+                        @php
+                        // Cari film berdasarkan id_film dari poster menggunakan dataFilm
+                        $film = $dataFilm->firstWhere('id_film', $poster->film->id_film);
+                    @endphp
+                    
+                    @if ($film)
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold">{{ $film->judul }}</h3>
+                            <p class="text-gray-500">Tahun Rilis ({{ $film->tahun_rilis }})</p>
+                        </div>
+                    @endif
+                    
                     </div>
                 </a>
             @endforeach

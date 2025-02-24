@@ -14,10 +14,27 @@
                         </path>
                     </svg>
                 </button>
-                <a href="#" class="flex ms-2 md:me-24">
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Admin
-                        RF</span>
-                </a>
+                @if (Auth::user()->role === 'admin')
+                    <a href="{{ route('anonymous.home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1146/1146203.png" alt=""
+                            class="w-8 h-8 filter invert md:block">
+                        <span
+                            class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white hidden md:block">
+                            Admin
+                        </span>
+                    </a>
+                @endif
+                @if (Auth::user()->role === 'author')
+                    <a href="{{ route('anonymous.home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1146/1146203.png" alt=""
+                            class="w-8 h-8 filter invert md:block">
+                        <span
+                            class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white hidden md:block">
+                            Author
+                        </span>
+                    </a>
+                @endif
+
             </div>
             <div class="flex items-center">
                 <div class="relative flex items-center ms-3">
@@ -27,8 +44,8 @@
                             aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
                             <img class="w-9 h-9 rounded-full object-cover"
-                            src="{{ Auth::user()->photo ? asset('storage/photos/' . Auth::user()->photo) : 'https://cdn-icons-png.flaticon.com/128/149/149071.png' }}"
-                            alt="user photo">
+                                src="{{ Auth::user()->photo ? asset('storage/photos/' . Auth::user()->photo) : 'https://cdn-icons-png.flaticon.com/128/149/149071.png' }}"
+                                alt="user photo">
                         </button>
                     </div>
                     <div class="absolute right-0 mt-80 z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow 
@@ -43,7 +60,7 @@
                             <li>
                                 <a href="{{ route('anonymous.home') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    role="menuitem">Dashboard</a>
+                                    role="menuitem">Home</a>
                             </li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}"

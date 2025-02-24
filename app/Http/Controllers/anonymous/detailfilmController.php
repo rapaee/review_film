@@ -39,19 +39,6 @@ class detailfilmController extends Controller
         return view('anonymous/detail-film', compact('films', 'hasCommented', 'dataFilm', 'datafilm', 'comment', 'user', 'genre', 'casting', 'listgenre'));
     }
     
-
-    // private function calculateAverageRating($filmId)
-    // {
-    //     $ratings = Comment::where('id_film', $filmId)
-    //         ->pluck('rating');
-    
-    //     if ($ratings->isNotEmpty()) {
-    //         return round($ratings->sum() / $ratings->count(), 1);
-    //     }
-    
-    //     return 0;
-    // }
-
     public function create()
     {
         //

@@ -88,9 +88,7 @@
                                         Film</li>
                                 </a>
                             @endif
-                            {{-- <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link> --}}
+
                             <a href="{{ route('profile.edit') }}">
                                 <li
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -112,6 +110,7 @@
         </div>
     </div>
 
+    @if (Route::currentRouteName() !== 'profile.edit')
     <div id="navbar" class="bg-[#1d1353] flex flex-wrap justify-center md:justify-normal">
         <!-- Dropdown 1 -->
         <div class="relative ml-0 md:ml-32">
@@ -140,7 +139,6 @@
             </div>
         </div>
 
-
         <!-- Dropdown 3 -->
         <div class="relative">
             <button id="dropdownDelayButton3"
@@ -168,6 +166,8 @@
             </div>
         </div>
     </div>
+@endif
+
 
 
 </nav>

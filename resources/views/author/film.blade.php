@@ -154,14 +154,14 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="mb-3 text-left">
                         <label for="judul" class="block mb-2 text-sm font-medium text-gray-900">Judul</label>
-                        <input type="text" name="judul" id="judul" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        <input type="text" name="judul" id="judul" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" autocomplete="off" required />
                         @error('judul')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mb-3 text-left">
                         <label for="pencipta" class="block mb-2 text-sm font-medium text-gray-900">Pencipta</label>
-                        <input type="text" name="pencipta" id="pencipta" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        <input type="text" name="pencipta" id="pencipta" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" autocomplete="off" required />
                          @error('pencipta')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -182,7 +182,7 @@
                     </div>
                     <div class="mb-3 text-left">
                         <label for="durasi" class="block mb-2 text-sm font-medium text-gray-900">Durasi</label>
-                        <input type="text" name="durasi" id="durasi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        <input type="text" name="durasi" id="durasi" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" autocomplete="off" required />
                          @error('durasi')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -208,7 +208,7 @@
                     </div>
                     <div class="mb-3 text-left">
                         <label for="trailer" class="block mb-2 text-sm font-medium text-gray-900">Trailer</label>
-                        <input type="text" name="trailer" id="trailer" accept="video/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5" required />
+                        <input type="text" name="trailer" id="trailer" accept="video/*" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"autocomplete="off" required />
                          @error('trailer')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror

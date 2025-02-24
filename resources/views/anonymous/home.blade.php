@@ -92,6 +92,42 @@
 
 
 
+
+
+        <div class="flex justify-between items-center mb-4 mt-5">
+            <h1 class="text-xl ml-5 font-bold">Paling Populer</h1>
+            <button class="bg-[#2E236C] mr-5 hover:bg-[#17153B] text-white px-4 py-2 rounded">
+                <a href="{{ route('anonymous.filter-rating') }}">SEMUA</a>
+            </button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
+
+            @foreach ($comments as $poster)
+                <div
+                    class="max-w-sm bg-black border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-200 relative">
+                    <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}">
+                        <!-- Ikon Bintang -->
+                        <div
+                            class="absolute top-2 right-2 flex justify-center items-center z-10 bg-black bg-opacity-50 px-2 py-1 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.285 3.945a1 1 0 00.95.69h4.15c.969 0 1.372 1.24.588 1.81l-3.356 2.438a1 1 0 00-.364 1.118l1.285 3.945c.3.921-.755 1.688-1.538 1.118L10 14.347l-3.951 2.844c-.783.57-1.837-.197-1.538-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.076 8.372c-.784-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.285-3.945z" />
+                            </svg>
+                            <p class="text-white text-sm ml-1">{{ $poster->film->averageRating ?? 'N/A' }}</p>
+                        </div>
+                        <img class="rounded-t-lg w-full h-52 object-cover"
+                            src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" />
+                        <div class="p-4">
+                            <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-black">
+                                {{ $poster->film->judul }}</h5>
+                            <p class="mb-3 text-sm text-gray-700 dark:text-gray-400">Tahun Rilis
+                                ({{ $poster->film->tahun_rilis }})</p>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
         <div data-aos="fade-up" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
             @foreach ($datafilm as $poster)
                 <div
@@ -110,57 +146,6 @@
                 </div>
                 </a>
             @endforeach
-        </div>
-
-
-        <div data-aos="fade-up"
-            class="rounded-md bg-white w-full md:w-[1480px] flex justify-center items-center mx-auto mt-8 mb-12">
-            <div class="p-5 w-full">
-                <!-- Header -->
-                <div class="flex justify-between items-center mb-4">
-                    <h1 class="text-xl font-bold">Paling Populer</h1>
-                    <button class="bg-[#2E236C] hover:bg-[#17153B] text-white px-4 py-2 rounded">
-                        <a href="{{ route('anonymous.filter-rating') }}">SEMUA</a>
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-3 gap-5 justify-center md:flex md:flex-wrap">
-                    @foreach ($comments as $poster)
-                        <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}"
-                            class="w-full md:w-[110px] group">
-                            <div class="relative flex-shrink-0">
-                                <!-- Gambar Poster -->
-                                <img src="{{ asset('storage/' . $poster->film->poster) }}"
-                                    alt="{{ $poster->film->judul }}"
-                                    class="w-full md:w-[130px] h-32 md:h-[170px] group-hover:opacity-75 transition-transform-300">
-
-                                <!-- Ikon Bintang -->
-                                <div class="absolute top-2 right-2 flex justify-center items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.285 3.945a1 1 0 00.95.69h4.15c.969 0 1.372 1.24.588 1.81l-3.356 2.438a1 1 0 00-.364 1.118l1.285 3.945c.3.921-.755 1.688-1.538 1.118L10 14.347l-3.951 2.844c-.783.57-1.837-.197-1.538-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.076 8.372c-.784-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.285-3.945z" />
-                                    </svg>
-                                    <div>
-                                        <p class="text-white">{{ $poster->film->averageRating ?? 'N/A' }}</p>
-                                    </div>
-                                </div>
-
-                                <!-- Judul dan Tahun Rilis -->
-                                <p
-                                    class="absolute bottom-0 left-0 z-10 w-full text-center bg-black bg-opacity-50 text-white p-1 text-[10px] md:text-md">
-                                    {{ $poster->film->judul }} <br> ({{ $poster->film->tahun_rilis }})
-                                </p>
-
-                                <!-- Overlay Efek Hover -->
-                                <div
-                                    class="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300 ease-in-out">
-                                </div>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
         </div>
 
 
