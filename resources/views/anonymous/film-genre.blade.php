@@ -20,12 +20,13 @@
                             <h3 class="text-lg font-semibold">{{ $film->judul }}</h3>
                             <p class="text-gray-500">Tahun Rilis ({{ $film->tahun_rilis }})</p>
                             <p class="text-red-500">
-                                @if(isset($filmGenres[$film->id_film]))
-                                    {{ $filmGenres[$film->id_film]->pluck('genre.title')->implode(', ') }}
+                                @if(isset($filmGenres[$film->id_film]) && count($filmGenres[$film->id_film]) > 0)
+                                    {{ implode(', ', $filmGenres[$film->id_film]) }}
                                 @else
                                     Tidak ada genre
                                 @endif
                             </p>
+                            
                         </div>
                     </div>
                 </a>

@@ -58,17 +58,17 @@
             <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center">
                 <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Judul</th>
-                        <th scope="col" class="px-6 py-3">Slug</th>
-                        <th scope="col" class="px-6 py-3"><span class="sr-only">Edit</span></th>
+                        <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Judul</th>
+                        <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Slug</th>
+                        <th scope="col" class="px-6 py-3 border-r dark:border-gray-400"><span class="sr-only">Edit</span></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($genre as $g)
-                        <tr class="border-b dark:border-gray-400">
-                            <td class="px-6 py-4">{{ $g->title }}</td>
-                            <td class="px-6 py-4">{{ $g->slug }}</td>
-                            <td class="px-2 py-4 flex justify-center items-center gap-3">
+                        <tr class="border-b dark:border-gray-400 ">
+                            <td class="px-6 py-4 border-r dark:border-gray-400">{{ $g->title }}</td>
+                            <td class="px-6 py-4 border-r dark:border-gray-400">{{ $g->slug }}</td>
+                            <td class="px-2 py-4 flex justify-center items-center gap-3 border-r dark:border-gray-400">
                                 <form id="delete-form-{{ $g->id_genre }}"
                                     action="{{ route('admin.genre.delete', $g->id_genre) }}" method="POST">
                                     @csrf

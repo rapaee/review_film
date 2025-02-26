@@ -46,19 +46,19 @@
     <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center">
         <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black">
             <tr>
-                <th scope="col" class="px-6 py-3">Film</th>
-                <th scope="col" class="px-6 py-3">Nama Panggung</th>
-                <th scope="col" class="px-6 py-3">Nama Asli</th>
-                <th scope="col" class="px-6 py-3"><span class="sr-only">Edit</span></th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Film</th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Nama Panggung</th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Nama Asli</th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400"><span class="sr-only">Edit</span></th>
             </tr>
         </thead>
         <tbody>
             @foreach ( $casting as $c )
             <tr class="bg-white border-b dark:border-gray-400">
-                <td class="px-6 py-4">{{ $c->film->judul }}</td>
-                <td class="px-6 py-4">{{ $c->nama_panggung }}</td>
-                <td class="px-6 py-4">{{ $c->nama_asli }}</td>
-                <td class="px-2 py-4 flex justify-center gap-3">
+                <td class="px-6 py-4 border-r dark:border-gray-400">{{ $c->film->judul }}</td>
+                <td class="px-6 py-4 border-r dark:border-gray-400">{{ $c->nama_panggung }}</td>
+                <td class="px-6 py-4 border-r dark:border-gray-400">{{ $c->nama_asli }}</td>
+                <td class="px-2 py-4 flex justify-center gap-3 border-r dark:border-gray-400">
                     <form id="delete-form-{{ $c->id_castings }}" action="{{ route('admin.castings.delete', $c->id_castings) }}" method="POST">
                         @csrf
                         @method('DELETE')

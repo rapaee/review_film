@@ -57,10 +57,10 @@
                         <h5
                             class="mb-2 text-2xl font-bold text-left tracking-tight uppercase text-gray-900 dark:text-white">
                             {{ $datafilm->judul }}</h5>
-                            
+
                         <p class="mb-2 font-normal text-center text-white md:text-white md:text-left">
                             {{ $datafilm->deskripsi }}</p>
-                        <div class="flex justify-center md:justify-normal space-x-2 mb-2">
+                        <div class="flex justify-center items-center md:justify-normal space-x-2 mb-2">
                             @foreach ($films as $film)
                                 @php
                                     $filteredComments = $film->comments->filter(function ($comment) {
@@ -70,21 +70,24 @@
                                     $averageRating = $filteredComments->avg('rating'); // Ambil rata-rata rating subscriber saja
                                 @endphp
 
-                                    <h3 class="text-lg font-semibold">{{ $film->title }}</h3>
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= floor($averageRating))
-                                            <i class="star fas fa-star text-3xl text-yellow-400 pointer-events-none"
-                                                data-value="{{ $i }}"></i>
-                                        @elseif ($i == ceil($averageRating) && fmod($averageRating, 1) >= 0.5)
-                                            <i class="star fas fa-star-half-stroke text-3xl text-yellow-400 pointer-events-none"
-                                                data-value="{{ $i }}"></i>
-                                        @else
-                                            <i class="star fas fa-star text-3xl text-gray-400 pointer-events-none"
-                                                data-value="{{ $i }}"></i>
-                                        @endif
-                                    @endfor
+                                <h3 class="text-lg font-semibold">{{ $film->title }}</h3>
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= floor($averageRating))
+                                        <i class="star fas fa-star text-3xl text-yellow-400 pointer-events-none"
+                                            data-value="{{ $i }}"></i>
+                                    @elseif ($i == ceil($averageRating) && fmod($averageRating, 1) >= 0.5)
+                                        <i class="star fas fa-star-half-stroke text-3xl text-yellow-400 pointer-events-none"
+                                            data-value="{{ $i }}"></i>
+                                    @else
+                                        <i class="star fas fa-star text-3xl text-gray-400 pointer-events-none"
+                                            data-value="{{ $i }}"></i>
+                                    @endif
+                                @endfor
                             @endforeach
 
+                            <p class="text-xl text-yellow-400">
+                                ( <i class="fas fa-user"></i>  {{ $jumlahPengguna }} ) 
+                            </p>
 
 
 
@@ -102,7 +105,8 @@
                                 <!-- Modal -->
                                 <div x-show="open"
                                     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                                    <div class="relative ml-0 md:ml-52 rounded-lg w-[90%] md:w-[800px] flex flex-col items-center">
+                                    <div
+                                        class="relative ml-0 md:ml-52 rounded-lg w-[90%] md:w-[800px] flex flex-col items-center">
                                         <!-- Tombol Close -->
                                         <button @click="open = false; stopVideo()"
                                             class="absolute top-2 right-2 cursor-pointer text-gray-500 z-50 hover:text-gray-800">

@@ -66,21 +66,21 @@
 </div>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center">
-        <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black">
+    <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center border-collapse">
+        <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black border-b dark:border-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3">Nama</th>
-                <th scope="col" class="px-6 py-3">Email</th>
-                <th scope="col" class="px-6 py-3">Role</th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Nama</th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Email</th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Role</th>
                 <th scope="col" class="px-6 py-3"><span class="sr-only">Edit</span></th>
             </tr>
         </thead>
         <tbody>
             @foreach ( $user as $u )
             <tr class="bg-white border-b dark:border-gray-400">
-                <td class="px-6 py-4">{{ $u->name }}</td>
-                <td class="px-6 py-4">{{ $u->email }}</td>
-                <td class="px-6 py-4">{{ $u->role }}</td>
+                <td class="px-6 py-4 border-r dark:border-gray-400">{{ $u->name }}</td>
+                <td class="px-6 py-4 border-r dark:border-gray-400">{{ $u->email }}</td>
+                <td class="px-6 py-4 border-r dark:border-gray-400">{{ $u->role }}</td>
                 <td class="px-2 py-4 flex justify-center gap-3">
                     <form id="delete-form-{{ $u->id }}" action="{{ route('admin.user.delete', $u->id) }}" method="POST">
                         @csrf
@@ -94,12 +94,12 @@
                         onclick="showEditUserPopup('{{ route('admin.user.update', $u->id) }}', '{{ $u->name }}', '{{ $u->email }}', '{{ $u->role }}')">
                         <img src="https://cdn-icons-png.flaticon.com/128/3597/3597088.png" alt="" class="w-5 h-5 filter invert">
                     </button>
-
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+    
 </div>
 
 

@@ -68,13 +68,13 @@
             <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center">
                 <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">
                             Judul
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">
                             Genre
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">
                             <span class="sr-only">Edit</span>
                         </th>
                     </tr>
@@ -82,11 +82,11 @@
                 <tbody>
                     @foreach ($gl as $judul => $items)
                         <tr class="border-b dark:border-gray-400">
-                            <td class="px-6 py-3">{{ $judul }}</td>
-                            <td class="px-6 py-3">
+                            <td class="px-6 py-3 border-r dark:border-gray-400">{{ $judul }}</td>
+                            <td class="px-6 py-3 border-r dark:border-gray-400">
                                 {{ $items->pluck('genre.title')->implode(', ') }}
                             </td>
-                            <td class="px-2 py-4 flex justify-center items-center gap-3">
+                            <td class="px-2 py-4 flex justify-center items-center gap-3 border-r dark:border-gray-400">
                                 @if ($items->isNotEmpty())
                                     <form id="delete-form-{{ $items->first()->id }}"
                                         action="{{ route('admin.genre-relasi.delete', $items->first()->id) }}"
