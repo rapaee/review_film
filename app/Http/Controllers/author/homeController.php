@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Film;
 use App\Models\Genre_relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class homeController extends Controller
@@ -17,10 +18,22 @@ class homeController extends Controller
      */
     public function index()
     {
-        $komen = Comment::all();
-        $ratings = Comment::select('rating')->get();
-        return view('author.home',compact('komen','ratings'));
+        // Ambil id_users yang sedang login
+        $userId = Auth::id(); 
+    
+        // Ambil id_film yang dimiliki oleh user
+        $films = Film::where('id_users', $userId)->pluck('id_film');
+    
+        // Ambil komentar berdasarkan id_film
+        $komen = Comment::whereIn('id_film', $films)->get();
+    
+        // Ambil rating dalam bentuk objek collection
+        $ratings = Comment::whereIn('id_film', $films)->get(['rating']);
+    
+        return view('author.home', compact('komen', 'ratings'));
     }
+    
+
 
     /**
      * Show the form for creating a new resource.

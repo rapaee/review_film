@@ -128,6 +128,8 @@
                 </div>
             @endforeach
         </div>
+
+        <h1 class="text-xl ml-5 font-bold">Terbaru</h1>
         <div data-aos="fade-up" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
             @foreach ($datafilm as $poster)
                 <div

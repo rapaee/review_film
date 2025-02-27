@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Casting;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,10 @@ class homeController extends Controller
     public function index()
     {
         $userCount = User::all()->count();
+        $ratings = Comment::select('rating')->get();
+        $komen = Comment::all();
         $castingsCount = Casting::all()->count();
-        return view('admin.home', compact('userCount','castingsCount'));
+        return view('admin.home', compact('userCount','castingsCount','ratings','komen'));
         
     }
 

@@ -60,16 +60,16 @@
             <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center">
                 <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black text-center">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-center">
+                        <th scope="col" class="px-6 py-3 text-center border-r dark:border-gray-400">
                             Judul
                         </th>
-                        <th scope="col" class="px-6 py-3 text-center">
+                        <th scope="col" class="px-6 py-3 text-center border-r dark:border-gray-400">
                             Pencipta
                         </th>
-                        <th scope="col" class="px-6 py-3 text-center">
+                        <th scope="col" class="px-6 py-3 text-center border-r dark:border-gray-400">
                             Poster
                         </th>
-                        <th scope="col" class="px-6 py-3 text-center">
+                        <th scope="col" class="px-6 py-3 text-center border-r dark:border-gray-400">
                             <span class="sr-only">Edit</span>
                         </th>
                     </tr>
@@ -77,12 +77,12 @@
                 <tbody>
                     @foreach ($film as $film)
                         <tr class="border-b dark:border-gray-400">
-                            <td class="px-6 py-3 text-center">{{ $film->judul }}</td>
-                            <td class="px-6 py-3 text-center">{{ $film->pencipta }}</td>
-                            <td class="px-6 py-3 text-center">
+                            <td class="px-6 py-3 text-center border-r dark:border-gray-400">{{ $film->judul }}</td>
+                            <td class="px-6 py-3 text-center border-r dark:border-gray-400">{{ $film->pencipta }}</td>
+                            <td class="px-6 py-3 text-center border-r dark:border-gray-400">
                                 <img src="{{ asset('storage/' . $film->poster) }}" alt="Poster" class="w-10 h-16 mx-auto">
                             </td>
-                            <td class="flex mt-3 justify-center items-center gap-3">
+                            <td class="flex mt-3 justify-center items-center gap-3 border-r dark:border-gray-400">
                                 <form id="delete-form-{{ $film->id_film }}"
                                     action="{{ route('author.film.delete', $film->id_film) }}" method="POST">
                                     @csrf

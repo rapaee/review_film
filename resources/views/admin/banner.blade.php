@@ -46,18 +46,18 @@
     <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center">
         <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black">
             <tr>
-                <th scope="col" class="px-6 py-3">Gambar</th>
-                <th scope="col" class="px-6 py-3"><span class="sr-only">Edit</span></th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Gambar</th>
+                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400"><span class="sr-only">Edit</span></th>
             </tr>
         </thead>
         <tbody>
             @foreach ( $banner as $b )
             <tr class="bg-white border-b dark:border-gray-400">
-                <td class="px-6 py-4 text-center">
+                <td class="px-6 py-4 text-center border-r dark:border-gray-400">
                     <img src="{{ asset('storage/' . $b->gambar) }}" alt="Gambar" class="w-8 h-8 rounded mx-auto">
                 </td>
                 
-                <td class="px-2 py-4 flex justify-center gap-3">
+                <td class="px-2 py-4 flex justify-center gap-3 border-r dark:border-gray-400">
                     <form id="delete-form-{{ $b->id }}" action="{{ route('admin.banner.delete', $b->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
