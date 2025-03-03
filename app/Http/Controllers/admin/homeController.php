@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Casting;
 use App\Models\Comment;
+use App\Models\Film;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -18,8 +19,12 @@ class homeController extends Controller
         $userCount = User::all()->count();
         $ratings = Comment::select('rating')->get();
         $komen = Comment::all();
+        $listkomen = Comment::all()->count();
         $castingsCount = Casting::all()->count();
-        return view('admin.home', compact('userCount','castingsCount','ratings','komen'));
+        $listfilm = Film::all()->count();
+
+
+        return view('admin.home', compact('userCount','castingsCount','ratings','komen','listfilm','listkomen'));
         
     }
 
@@ -66,8 +71,16 @@ class homeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id_comments)
     {
-        //
+        $comment = Comment::find($id_comments);
+        
+        if (!$comment) {
+            return redirect()->back()->with('error', 'Komentar tidak ditemukan.');
+        }
+        
+        $comment->delete();
+        
+        return redirect()->back()->with('success', 'Komentar berhasil dihapus.');
     }
 }

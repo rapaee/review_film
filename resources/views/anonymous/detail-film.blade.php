@@ -58,8 +58,20 @@
                             class="mb-2 text-2xl font-bold text-left tracking-tight uppercase text-gray-900 dark:text-white">
                             {{ $datafilm->judul }}</h5>
 
+                        <div class="text-white flex gap-2 flex-wrap">
+                            @foreach ($datafilm->genreRelations as $index => $relation)
+                                <span
+                                    class="px-2 py-1 rounded 
+                                        {{ $loop->odd ? 'bg-blue-600' : 'bg-red-600' }}">
+                                    {{ $relation->genre->title }}
+                                </span>
+                            @endforeach
+                        </div>
+
+
                         <p class="mb-2 font-normal text-center text-white md:text-white md:text-left">
                             {{ $datafilm->deskripsi }}</p>
+
                         <div class="flex justify-center items-center md:justify-normal space-x-2 mb-2">
                             @foreach ($films as $film)
                                 @php
@@ -86,7 +98,7 @@
                             @endforeach
 
                             <p class="text-xl text-yellow-400">
-                                ( <i class="fas fa-user"></i>  {{ $jumlahPengguna }} ) 
+                                ( <i class="fas fa-user"></i> {{ $jumlahPengguna }} )
                             </p>
 
 
@@ -368,29 +380,44 @@
                                         <div class="flex gap-3 items-center justify-center">
                                             <p class="font-bold">{{ $c->created_at->diffForHumans() }}</p>
                                             <div class="dropdown">
-                                                @if ($c->id_user == auth()->id())
+                                                @if ($c->id_user == auth()->id() || auth()->user()->role == 'admin')
                                                     <i class="fas fa-ellipsis-v cursor-pointer"
                                                         onclick="toggleDropdown({{ $c->id_comments }})"></i>
                                                     <div id="dropdownMenu-{{ $c->id_comments }}"
                                                         class="dropdown-content bg-white p-2 rounded shadow-md w-20">
                                                         <div class="flex flex-col gap-2">
-                                                            <button onclick="showEditForm({{ $c->id_comments }})"
-                                                                class="bg-white text-black px-4 py-2 rounded hover:bg-gray-200">
-                                                                Edit
-                                                            </button>
-                                                            <form
-                                                                action="{{ route('subcriber.comment.detail-film', $c->id_comments) }}"
-                                                                method="POST" class="w-full">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="bg-white text-black px-4 py-2 rounded hover:bg-gray-200 w-full">
-                                                                    Hapus
+                                                            @if ($c->id_user == auth()->id())
+                                                                <form
+                                                                    action="{{ route('subcriber.comment.detail-film', $c->id_comments) }}"
+                                                                    method="POST" class="w-full">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit"
+                                                                        class="bg-white text-black px-4 py-2 rounded hover:bg-gray-200 w-full">
+                                                                        Hapus
+                                                                    </button>
+                                                                </form>
+                                                                <button onclick="showEditForm({{ $c->id_comments }})"
+                                                                    class="bg-white text-black px-4 py-2 rounded hover:bg-gray-200">
+                                                                    Edit
                                                                 </button>
-                                                            </form>
+                                                            @endif
+                                                            @if (auth()->user()->role == 'admin')
+                                                                <form
+                                                                    action="{{ route('hapus-untuk-admin', $c->id_comments) }}"
+                                                                    method="POST" class="w-full">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit"
+                                                                        class="bg-white text-black px-4 py-2 rounded hover:bg-gray-200 w-full">
+                                                                        Hapus
+                                                                    </button>
+                                                                </form>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 @endif
+
                                             </div>
                                         </div>
                                     </div>

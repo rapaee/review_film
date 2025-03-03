@@ -46,11 +46,11 @@
         
         <div class="gap-5 flex justify-end">
            <a href="{{ route('admin.genre-relasi') }}">
-            <button class="w-20 bg-red-600 text-white p-1 h-8 rounded-lg hover:bg-red-700 transition duration-200">
+            <button class="w-20 bg-red-600 text-white p-1 h-10 rounded-lg hover:bg-red-700 transition duration-200">
                 Batal
             </button>
            </a>
-            <button type="submit" class="w-20 bg-green-600 text-white p-1 h-8 rounded-lg hover:bg-green-700 transition duration-200">
+            <button type="submit" class="w-20 bg-green-600 text-white p-1 h-10 rounded-lg hover:bg-green-700 transition duration-200">
                 Submit
             </button>
         </div>

@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -26,6 +28,19 @@
                     </div>
                 </div>
             </a>
+            <a href="{{ route('admin.film') }}">
+                <div
+                    class="bg-red-700 dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-gray-900 dark:border-gray-600 text-white font-medium group">
+                    <div
+                        class="flex justify-center items-center w-14 h-14 bg-white rounded-full transition-all duration-300 transform group-hover:rotate-12">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1101/1101793.png" alt="" class="w-8 h-8">
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl">FILM</p>
+                        <p>{{ $listfilm }}</p>
+                    </div>
+                </div>
+            </a>
             <a href="{{ route('admin.castings') }}">
                 <div
                     class="bg-red-700 dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-gray-900 dark:border-gray-600 text-white font-medium group">
@@ -39,35 +54,20 @@
                     </div>
                 </div>
             </a>
+
             <div
                 class="bg-red-700 dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-gray-900 dark:border-gray-600 text-white font-medium group">
                 <div
                     class="flex justify-center items-center w-14 h-14 bg-white rounded-full transition-all duration-300 transform group-hover:rotate-12">
-                    <svg width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        class="stroke-current text-blue-800 dark:text-gray-800 transform transition-transform duration-500 ease-in-out">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                    </svg>
+                    <div
+                        class="flex justify-center items-center w-14 h-14 bg-white rounded-full transition-all duration-300 transform group-hover:rotate-12">
+                        <img src="  https://cdn-icons-png.flaticon.com/128/9513/9513804.png" alt="" class="w-8 h-8">
+                    </div>
+
                 </div>
                 <div class="text-right">
-                    <p class="text-2xl">$11,257</p>
-                    <p>Sales</p>
-                </div>
-            </div>
-            <div
-                class="bg-red-700 dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-gray-900 dark:border-gray-600 text-white font-medium group">
-                <div
-                    class="flex justify-center items-center w-14 h-14 bg-white rounded-full transition-all duration-300 transform group-hover:rotate-12">
-                    <svg width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        class="stroke-current text-blue-800 dark:text-gray-800 transform transition-transform duration-500 ease-in-out">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                        </path>
-                    </svg>
-                </div>
-                <div class="text-right">
-                    <p class="text-2xl">$75,257</p>
-                    <p>Balances</p>
+                    <p class="text-2xl">KOMENTAR</p>
+                    <p>{{ $listkomen }}</p>
                 </div>
             </div>
         </div>
@@ -90,19 +90,17 @@
             </form>
 
             <div class="relative">
-                <button id="dropdownButton" class="bg-blue-700 text-white px-5 py-2.5 rounded-lg flex items-center">
-                    Filter <svg class="w-2.5 h-2.5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"
-                        fill="none">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
+                <button id="dropdownButton"
+                    class="bg-green-600 hover:bg-green-700 text-white w-12 h-12 rounded-lg flex justify-center items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/128/9373/9373611.png" alt=""
+                        class="w-8 h-8 filter invert">
                 </button>
 
-                <div id="dropdownMenu" class="hidden absolute bg-white shadow-md rounded-lg mt-2 w-44 left-0 z-10">
-                    <ul class="py-2 text-sm text-gray-700">
-                        <li class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Semua</li>
+                <div id="dropdownMenu" class="hidden absolute bg-green-700 shadow-md rounded-lg mt-2 w-44 -ml-28 z-10">
+                    <ul class="py-2 text-sm text-white">
+                        <li class="block px-4 py-2 hover:bg-green-600 rounded-lg cursor-pointer">Semua</li>
                         @foreach ($komen->unique('film.judul') as $item)
-                            <li class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ $item->film->judul }}</li>
+                            <li class="block px-4 py-2 hover:bg-green-600 rounded-lg cursor-pointer">{{ $item->film->judul }}</li>
                         @endforeach
 
                     </ul>
@@ -127,6 +125,8 @@
                         <th scope="col" class="px-6 py-3 text-center border-r dark:border-gray-400">
                             Rating
                         </th>
+                        <th scope="col" class="px-6 py-3 border-r dark:border-gray-400"><span class="sr-only">Edit</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -148,6 +148,19 @@
 
 
                             </td>
+                            <td class="px-2 py-4 flex justify-center items-center gap-3 border-r dark:border-gray-400">
+                                <form id="delete-form-{{ $item->id_comments }}"
+                                    action="{{ route('admin.hapus-komen', $item->id_comments) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button"
+                                        class="text-white bg-red-600 flex justify-center hover:bg-red-700 py-1 h-8 rounded w-14 delete-btn"
+                                        data-id="{{ $item->id_comments }}">
+                                        <img src="https://cdn-icons-png.flaticon.com/128/542/542724.png" alt=""
+                                            class="w-5 h-5 filter invert">
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -157,6 +170,49 @@
         </div>
     @endsection
     <script>
+        //alert button delete
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    let userId = this.getAttribute('data-id');
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data ini akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('delete-form-' + userId).submit();
+                        }
+                    });
+                });
+            });
+        });
+
+        // Notifikasi sukses atau error dari session
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Sukses!',
+                text: "{{ session('success') }}",
+                timer: 1000,
+                showConfirmButton: false
+            });
+        @elseif (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{{ session('error') }}",
+                timer: 1000,
+                showConfirmButton: false
+            });
+        @endif
+
+
         //seacrh
         document.addEventListener("DOMContentLoaded", function() {
             const searchInput = document.getElementById("search");

@@ -25,7 +25,7 @@ class detailfilmController extends Controller
         $jumlahPengguna = Comment::where('id_film', $id)->distinct('id_user')->count('id_user');
 
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
-        $datafilm = Film::findOrFail($id);
+        $datafilm = Film::with('genreRelations.genre')->findOrFail($id);
         $listgenre = Genre::all();
         //untuk navbar filter genre anonymous
         $genre = Genre::all();

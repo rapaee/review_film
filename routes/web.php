@@ -34,6 +34,7 @@ Route::get('/dashboard', function () {
 // Rute yang hanya bisa diakses oleh pengguna dengan peran "admin"
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin/home', [AdminHomeController::class,'index'])->name('admin.home');
+    Route::delete('hapus/komen{id_comments}', [AdminHomeController::class,'destroy'])->name('admin.hapus-komen');
     Route::get('admin/film-detail/{id}', [FilmDetailController::class,'index'])->name('admin.film-detail');
     Route::post('admin/film-detail', [FilmDetailController::class, 'store'])->name('admin.film-detail.casting');
 
@@ -78,6 +79,7 @@ Route::middleware(['auth', 'role:admin,author,subcriber'])->group(function () {
     Route::post('subcriber/detail-film', [SubcriberDetailFilmController::class, 'store'])
         ->name('subcriber.coment');
     Route::delete('subcriber/detail-film/{id}', [SubcriberDetailFilmController::class, 'destroy'])->name('subcriber.comment.detail-film');
+    Route::delete('subcriber/detail-film/{id}', [SubcriberDetailFilmController::class, 'hapuskomenadmin'])->name('hapus-untuk-admin');
     Route::put('anonymous/detail-film/{id}', [detailfilmController::class, 'update'])->name('subcriber.comment.update');
 });
 

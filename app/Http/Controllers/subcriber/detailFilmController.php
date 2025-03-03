@@ -111,4 +111,14 @@ class detailFilmController extends Controller
 
         return redirect()->back()->with('success', 'Komentar berhasil dihapus.');
     }
+    public function hapuskomenadmin($id_comments)
+    {
+        try {
+            $genre = Comment::findOrFail($id_comments); // Menangkap exception jika data tidak ditemukan
+            $genre->delete();
+            return redirect()->back()->with('success', 'Komentar berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Komentar tidak ditemukan atau terjadi kesalahan.');
+        }
+    }
 }
