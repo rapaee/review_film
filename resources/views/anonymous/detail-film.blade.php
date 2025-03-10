@@ -57,8 +57,13 @@
                         <h5
                             class="mb-2 text-2xl font-bold text-left tracking-tight uppercase text-gray-900 dark:text-white">
                             {{ $datafilm->judul }}</h5>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-video text-gray-400 text-2xl"></i>
+                            <h5 class="mb-2 text-lg text-left mt-2 tracking-tight capitalize text-gray-900 dark:text-gray-400">
+                                {{ $datafilm->pencipta }}</h5>
 
-                        <div class="text-white flex gap-2 flex-wrap">
+                        </div>
+                        <div class="text-white flex gap-2 flex-wrap mb-2">
                             @foreach ($datafilm->genreRelations as $index => $relation)
                                 <span
                                     class="px-2 py-1 rounded 
@@ -97,8 +102,8 @@
                                 @endfor
                             @endforeach
 
-                            <p class="text-xl text-yellow-400">
-                                ( <i class="fas fa-user"></i> {{ $jumlahPengguna }} )
+                            <p class="text-md mt-2 text-gray-300">
+                                ( {{ $jumlahPengguna }} rates )
                             </p>
 
 
@@ -388,7 +393,7 @@
                                                         <div class="flex flex-col gap-2">
                                                             @if ($c->id_user == auth()->id())
                                                                 <form
-                                                                    action="{{ route('subcriber.comment.detail-film', $c->id_comments) }}"
+                                                                    action="{{ route('hapus-untuk-admin', $c->id_comments) }}"
                                                                     method="POST" class="w-full">
                                                                     @csrf
                                                                     @method('DELETE')

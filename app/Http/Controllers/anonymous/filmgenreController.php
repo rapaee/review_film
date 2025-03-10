@@ -7,6 +7,7 @@ use App\Models\Film;
 use App\Models\Genre;
 use App\Models\Genre_relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class filmgenreController extends Controller
 {
@@ -23,11 +24,18 @@ class filmgenreController extends Controller
             ->groupBy('genre_relations.id_genre', 'genre.title')
             ->get();
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
-        // Ambil film tanpa duplikasi, lalu gabungkan genre dalam satu array
-        // Ambil film berdasarkan genre yang dipilih
-        $films = Film::select('film.id_film', 'film.judul', 'film.poster', 'film.tahun_rilis')
+
+
+        $films = Film::select(
+            'film.id_film',
+            'film.judul',
+            'film.poster',
+            'film.tahun_rilis',
+            DB::raw('COALESCE(AVG(comments.rating), 0) as averageRating') // Hitung rata-rata rating
+        )
             ->join('genre_relations', 'film.id_film', '=', 'genre_relations.id_film')
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+            ->leftJoin('comments', 'film.id_film', '=', 'comments.id_film') // Join ke comments
             ->where('genre_relations.id_genre', $id)
             ->groupBy('film.id_film', 'film.judul', 'film.poster', 'film.tahun_rilis')
             ->get();
@@ -42,7 +50,7 @@ class filmgenreController extends Controller
         }
 
         // $datafilm = Film::orderByDesc('tahun_rilis')->get();
-        return view('anonymous.film-genre', compact('filmGenres','dataFilm', 'genre', 'films', 'selectedGenre'));
+        return view('anonymous.film-genre', compact('filmGenres', 'dataFilm', 'genre', 'films', 'selectedGenre'));
     }
 
 

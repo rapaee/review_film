@@ -24,7 +24,13 @@ class homeAnonymous extends Controller
             ->get();
 
         $Film = Film::all();
-        $datafilm = Film::orderByDesc('tahun_rilis')->get();
+        $datafilm = Film::with('comments')->orderByDesc('tahun_rilis')->get();
+
+        // Pastikan setiap koleksi film mendapatkan rating
+        foreach ($datafilm as $film) {
+            $film->averageRating = $this->calculateAverageRating($film->id_film);
+        }
+
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
         $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
 
@@ -36,18 +42,32 @@ class homeAnonymous extends Controller
         // Pastikan setiap koleksi film mendapatkan rating
         foreach ($comments as $comment) {
             if ($comment->film) {
-                $comment->film->averageRating = $this->calculateAverageRating($comment->film->id_film);
+                $comment->film->averageRating = $this->hitungrating($comment->film->id_film);
             }
         }
 
         return view('anonymous/home', compact('Film', 'datafilm', 'dataFilm', 'terbaru', 'comments', 'genre', 'banner'));
     }
+    private function hitungrating($id_film)
+    {
+        return Comment::where('id_film', $id_film)->avg('rating') ?? 0;
+    }
+
 
     public function search(Request $request)
     {
         $search = request('search');
 
-        $film = Film::where('judul', 'LIKE', "%{$search}%")->get();
+        $film = Film::with('comments')
+            ->where('judul', 'LIKE', "%{$search}%")
+            ->orderByDesc('tahun_rilis')
+            ->get();
+
+        // Hitung rating untuk setiap film
+        foreach ($film as $poster) {
+            $poster->averageRating = $poster->comments->avg('rating') ?? 0;
+        }
+
 
         $filmIds = $film->pluck('id_film');
 
@@ -100,13 +120,25 @@ class homeAnonymous extends Controller
 
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
 
-        $films = Film::where('tahun_rilis', $tahun)->get();
+        $films = Film::where('tahun_rilis', $tahun)
+            ->leftJoin('comments', 'film.id_film', '=', 'comments.id_film') // Gabungkan dengan tabel komentar
+            ->select(
+                'film.id_film',
+                'film.judul',
+                'film.poster',
+                'film.tahun_rilis',
+                DB::raw('COALESCE(AVG(comments.rating), 0) as averageRating') // Hitung rata-rata rating
+            )
+            ->groupBy('film.id_film', 'film.judul', 'film.poster', 'film.tahun_rilis')
+            ->get();
 
+        // Buat daftar genre untuk setiap film
         $filmGenres = Genre_relation::whereIn('id_film', $films->pluck('id_film'))
             ->with('genre')
             ->get()
             ->groupBy('id_film')
             ->map(fn($genres) => $genres->unique('id_genre'));
+
 
         return view('anonymous/tahun-rilis', compact('filmGenres', 'films', 'tahun', 'dataFilm', 'genre'));
     }

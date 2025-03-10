@@ -53,15 +53,15 @@
                 <div class="flex items-center ms-3">
                     <div>
                         <button type="button"
-                        class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 
+                            class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 
                         {{ request()->routeIs('profile.edit') ? '-mt-5' : '' }}"
-                        aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                        <span class="sr-only">Open user menu</span>
-                        <img class="w-9 h-9 rounded-full object-cover"
-                            src="{{ Auth::user()->photo ? asset('storage/photos/' . Auth::user()->photo) : 'https://cdn-icons-png.flaticon.com/128/149/149071.png' }}"
-                            alt="user photo">
-                    </button>
-                    
+                            aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                            <span class="sr-only">Open user menu</span>
+                            <img class="w-9 h-9 rounded-full object-cover"
+                                src="{{ Auth::user()->photo ? asset('storage/photos/' . Auth::user()->photo) : 'https://cdn-icons-png.flaticon.com/128/149/149071.png' }}"
+                                alt="user photo">
+                        </button>
+
                     </div>
                     <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
                         id="dropdown-user">
@@ -111,62 +111,63 @@
     </div>
 
     @if (Route::currentRouteName() !== 'profile.edit')
-    <div id="navbar" class="bg-[#1d1353] flex flex-wrap justify-center md:justify-normal">
-        <!-- Dropdown 1 -->
-        <div class="relative ml-0 md:ml-32">
-            <button id="dropdownDelayButton"
-                class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
-                <img src="https://cdn-icons-png.flaticon.com/128/974/974476.png" alt=""
-                    class="w-5 h-5 filter invert">
-                <span>Genre</span>
-                <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
-                    class="w-3 h-3 filter invert">
-            </button>
+        <div id="navbar" class="bg-[#1d1353] flex flex-wrap justify-center md:justify-normal">
+            <!-- Dropdown 1 -->
+            <div class="relative ml-0 md:ml-32">
+                <button id="dropdownDelayButton"
+                    class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
+                    <img src="https://cdn-icons-png.flaticon.com/128/974/974476.png" alt=""
+                        class="w-5 h-5 filter invert">
+                    <span>Genre</span>
+                    <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
+                        class="w-3 h-3 filter invert">
+                </button>
 
-            <!-- Dropdown menu -->
-            <div id="dropdownDelay"
-                class="absolute w-64 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
-                <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
-                    @foreach ($genre as $g)
-                        <li>
-                            <a href="{{ route('anonymous.film-genre', ['id' => $g->id_genre]) }}"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
-                                {{ $g->title }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
+                <!-- Dropdown menu -->
+                <div id="dropdownDelay"
+                    class="absolute w-64 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
+                    <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                        @foreach ($genre as $g)
+                            <li>
+                                <a href="{{ route('anonymous.film-genre', ['id' => $g->id_genre]) }}"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
+                                    {{ $g->title }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dropdown 3 -->
+            <div class="relative">
+                <button id="dropdownDelayButton3"
+                    class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
+                    <img src="https://cdn-icons-png.flaticon.com/128/2370/2370264.png" alt=""
+                        class="w-5 h-5 filter invert">
+                    <span>Tahun</span>
+                    <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
+                        class="w-3 h-3 filter invert">
+                </button>
+
+                <!-- Dropdown menu -->
+                <div id="dropdownDelay3"
+                    class="absolute -ml-[75px] md:-ml-0 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
+                    <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                        @foreach ($dataFilm->unique('tahun_rilis') as $d)
+                            <li>
+                                <a href="{{ route('anonymous.tahun-rilis', $d->tahun_rilis) }}"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
+                                    {{ $d->tahun_rilis }}
+                                </a>
+                            </li>
+                        @endforeach
+
+                    </ul>
+                </div>
             </div>
         </div>
-
-        <!-- Dropdown 3 -->
-        <div class="relative">
-            <button id="dropdownDelayButton3"
-                class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
-                <img src="https://cdn-icons-png.flaticon.com/128/2370/2370264.png" alt=""
-                    class="w-5 h-5 filter invert">
-                <span>Tahun</span>
-                <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
-                    class="w-3 h-3 filter invert">
-            </button>
-
-            <!-- Dropdown menu -->
-            <div id="dropdownDelay3"
-                class="absolute -ml-[75px] md:-ml-0 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
-                <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
-                    @foreach ($dataFilm as $d)
-                        <li>
-                            <a href="{{ route('anonymous.tahun-rilis', $d->tahun_rilis) }}"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
-                                {{ $d->tahun_rilis }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
-@endif
+    @endif
 
 
 
