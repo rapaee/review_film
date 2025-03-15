@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -53,3 +54,13 @@
         </div>
     </form>
 </x-guest-layout>
+@if(session('registerSuccess'))
+<script>
+    Swal.fire({
+        title: 'Registrasi Berhasil!',
+        text: "{{ session('registerSuccess') }}",
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif

@@ -102,7 +102,12 @@
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
 
-            @foreach ($comments as $poster)
+            @php
+                // Urutkan berdasarkan rating terbanyak saat diakses dari perangkat mobile
+                $sortedComments = $comments->sortByDesc(fn($poster) => $poster->film->averageRating ?? 0);
+            @endphp
+
+            @foreach ($sortedComments as $poster)
                 <div
                     class="max-w-sm bg-black border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-200 relative">
                     <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}">
@@ -114,45 +119,45 @@
                                 <path
                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.285 3.945a1 1 0 00.95.69h4.15c.969 0 1.372 1.24.588 1.81l-3.356 2.438a1 1 0 00-.364 1.118l1.285 3.945c.3.921-.755 1.688-1.538 1.118L10 14.347l-3.951 2.844c-.783.57-1.837-.197-1.538-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.076 8.372c-.784-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.285-3.945z" />
                             </svg>
-                            <p class="text-white text-sm ml-1">{{ $poster->film->averageRating ?? 'N/A' }}</p>
+                            <p class="text-white text-sm ml-1">{{ round($poster->film->averageRating, 1) ?? 'N/A' }}</p>
                         </div>
                         <img class="rounded-t-lg w-full h-52 object-cover"
                             src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" />
                         <div class="p-4">
                             <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-black">
-                                {{ $poster->film->judul }}</h5>
+                                {{ $poster->film->judul }}
+                            </h5>
                             <p class="mb-3 text-sm text-gray-700 dark:text-gray-400">Tahun Rilis
-                                ({{ $poster->film->tahun_rilis }})
-                            </p>
+                                ({{ $poster->film->tahun_rilis }})</p>
                         </div>
                     </a>
                 </div>
             @endforeach
+
         </div>
 
         <h1 class="text-xl ml-5 font-bold">Terbaru</h1>
         <div data-aos="fade-up" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
             @foreach ($datafilm as $poster)
-                <div class="max-w-sm bg-black border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-200 relative">
+                <div
+                    class="max-w-sm bg-black border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-200 relative">
                     <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}">
                         <div class="relative">
-                            <img class="rounded-t-lg w-full h-52 object-cover" src="{{ asset('storage/' . $poster->poster) }}" alt="{{ $poster->judul }}" />
-                            
-                            <!-- Rating dengan ikon bintang di kanan atas -->
-                            @php
-                                $rating = $poster->averageRating;
-                                $formattedRating = ($rating == floor($rating)) ? number_format($rating, 0) : number_format($rating, 1);
-                            @endphp
-                            <div class="absolute top-2 right-2 bg-black bg-opacity-50 text-yellow-500 text-sm font-semibold px-2 py-1 rounded flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4 mr-1">
-                                    <path d="M12 .587l3.668 7.425 8.215 1.196-5.941 5.8 1.402 8.187L12 18.896l-7.344 3.86 1.402-8.187-5.941-5.8 8.215-1.196L12 .587z"/>
+                            <img class="rounded-t-lg w-full h-52 object-cover"
+                                src="{{ asset('storage/' . $poster->poster) }}" alt="{{ $poster->judul }}" />
+                            <div
+                                class="absolute top-2 right-2 bg-black bg-opacity-50 text-yellow-500 text-sm font-semibold px-2 py-1 rounded flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                                    class="w-4 h-4 mr-1">
+                                    <path
+                                        d="M12 .587l3.668 7.425 8.215 1.196-5.941 5.8 1.402 8.187L12 18.896l-7.344 3.86 1.402-8.187-5.941-5.8 8.215-1.196L12 .587z" />
                                 </svg>
-                               
-                                <p class="text-white text-sm ml-1"> {{ $formattedRating }}</p>
+
+                                <p class="text-white text-sm ml-1"> {{ round($poster->averageRating, 1) }}</p>
 
                             </div>
                         </div>
-        
+
                         <div class="p-4">
                             <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-black">
                                 {{ $poster->judul }}
@@ -165,7 +170,7 @@
                 </div>
             @endforeach
         </div>
-        
+
 
 
 

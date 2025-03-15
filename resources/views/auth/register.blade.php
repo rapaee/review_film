@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <x-guest-layout>
     <form method="POST" action="{{ route('register') }}">
         @csrf
@@ -49,3 +50,25 @@
         </div>
     </form>
 </x-guest-layout>
+@if(session('registerSuccess'))
+<script>
+    Swal.fire({
+        title: 'Registrasi Berhasil!',
+        text: "{{ session('registerSuccess') }}",
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+
+<!-- SweetAlert Error Notification -->
+@if($errors->any())
+<script>
+    Swal.fire({
+        title: 'Registrasi Gagal!',
+        text: 'Periksa kembali data yang diinputkan!',
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif

@@ -22,7 +22,14 @@ class detailfilmController extends Controller
         $comment = Comment::where('id_film', $id)
             ->orderByDesc('created_at')
             ->get();
-        $jumlahPengguna = Comment::where('id_film', $id)->distinct('id_user')->count('id_user');
+
+        $jumlahPengguna = Comment::where('id_film', $id)
+            ->whereHas('user', function ($query) {
+                $query->where('role', 'subcriber');
+            })
+            ->distinct('id_user')
+            ->count('id_user');
+
 
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
         $datafilm = Film::with('genreRelations.genre')->findOrFail($id);
@@ -39,7 +46,7 @@ class detailfilmController extends Controller
         }])->where('id_film', $id)->get();
 
 
-        return view('anonymous/detail-film', compact('jumlahPengguna','films', 'hasCommented', 'dataFilm', 'datafilm', 'comment', 'user', 'genre', 'casting', 'listgenre'));
+        return view('anonymous/detail-film', compact('jumlahPengguna', 'films', 'hasCommented', 'dataFilm', 'datafilm', 'comment', 'user', 'genre', 'casting', 'listgenre'));
     }
 
     public function create()

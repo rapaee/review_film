@@ -7,7 +7,7 @@
         z-index: 50;
     }
 </style>
-<nav class="bg-white border-gray-200 dark:bg-[#17153B] w-full fixed z-50 top-0">
+<nav class="bg-[#17153B] border-gray-200 w-full fixed z-50 top-0">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <!-- Logo -->
         <a href="{{ route('anonymous.home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -23,7 +23,7 @@
             <form class="max-w-md mx-auto" action="{{ route('search') }}" method="GET">
                 <div class="relative">
                     <input type="search" id="default-search" name="search" value="{{ request('search') }}"
-                        class="block w-[200px] md:w-[400px] p-3 ps-2 md:ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none"
+                        class="block w-[230px] md:w-[400px] p-3 ps-2 md:ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none"
                         placeholder="Cari judul film" autocomplete="off" required>
                     <button type="submit"
                         class="absolute inset-y-0 end-0 flex items-center justify-center bg-blue-600 hover:bg-blue-700 rounded-r-md text-white dark:text-gray-400 p-3 md:p-5">
@@ -95,13 +95,37 @@
                                     Profile</li>
                             </a>
                             <li class="cursor-pointer">
-                                <form method="POST" action="{{ route('logout') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    onclick="this.closest('form').submit();">
+                                <form id="logout-form" method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <span>Log out</span>
+                                    <button type="button"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="confirmLogout()">
+                                        Log out
+                                    </button>
                                 </form>
                             </li>
+
+                            <!-- Tambahkan SweetAlert -->
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                            <script>
+                                function confirmLogout() {
+                                    Swal.fire({
+                                        title: "Apakah Anda yakin ingin logout?",
+                                        text: "Anda harus login kembali untuk mengakses sistem!",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#d33",
+                                        cancelButtonColor: "#3085d6",
+                                        confirmButtonText: "Ya, Logout!",
+                                        cancelButtonText: "Batal"
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById("logout-form").submit();
+                                        }
+                                    });
+                                }
+                            </script>
+
                         </ul>
                     </div>
                 </div>

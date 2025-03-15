@@ -4,7 +4,6 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
-use App\Models\Casting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,7 +38,7 @@ class BannerController extends Controller
         // Simpan gambar ke storage
         if ($request->hasFile('gambar')) {
             try {
-                $path = $request->file('gambar')->store('banners', 'public');
+                $path = $request->file('gambar')->store('posters', 'public');
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', 'Gagal menyimpan gambar: ' . $e->getMessage());
             }
@@ -99,7 +98,7 @@ class BannerController extends Controller
                  }
                  
                  // Simpan gambar baru ke folder yang sama
-                 $gambarPath = $request->file('gambar')->store('banners', 'public');
+                 $gambarPath = $request->file('gambar')->store('posters', 'public');
                  
                  // Update data banner dengan path baru
                  $banner->update([

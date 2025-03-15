@@ -126,12 +126,4 @@ Route::put('author/edit-castings-detail-film/{id_castings}', [AuthorDetailFilmCo
 });
 
 
-
-
-
-
-
-
-
-
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');

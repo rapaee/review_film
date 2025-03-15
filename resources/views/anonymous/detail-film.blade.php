@@ -59,7 +59,8 @@
                             {{ $datafilm->judul }}</h5>
                         <div class="flex items-center gap-2">
                             <i class="fas fa-video text-gray-400 text-2xl"></i>
-                            <h5 class="mb-2 text-lg text-left mt-2 tracking-tight capitalize text-gray-900 dark:text-gray-400">
+                            <h5
+                                class="mb-2 text-lg text-left mt-2 tracking-tight capitalize text-gray-900 dark:text-gray-400">
                                 {{ $datafilm->pencipta }}</h5>
 
                         </div>
@@ -172,29 +173,34 @@
 
 
 
-        <div class="max-w-5xl mx-auto py-12 px-4">
-            <h2 class="text-2xl font-bold mb-8">CAST & CREW</h2>
-            <div class="grid grid-cols-3 gap-10">
-                @foreach ($casting as $cast)
-                    <div class="flex items-center space-x-4">
-                        {{-- <img class="w-16 h-16 rounded-full" src="{{ asset('storage/' . $cast->foto) }}" alt="{{ $cast->nama }}"> --}}
-                        <img src="https://cdn-icons-png.flaticon.com/128/3135/3135715.png" alt=""
-                            class="w-16 h-16 rounded-full">
-                        <div>
-                            <p class="text-sm text-gray-400">Cast</p>
-                            <p class="font-semibold">{{ $cast->nama_panggung }}</p>
+        @if ($casting->isNotEmpty())
+            <div class="max-w-full mx-auto py-12 bg-white px-4">
+                <h2 class="text-2xl font-bold mb-8 text-center md:text-left md:ml-20">CAST</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+                    @foreach ($casting as $cast)
+                        <div class="flex items-start justify-center space-x-4 mx-auto md:ml-20">
+                            <img src="https://cdn-icons-png.flaticon.com/128/3135/3135715.png" alt=""
+                                class="w-16 h-16 rounded-full">
+                            <div>
+                                <p class="text-sm text-gray-400">Cast</p>
+                                <p class="font-semibold">{{ $cast->nama_panggung }}</p>
+                                <p class="font-semibold"><span class="text-gray-400">Artis: </span> {{ $cast->nama_asli }}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
-        </div>
+        @endif
+
+
 
 
         <div>
             {{-- Anonymous (Tampil jika belum login) --}}
             @guest
                 <div class="w-full mx-auto mt-10">
-                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class=" p-6 rounded-lg shadow-lg">
                         <h2 class="text-xl font-bold mb-4">Komentar</h2>
 
                         <form>
@@ -251,27 +257,41 @@
 
                         <div class="space-y-6">
                             @foreach ($comment as $c)
-                                <div class="bg-gray-300 p-4 rounded-lg">
+                                <div class="bg-white p-4 rounded-lg">
                                     <div class="flex justify-between">
                                         <div class="flex gap-3">
-                                            <p class="font-bold">{{ $c->user->name }}</p>
+                                            <p class="font-bold text-[12px] md:text-sm">{{ $c->user->name }}</p>
+
                                             @php
                                                 $rating = $c->rating; // Ambil rating dari database
+                                                $role = $c->user->role; // Ambil role dari user
                                             @endphp
 
-                                            <p class="font-bold text-sm text-yellow-500">
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    @if ($i <= $rating)
-                                                        <i class="fas fa-star"></i> {{-- Bintang penuh --}}
-                                                    @else
-                                                        <i class="far fa-star"></i> {{-- Bintang kosong --}}
-                                                    @endif
-                                                @endfor
+                                            <p class="font-bold text-xs text-yellow-500">
+                                                @if (isset($role) && $role === 'admin')
+                                                    <p
+                                                        class="text-[10px] md:text-sm -ml-4 text-red-500 items-center justify-center flex rounded-md">
+                                                        Admin
+                                                    </p>
+                                                @elseif (isset($role) && $role === 'author')
+                                                    <p
+                                                        class="text-[10px] md:text-sm -ml-4 text-blue-500 items-center justify-center flex rounded-md">
+                                                        Author
+                                                    </p>
+                                                @elseif (isset($rating) && is_numeric($rating))
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        @if ($i <= $rating)
+                                                            <i class="fas fa-star text-yellow-400"></i> {{-- Bintang penuh --}}
+                                                        @else
+                                                            <i class="far fa-star text-gray-400"></i> {{-- Bintang kosong --}}
+                                                        @endif
+                                                    @endfor
+                                                @endif
+
                                             </p>
 
                                         </div>
-
-
+                                        <p class="text-[10px] font-bold">{{ $c->created_at->diffForHumans() }}</p>
                                     </div>
                                     <p>{{ $c->comment }}</p>
                                 </div>
@@ -281,25 +301,32 @@
                 </div>
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
-                                const loginPopup = document.getElementById('loginPopup');
-                                const closePopupBtn = document.getElementById('closePopupBtn');
+                        const loginPopup = document.getElementById('loginPopup');
+                        const closePopupBtn = document.getElementById('closePopupBtn');
 
-                                function checkLogin(event) {
-                                    event.preventDefault();
-                                    loginPopup.classList.remove('hidden');
-                                }
+                        // Pastikan elemen ditemukan sebelum menambahkan event listener
+                        if (!loginPopup || !closePopupBtn) {
+                            console.error("Elemen popup tidak ditemukan!");
+                            return;
+                        }
 
-                                function closePopupAndReload() {
-                                    loginPopup.classList.add('hidden');
-                                    setTimeout(() => {
-                                            location.reload();
-                                            white); // Beri jeda 100ms agar animasi berjalan sebelum reload
-                                    }
+                        function checkLogin(event) {
+                            event.preventDefault();
+                            loginPopup.classList.remove('hidden'); // Tampilkan popup
+                        }
 
-                                    closePopupBtn.addEventListener('click', closePopupAndReload);
-                                    window.checkLogin = checkLogin;
-                                });
+                        function closePopupAndReload() {
+                            loginPopup.classList.add('hidden'); // Sembunyikan popup
+                            setTimeout(() => {
+                                location.reload(); // Beri jeda sebelum reload
+                            }, 100);
+                        }
+
+                        closePopupBtn.addEventListener('click', closePopupAndReload);
+                        window.checkLogin = checkLogin; // Buat fungsi global agar bisa dipanggil dari luar
+                    });
                 </script>
+
 
             @endguest
 
@@ -308,7 +335,11 @@
                 <div class="w-full mx-auto mt-10">
                     <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
                         <h2 class="text-xl font-bold mb-4">Komentar</h2>
-
+                        @if (session('success'))
+                            <div class="p-4 mb-4 text-sm text-green-800 bg-green-200 rounded-lg">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                         @if (!$hasCommented)
                             <form action="{{ route('subcriber.coment') }}" method="POST">
                                 @csrf
@@ -360,30 +391,39 @@
                             @foreach ($comment as $c)
                                 <div class="bg-white p-4 rounded-lg" id="comment-{{ $c->id_comments }}">
                                     <div class="flex justify-between">
-                                        <div class="flex gap-3">
-                                            <p class="font-bold">{{ $c->user->name }}</p>
+                                        <div class="flex justify-center items-center gap-3">
+                                            <p class="font-bold text-[12px] md:text-sm">{{ $c->user->name }}</p>
 
                                             @php
                                                 $rating = $c->rating; // Ambil rating dari database
                                                 $role = $c->user->role; // Ambil role dari user
                                             @endphp
 
-                                            <p class="font-bold text-sm text-yellow-500">
-                                                @if ($role === 'admin')
-                                                    <p class="text-sm -ml-4 text-red-500">( Admin )</p>
-                                                @else
+                                            <p class="font-bold text-xs text-yellow-500">
+                                                @if (isset($role) && $role === 'admin')
+                                                    <p
+                                                        class="text-[10px] md:text-sm -ml-4 text-red-500 items-center justify-center flex rounded-md">
+                                                        Admin
+                                                    </p>
+                                                @elseif (isset($role) && $role === 'author')
+                                                    <p
+                                                        class="text-[10px] md:text-sm -ml-4 text-blue-500 items-center justify-center flex rounded-md">
+                                                        Author
+                                                    </p>
+                                                @elseif (isset($rating) && is_numeric($rating))
                                                     @for ($i = 1; $i <= 5; $i++)
                                                         @if ($i <= $rating)
-                                                            <i class="fas fa-star"></i> {{-- Bintang penuh --}}
+                                                            <i class="fas fa-star text-yellow-400"></i> {{-- Bintang penuh --}}
                                                         @else
-                                                            <i class="far fa-star"></i> {{-- Bintang kosong --}}
+                                                            <i class="far fa-star text-gray-400"></i> {{-- Bintang kosong --}}
                                                         @endif
                                                     @endfor
                                                 @endif
+
                                             </p>
                                         </div>
                                         <div class="flex gap-3 items-center justify-center">
-                                            <p class="font-bold">{{ $c->created_at->diffForHumans() }}</p>
+                                            <p class="text-[10px] font-bold">{{ $c->created_at->diffForHumans() }}</p>
                                             <div class="dropdown">
                                                 @if ($c->id_user == auth()->id() || auth()->user()->role == 'admin')
                                                     <i class="fas fa-ellipsis-v cursor-pointer"
@@ -431,11 +471,7 @@
                                     </div>
                                     <!-- Form edit akan muncul di sini -->
                                     <div id="edit-form-{{ $c->id_comments }}" class="hidden w-full mt-4">
-                                        @if (session('success'))
-                                            <div class="p-4 mb-4 text-sm text-green-800 bg-green-200 rounded-lg">
-                                                {{ session('success') }}
-                                            </div>
-                                        @endif
+
                                         <form action="{{ route('subcriber.comment.update', $c->id_comments) }}"
                                             method="POST">
                                             @csrf
