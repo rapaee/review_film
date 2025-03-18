@@ -18,9 +18,9 @@ class homeAnonymous extends Controller
     {
         $banner = Banner::all();
 
-        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
-            ->groupBy('genre_relations.id_genre', 'genre.title')
+            ->groupBy('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->get();
 
         $Film = Film::all();
@@ -76,11 +76,10 @@ class homeAnonymous extends Controller
             ->get()
             ->groupBy('id_film');
 
-        $banner = Banner::all();
 
-        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
-            ->groupBy('genre_relations.id_genre', 'genre.title')
+            ->groupBy('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->get();
 
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
@@ -106,16 +105,15 @@ class homeAnonymous extends Controller
             'terbaru',
             'comments',
             'genre',
-            'banner',
             'dataFilm',
             'filmGenres'
         ));
     }
     public function filterByYear($tahun)
     {
-        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
-            ->groupBy('genre_relations.id_genre', 'genre.title')
+            ->groupBy('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->get();
 
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();

@@ -14,15 +14,16 @@ class filmgenreController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index($slug)
     {
         // Ambil nama genre berdasarkan ID
-        $selectedGenre = Genre::where('id_genre', $id)->value('title');
+        $selectedGenre = Genre::where('slug', $slug)->value('title');
 
-        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title')
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
-            ->groupBy('genre_relations.id_genre', 'genre.title')
+            ->groupBy('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->get();
+
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
 
 
@@ -31,16 +32,16 @@ class filmgenreController extends Controller
             'film.judul',
             'film.poster',
             'film.tahun_rilis',
-            DB::raw('COALESCE(AVG(comments.rating), 0) as averageRating') // Hitung rata-rata rating
+            'genre.slug as genre_slug',
+            DB::raw('COALESCE(AVG(comments.rating), 0) as averageRating')
         )
             ->join('genre_relations', 'film.id_film', '=', 'genre_relations.id_film')
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
-            ->leftJoin('comments', 'film.id_film', '=', 'comments.id_film') // Join ke comments
-            ->where('genre_relations.id_genre', $id)
-            ->groupBy('film.id_film', 'film.judul', 'film.poster', 'film.tahun_rilis')
+            ->leftJoin('comments', 'film.id_film', '=', 'comments.id_film')
+            ->where('genre.slug', $slug) // Ubah filter berdasarkan slug
+            ->groupBy('film.id_film', 'film.judul', 'film.poster', 'film.tahun_rilis', 'genre.slug')
             ->get();
 
-        // Buat daftar genre untuk setiap film
         $filmGenres = [];
         foreach ($films as $film) {
             $filmGenres[$film->id_film] = Genre_relation::join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
@@ -50,7 +51,7 @@ class filmgenreController extends Controller
         }
 
         // $datafilm = Film::orderByDesc('tahun_rilis')->get();
-        return view('anonymous.film-genre', compact('filmGenres', 'dataFilm', 'genre', 'films', 'selectedGenre'));
+        return view('anonymous.film-genre', compact('filmGenres','dataFilm', 'genre', 'films', 'selectedGenre'));
     }
 
 

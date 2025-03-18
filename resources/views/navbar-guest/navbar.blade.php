@@ -13,10 +13,11 @@
         <a href="{{ route('anonymous.home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="https://cdn-icons-png.flaticon.com/128/1146/1146203.png" alt=""
                 class="w-8 h-8 filter invert md:block">
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white hidden md:block">
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white hidden sm:block">
                 Paee Films
             </span>
         </a>
+
 
         <!-- Search & Buttons -->
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-4">
@@ -28,7 +29,7 @@
                 <form class="max-w-md mx-auto" action="{{ route('search') }}" method="GET">
                     <div class="relative">
                         <input type="search" id="default-search" name="search" value="{{ request('search') }}"
-                            class="block w-[205px] md:w-[400px] p-3 ps-2 md:ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none"
+                            class="block w-[205px] sm:w-[370px] md:w-[400px] p-3 ps-2 md:ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none"
                             placeholder="Cari judul film" autocomplete="off" required>
                         <button type="submit"
                             class="absolute inset-y-0 end-0 flex items-center justify-center bg-blue-600 hover:bg-blue-700 rounded-r-md text-white dark:text-gray-400 p-3 md:p-5">
@@ -171,12 +172,13 @@
                     <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
                         @foreach ($genre as $g)
                             <li>
-                                <a href="{{ route('anonymous.film-genre', ['id' => $g->id_genre]) }}"
+                                <a href="{{ route('anonymous.film-genre', ['slug' => $g->slug]) }}"
                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
                                     {{ $g->title }}
                                 </a>
                             </li>
                         @endforeach
+
                     </ul>
                 </div>
             </div>

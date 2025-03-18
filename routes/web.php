@@ -96,7 +96,7 @@ require __DIR__.'/auth.php';
 
 Route::get('anonymous/detail-film{id}', [detailfilmController::class,'index'])->name('anonymous.detail-film');
 Route::get('anonymous/filter-rating', [filmFilterRatingController::class,'index'])->name('anonymous.filter-rating');
-Route::get('anonymous/film-genre/{id}', [filmgenreController::class, 'index'])->name('anonymous.film-genre');
+Route::get('anonymous/film-genre/{slug}', [filmgenreController::class, 'index'])->name('anonymous.film-genre');
 Route::get('anonymous/tahun-rilis/{tahun}', [homeAnonymous::class, 'filterByYear'])->name('anonymous.tahun-rilis');
 Route::get('search', [homeAnonymous::class, 'search'])->name('search');
 Route::get('anonymous/search-film', [homeAnonymous::class, 'search'])->name('anonymous.film-search');
