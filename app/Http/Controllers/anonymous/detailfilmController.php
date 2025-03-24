@@ -4,9 +4,11 @@ namespace App\Http\Controllers\anonymous;
 
 use App\Http\Controllers\Controller;
 use App\Models\Casting;
+use App\Models\casting_relation;
 use App\Models\Comment;
 use App\Models\Film;
 use App\Models\Genre;
+use App\Models\Genre_relation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,9 +36,15 @@ class detailfilmController extends Controller
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
         $datafilm = Film::with('genreRelations.genre')->findOrFail($id);
         $listgenre = Genre::all();
+
         //untuk navbar filter genre anonymous
-        $genre = Genre::all();
-        $casting = Casting::where('id_film', $id)->get(); // Filter casting berdasarkan id_film
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title', 'genre.slug')
+        ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+        ->groupBy('genre_relations.id_genre', 'genre.title', 'genre.slug')
+        ->get();
+
+
+        $casting = casting_relation::where('id_film', $id)->get(); // Filter casting berdasarkan id_film
         $hasCommented = Auth::check() ? Comment::where('id_user', Auth::user()->id)->where('id_film', $id)->exists() : false;
 
         $films = Film::with(['comments' => function ($query) use ($id) {
@@ -45,8 +53,9 @@ class detailfilmController extends Controller
             })->where('id_film', $id);
         }])->where('id_film', $id)->get();
 
+        $listNavbarUmur = Film::orderBydesc('kategori_umur')->get();
 
-        return view('anonymous/detail-film', compact('jumlahPengguna', 'films', 'hasCommented', 'dataFilm', 'datafilm', 'comment', 'user', 'genre', 'casting', 'listgenre'));
+        return view('anonymous/detail-film', compact('listNavbarUmur','jumlahPengguna', 'films', 'hasCommented', 'dataFilm', 'datafilm', 'comment', 'user', 'genre', 'casting', 'listgenre'));
     }
 
     public function create()

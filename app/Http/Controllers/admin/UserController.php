@@ -36,6 +36,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'nomor_telepon' => 'required|',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -43,6 +44,7 @@ class UserController extends Controller
         try {
             User::create([
                 'name' => $request->name,
+                'nomor_telepon' => $request->nomor_telepon,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);

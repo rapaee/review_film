@@ -29,7 +29,7 @@
             <img src="https://cdn-icons-png.flaticon.com/128/16026/16026444.png" alt="" class="w-6 h-6">
             <p>Kembali</p>
         </a>
-        <h1 class="flex justify-center font-bold mb-4 mt-2 text-2xl">TABLE GENRE</h1>
+        <h1 class="flex justify-center font-bold mb-4 mt-2 text-2xl">LIST DATA GENRE</h1>
         <div class="flex justify-between mb-3">
             <form class="flex-grow me-4 ml-2">
                 <label for="default-search"

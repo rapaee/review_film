@@ -37,8 +37,12 @@ class filmgenreController extends Controller
         )
             ->join('genre_relations', 'film.id_film', '=', 'genre_relations.id_film')
             ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
-            ->leftJoin('comments', 'film.id_film', '=', 'comments.id_film')
-            ->where('genre.slug', $slug) // Ubah filter berdasarkan slug
+            ->leftJoin('comments', function ($join) {
+                $join->on('film.id_film', '=', 'comments.id_film')
+                    ->join('users', 'comments.id_user', '=', 'users.id')
+                    ->where('users.role', 'subcriber'); // Hanya ambil rating dari subscriber
+            })
+            ->where('genre.slug', $slug)
             ->groupBy('film.id_film', 'film.judul', 'film.poster', 'film.tahun_rilis', 'genre.slug')
             ->get();
 
@@ -50,8 +54,10 @@ class filmgenreController extends Controller
                 ->toArray();
         }
 
-        // $datafilm = Film::orderByDesc('tahun_rilis')->get();
-        return view('anonymous.film-genre', compact('filmGenres','dataFilm', 'genre', 'films', 'selectedGenre'));
+        
+        $listNavbarUmur = Film::orderBydesc('kategori_umur')->get();
+
+        return view('anonymous.film-genre', compact('listNavbarUmur','filmGenres', 'dataFilm', 'genre', 'films', 'selectedGenre'));
     }
 
 

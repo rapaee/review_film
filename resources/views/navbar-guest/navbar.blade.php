@@ -113,12 +113,11 @@
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                     Profile</li>
                             </a>
-                            <li class="cursor-pointer">
+                            <li
+                                class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                 <form id="logout-form" method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="button"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        onclick="confirmLogout()">
+                                    <button type="button" class="" onclick="confirmLogout()">
                                         Log out
                                     </button>
                                 </form>
@@ -155,62 +154,85 @@
 
     @if (Route::currentRouteName() !== 'profile.edit')
         <div id="navbar" class="bg-[#1d1353] flex flex-wrap justify-center md:justify-normal">
-            <!-- Dropdown 1 -->
-            <div class="relative ml-0 md:ml-32">
-                <button id="dropdownDelayButton"
-                    class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
-                    <img src="https://cdn-icons-png.flaticon.com/128/974/974476.png" alt=""
-                        class="w-5 h-5 filter invert">
-                    <span>Genre</span>
-                    <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
-                        class="w-3 h-3 filter invert">
-                </button>
-
-                <!-- Dropdown menu -->
-                <div id="dropdownDelay"
-                    class="absolute w-64 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
-                    <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
-                        @foreach ($genre as $g)
-                            <li>
-                                <a href="{{ route('anonymous.film-genre', ['slug' => $g->slug]) }}"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
-                                    {{ $g->title }}
-                                </a>
-                            </li>
-                        @endforeach
-
-                    </ul>
+            <div class="grid grid-cols-3 gap-2 w-full md:w-auto">
+                <!-- Dropdown Genre -->
+                <div class="relative">
+                    <button id="dropdownButtonGenre"
+                        class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2 w-full md:w-auto">
+                        <img src="https://cdn-icons-png.flaticon.com/128/974/974476.png" alt=""
+                            class="w-5 h-5 filter invert">
+                        <span>Genre</span>
+                        <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
+                            class="w-3 h-3 filter invert">
+                    </button>
+                    <div id="dropdownMenuGenre"
+                        class="absolute w-64 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
+                        <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                            @foreach ($genre as $g)
+                                <li>
+                                    <a href="{{ route('anonymous.film-genre', ['slug' => $g->slug]) }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
+                                        {{ $g->title }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Dropdown 3 -->
-            <div class="relative">
-                <button id="dropdownDelayButton3"
-                    class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2">
-                    <img src="https://cdn-icons-png.flaticon.com/128/2370/2370264.png" alt=""
-                        class="w-5 h-5 filter invert">
-                    <span>Tahun</span>
-                    <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
-                        class="w-3 h-3 filter invert">
-                </button>
+                <!-- Dropdown Tahun -->
+                <div class="relative">
+                    <button id="dropdownButtonTahun"
+                        class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2 w-full md:w-auto">
+                        <img src="https://cdn-icons-png.flaticon.com/128/2370/2370264.png" alt=""
+                            class="w-5 h-5 filter invert">
+                        <span>Tahun</span>
+                        <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
+                            class="w-3 h-3 filter invert">
+                    </button>
+                    <div id="dropdownMenuTahun"
+                        class="absolute w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
+                        <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                            @foreach ($dataFilm->unique('tahun_rilis') as $d)
+                                <li>
+                                    <a href="{{ route('anonymous.tahun-rilis', $d->tahun_rilis) }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
+                                        {{ $d->tahun_rilis }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
 
-                <!-- Dropdown menu -->
-                <div id="dropdownDelay3"
-                    class="absolute -ml-[75px] md:-ml-0 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
-                    <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
-                        @foreach ($dataFilm->unique('tahun_rilis') as $d)
-                            <li>
-                                <a href="{{ route('anonymous.tahun-rilis', $d->tahun_rilis) }}"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
-                                    {{ $d->tahun_rilis }}
-                                </a>
-                            </li>
-                        @endforeach
+                <!-- Dropdown Kategori Umur -->
+                <div class="relative">
+                    <button id="dropdownButtonUmur"
+                        class="text-white0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:hover:bg-[#413778] text-white gap-2 w-full md:w-auto">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3502/3502685.png" alt=""
+                            class="w-3 h-3 filter invert">
+                        <span>Umur</span>
+                        <img src="https://cdn-icons-png.flaticon.com/128/2722/2722987.png" alt=""
+                            class="w-3 h-3 filter invert">
+                    </button>
+                    <div id="dropdownMenuUmur"
+                        class="absolute w-48 md:-ml-0 -ml-16 bg-white divide-y divide-gray-100 rounded-lg shadow-lg hidden z-40 dark:bg-[#413778]">
+                        <ul class="grid grid-cols-2 gap-2 p-2 text-sm text-gray-700 dark:text-gray-200">
+                            @foreach ($listNavbarUmur->unique('kategori_umur') as $d)
+                                <li>
+                                    <a href="{{ route('anonymous.filter-umur', $d->kategori_umur) }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#2E236C]">
+                                        {{ $d->kategori_umur }}
+                                    </a>
 
-                    </ul>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+
     @endif
 
 
@@ -220,34 +242,35 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Fungsi untuk menangani dropdown
-        const handleDropdown = (dropdownButtonId, dropdownMenuId) => {
-            const dropdownButton = document.getElementById(dropdownButtonId);
-            const dropdownMenu = document.getElementById(dropdownMenuId);
+        const handleDropdown = (buttonId, menuId) => {
+            const button = document.getElementById(buttonId);
+            const menu = document.getElementById(menuId);
 
-            dropdownButton.addEventListener('mouseenter', () => {
-                dropdownMenu.classList.remove('hidden');
+            button.addEventListener('mouseenter', () => {
+                menu.classList.remove('hidden');
             });
 
-            dropdownButton.addEventListener('mouseleave', () => {
+            menu.addEventListener('mouseleave', () => {
+                menu.classList.add('hidden');
+            });
+
+            menu.addEventListener('mouseenter', () => {
+                menu.classList.remove('hidden');
+            });
+
+            button.addEventListener('mouseleave', () => {
                 setTimeout(() => {
-                    if (!dropdownMenu.matches(':hover')) {
-                        dropdownMenu.classList.add('hidden');
+                    if (!menu.matches(':hover')) {
+                        menu.classList.add('hidden');
                     }
-                }, 0.5); // Ganti angka ini untuk mengatur delay
-            });
-
-            dropdownMenu.addEventListener('mouseleave', () => {
-                dropdownMenu.classList.add('hidden');
-            });
-
-            dropdownMenu.addEventListener('mouseenter', () => {
-                dropdownMenu.classList.remove('hidden');
+                }, 100); // Delay 300ms agar lebih smooth
             });
         };
 
-        // Panggil fungsi handleDropdown untuk masing-masing ID dropdown
-        handleDropdown('dropdownDelayButton', 'dropdownDelay');
-        handleDropdown('dropdownDelayButton3', 'dropdownDelay3');
+        // Terapkan untuk semua dropdown
+        handleDropdown('dropdownButtonGenre', 'dropdownMenuGenre');
+        handleDropdown('dropdownButtonTahun', 'dropdownMenuTahun');
+        handleDropdown('dropdownButtonUmur', 'dropdownMenuUmur');
     });
 
     //open profile

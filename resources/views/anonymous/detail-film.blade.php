@@ -40,6 +40,7 @@
         .show {
             display: block;
         }
+        
     </style>
 </head>
 
@@ -183,8 +184,8 @@
                                 class="w-16 h-16 rounded-full">
                             <div>
                                 <p class="text-sm text-gray-400">Cast</p>
-                                <p class="font-semibold">{{ $cast->nama_panggung }}</p>
-                                <p class="font-semibold"><span class="text-gray-400">Artis: </span> {{ $cast->nama_asli }}
+                                <p class="font-semibold">{{ $cast->casting->nama_panggung }}</p>
+                                <p class="font-semibold"><span class="text-gray-400">Artis: </span> {{ $cast->casting->nama_asli }}
                                 </p>
                             </div>
                         </div>
@@ -208,20 +209,20 @@
                                 <div class="flex items-center">
                                     <label for="rating">
                                         <div id="rating-stars" class="flex space-x-2 mt-2">
-                                            <i class="star text-7xl cursor-pointer text-gray-400" data-value="1">★</i>
-                                            <i class="star text-7xl cursor-pointer text-gray-400" data-value="2">★</i>
-                                            <i class="star text-7xl cursor-pointer text-gray-400" data-value="3">★</i>
-                                            <i class="star text-7xl cursor-pointer text-gray-400" data-value="4">★</i>
-                                            <i class="star text-7xl cursor-pointer text-gray-400" data-value="5">★</i>
+                                            <i class="star text-7xl cursor-pointer text-blue-500" data-value="1">★</i>
+                                            <i class="star text-7xl cursor-pointer text-blue-500" data-value="2">★</i>
+                                            <i class="star text-7xl cursor-pointer text-blue-500" data-value="3">★</i>
+                                            <i class="star text-7xl cursor-pointer text-blue-500" data-value="4">★</i>
+                                            <i class="star text-7xl cursor-pointer text-blue-500" data-value="5">★</i>
                                         </div>
                                         <input type="hidden" name="rating" id="rating">
                                 </div>
                             </div>
-                            <div class="w-full mb-4 border border-gray-400 rounded-lg bg-gray-50 dark:bg-gray-200">
-                                <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-200">
+                            <div class="w-full mb-4 border border-gray-400 rounded-lg bg-white">
+                                <div class="px-4 py-2 bg-white rounded-t-lg ">
                                     <label for="comment" class="sr-only">Your comment</label>
                                     <textarea id="comment" rows="4"
-                                        class="w-full px-0 text-sm text-gray-900 bg-white dark:bg-gray-200 dark:text-black dark:placeholder-gray-400"
+                                        class="w-full px-0 text-sm text-gray-900 bg-white dark:placeholder-gray-400"
                                         placeholder="Write a comment..." required></textarea>
                                 </div>
                                 <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
@@ -349,15 +350,15 @@
                                             <div class="mt-4">
                                                 <label for="rating"></label>
                                                 <div id="rating-stars" class="flex space-x-2 mt-2">
-                                                    <span class="star text-7xl cursor-pointer text-gray-400"
+                                                    <span class="star text-7xl cursor-pointer text-blue-500"
                                                         data-value="1">★</span>
-                                                    <span class="star text-7xl cursor-pointer text-gray-400"
+                                                    <span class="star text-7xl cursor-pointer text-blue-500"
                                                         data-value="2">★</span>
-                                                    <span class="star text-7xl cursor-pointer text-gray-400"
+                                                    <span class="star text-7xl cursor-pointer text-blue-500"
                                                         data-value="3">★</span>
-                                                    <span class="star text-7xl cursor-pointer text-gray-400"
+                                                    <span class="star text-7xl cursor-pointer text-blue-500"
                                                         data-value="4">★</span>
-                                                    <span class="star text-7xl cursor-pointer text-gray-400"
+                                                    <span class="star text-7xl cursor-pointer text-blue-500"
                                                         data-value="5">★</span>
                                                 </div>
                                                 <input type="hidden" name="rating" id="rating"
@@ -367,14 +368,14 @@
                                     </div>
                                 </div>
 
-                                <div class="w-full mb-4 border border-gray-400 rounded-lg bg-gray-50 dark:bg-gray-200">
-                                    <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-200">
+                                <div class="w-full mb-4 border border-gray-400 rounded-lg bg-white">
+                                    <div class="px-4 py-2 bg-white rounded-t-lg ">
                                         <label for="comment" class="sr-only">Your comment</label>
                                         <textarea id="comment" name="comment" rows="4"
-                                            class="w-full px-0 text-sm text-gray-900 bg-white dark:bg-gray-200 dark:text-black dark:placeholder-gray-400"
+                                            class="w-full px-0 text-sm text-gray-900 bg-white dark:text-black dark:placeholder-gray-400"
                                             placeholder="Write a comment..." required></textarea>
                                     </div>
-                                    <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+                                    <div class="flex items-center justify-between px-3 py-2 border-t bg-white">
                                         <input type="hidden" name="id_film" value="{{ $datafilm->id_film }}">
                                         <button type="submit"
                                             class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
@@ -484,7 +485,7 @@
                                                             <div id="rating-stars-{{ $c->id_comments }}"
                                                                 class="flex space-x-2 mt-2">
                                                                 @for ($i = 1; $i <= 5; $i++)
-                                                                    <span class="star text-7xl cursor-pointer text-gray-400"
+                                                                    <span class="star text-7xl cursor-pointer text-blue-500"
                                                                         data-value="{{ $i }}"
                                                                         onclick="setRating({{ $i }}, {{ $c->id_comments }})">★</span>
                                                                 @endfor
@@ -553,10 +554,10 @@
             stars.forEach((star, index) => {
                 if (index < rating) {
                     star.classList.add('text-yellow-500');
-                    star.classList.remove('text-gray-400');
+                    star.classList.remove('text-blue-500');
                 } else {
                     star.classList.remove('text-yellow-500');
-                    star.classList.add('text-gray-400');
+                    star.classList.add('text-blue-500');
                 }
             });
         }
@@ -635,7 +636,7 @@
                         stars.forEach(s => {
                             s.classList.toggle("text-yellow-400", s.getAttribute(
                                 "data-value") <= rating);
-                            s.classList.toggle("text-gray-400", s.getAttribute(
+                            s.classList.toggle("text-blue-500", s.getAttribute(
                                 "data-value") > rating);
                         });
                     });

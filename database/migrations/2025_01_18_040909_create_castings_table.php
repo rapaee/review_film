@@ -15,10 +15,8 @@ return new class extends Migration
             $table->increments('id_castings');
             $table->string('nama_panggung');
             $table->string('nama_asli');
-            $table->integer('id_film')->unsigned();
             $table->timestamps();
 
-            $table->foreign('id_film')->references('id_film')->on('film');
         });
     }
 

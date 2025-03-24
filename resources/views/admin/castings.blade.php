@@ -46,7 +46,6 @@
     <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-black text-center">
         <thead class="text-xs uppercase dark:bg-blue-200 dark:text-black">
             <tr>
-                <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Film</th>
                 <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Nama Panggung</th>
                 <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Nama Asli</th>
                 <th scope="col" class="px-6 py-3 border-r dark:border-gray-400"><span class="sr-only">Edit</span></th>
@@ -55,7 +54,6 @@
         <tbody>
             @foreach ( $casting as $c )
             <tr class="bg-white border-b dark:border-gray-400">
-                <td class="px-6 py-4 border-r dark:border-gray-400">{{ $c->film->judul }}</td>
                 <td class="px-6 py-4 border-r dark:border-gray-400">{{ $c->nama_panggung }}</td>
                 <td class="px-6 py-4 border-r dark:border-gray-400">{{ $c->nama_asli }}</td>
                 <td class="px-2 py-4 flex justify-center gap-3 border-r dark:border-gray-400">
@@ -68,7 +66,7 @@
                     </form>
                     <button 
                         class="text-white bg-green-600 hover:bg-green-700 py-1 w-14 h-8 rounded px-4 flex justify-center" 
-                        onclick="showEditUserPopup('{{ route('admin.castings.update', $c->id_castings) }}', '{{ $c->film->id_film }}', '{{ $c->nama_panggung }}', '{{ $c->nama_asli }}')">
+                        onclick="showEditUserPopup('{{ route('admin.castings.update', $c->id_castings) }}', '{{ $c->nama_panggung }}', '{{ $c->nama_asli }}')">
                         <img src="https://cdn-icons-png.flaticon.com/128/3597/3597088.png" alt="" class="w-5 h-5 filter invert">
                     </button>
 
@@ -114,18 +112,6 @@ document.getElementById('openModal').addEventListener('click', function () {
             <form action="{{ route('admin.castings.store') }}" method="POST" id="userForm" class="text-left">
                 @csrf
                 <div class="mb-3">
-                    <label for="id_film" class="block mb-2 text-sm font-medium text-gray-900">Film</label>
-                   <select class="w-full border-gray-500 rounded-lg shadow-sm focus:ring focus:ring-blue-200 p-2" id="id_film" name="id_film">
-                        <option value="" selected disabled>Pilih Judul Film</option>
-                        @foreach($film as $f)
-                        <option value="{{ $f->id_film }}">{{ $f->judul }}</option>
-                        @endforeach
-                    </select>
-                    @error('id_Film')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
                     <label for="nama_panggung" class="block mb-2 text-sm font-medium text-gray-900">Nama Panggung</label>
                     <input type="nama_panggung" name="nama_panggung" id="nama_panggung" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
                     @error('nama_panggung')
@@ -163,11 +149,6 @@ function showEditUserPopup(updateUrl, id_film, nama_panggung, nama_asli ) {
             <form id="showEditPopup" action="${updateUrl}" method="POST">
                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="_method" value="PUT">
-                <div class="mb-3 text-left hidden">
-                    <label for="id_film" class="block mb-2 text-sm font-medium text-gray-900">FIlm</label>
-                    <input type="text" name="id_film" id="id_film" value="${id_film}" 
-                           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
-                </div>
                 <div class="mb-3 text-left">
                     <label for="nama_panggung" class="block mb-2 text-sm font-medium text-gray-900">Nama Panggung</label>
                     <input type="nama_panggung" name="nama_panggung" id="nama_panggung" value="${nama_panggung}" 

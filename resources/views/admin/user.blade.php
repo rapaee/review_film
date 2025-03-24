@@ -80,6 +80,7 @@
                     <tr>
                         <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Nama</th>
                         <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Email</th>
+                        <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Nomor Telepon</th>
                         <th scope="col" class="px-6 py-3 border-r dark:border-gray-400">Role</th>
                         <th scope="col" class="px-6 py-3"><span class="sr-only">Edit</span></th>
                     </tr>
@@ -89,6 +90,7 @@
                         <tr class="bg-white border-b dark:border-gray-400">
                             <td class="px-6 py-4 border-r dark:border-gray-400">{{ $u->name }}</td>
                             <td class="px-6 py-4 border-r dark:border-gray-400">{{ $u->email }}</td>
+                            <td class="px-6 py-4 border-r dark:border-gray-400">{{ $u->nomor_telepon }}</td>
                             <td class="px-6 py-4 border-r dark:border-gray-400">{{ $u->role }}</td>
                             <td class="px-2 py-4 flex justify-center gap-3">
                                 <form id="delete-form-{{ $u->id }}" action="{{ route('admin.user.delete', $u->id) }}"
@@ -154,6 +156,13 @@
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nama</label>
                     <input type="text" name="name" id="name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
                     @error('name')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="nomor_telepon" class="block mb-2 text-sm font-medium text-gray-900">Nomor Telepon</label>
+                    <input type="number" name="nomor_telepon" id="nomor_telepon" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+                    @error('nomor_telepon')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>

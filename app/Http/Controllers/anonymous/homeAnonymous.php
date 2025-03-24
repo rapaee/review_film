@@ -23,8 +23,18 @@ class homeAnonymous extends Controller
             ->groupBy('genre_relations.id_genre', 'genre.title', 'genre.slug')
             ->get();
 
-        $Film = Film::all();
-        $datafilm = Film::with('comments')->orderByDesc('tahun_rilis')->get();
+        $Film = Film::withCount('comments')->orderByDesc('comments_count')->get();
+
+        $terbaruInput = Film::with('comments')->orderByDesc('created_at')->orderByDesc('tahun_rilis')->get();
+        // Pastikan setiap koleksi film mendapatkan rating
+        foreach ($terbaruInput as $film) {
+            $film->averageRating = $this->calculateAverageRating($film->id_film);
+        }
+
+        $datafilm = Film::withCount('comments')
+        ->orderByDesc('comments_count')
+        ->limit(4)
+        ->get();
 
         // Pastikan setiap koleksi film mendapatkan rating
         foreach ($datafilm as $film) {
@@ -32,7 +42,6 @@ class homeAnonymous extends Controller
         }
 
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
-        $terbaru = Film::orderByDesc('tahun_rilis')->take(9)->get();
 
         $comments = Comment::with('film')
             ->select('id_film', DB::raw('MAX(rating) as max_rating'))
@@ -45,8 +54,9 @@ class homeAnonymous extends Controller
                 $comment->film->averageRating = $this->hitungrating($comment->film->id_film);
             }
         }
+        $listNavbarUmur = Film::orderBydesc('kategori_umur')->get();
 
-        return view('anonymous/home', compact('Film', 'datafilm', 'dataFilm', 'terbaru', 'comments', 'genre', 'banner'));
+        return view('anonymous/home', compact('listNavbarUmur', 'Film', 'datafilm', 'terbaruInput', 'dataFilm', 'comments', 'genre', 'banner'));
     }
     private function hitungrating($id_film)
     {
@@ -99,7 +109,11 @@ class homeAnonymous extends Controller
             }
         }
 
+
+        $listNavbarUmur = Film::orderBydesc('kategori_umur')->get();
+
         return view('anonymous/search-film', compact(
+            'listNavbarUmur',
             'film',
             'datafilm',
             'terbaru',
@@ -119,13 +133,17 @@ class homeAnonymous extends Controller
         $dataFilm = Film::orderByDesc('tahun_rilis')->get();
 
         $films = Film::where('tahun_rilis', $tahun)
-            ->leftJoin('comments', 'film.id_film', '=', 'comments.id_film') // Gabungkan dengan tabel komentar
+            ->leftJoin('comments', function ($join) {
+                $join->on('film.id_film', '=', 'comments.id_film')
+                    ->join('users', 'comments.id_user', '=', 'users.id')
+                    ->where('users.role', 'subcriber'); // Hanya ambil rating dari subscriber
+            })
             ->select(
                 'film.id_film',
                 'film.judul',
                 'film.poster',
                 'film.tahun_rilis',
-                DB::raw('COALESCE(AVG(comments.rating), 0) as averageRating') // Hitung rata-rata rating
+                DB::raw('COALESCE(AVG(comments.rating), 0) as averageRating') // Hitung rata-rata rating dari subscriber
             )
             ->groupBy('film.id_film', 'film.judul', 'film.poster', 'film.tahun_rilis')
             ->get();
@@ -138,12 +156,40 @@ class homeAnonymous extends Controller
             ->map(fn($genres) => $genres->unique('id_genre'));
 
 
-        return view('anonymous/tahun-rilis', compact('filmGenres', 'films', 'tahun', 'dataFilm', 'genre'));
+        $listNavbarUmur = Film::orderBydesc('kategori_umur')->get();
+
+        return view('anonymous/tahun-rilis', compact('listNavbarUmur', 'filmGenres', 'films', 'tahun', 'dataFilm', 'genre'));
     }
+
+    public function filterUmur($kategori_umur)
+    {
+        $selectedUmur = Film::where('kategori_umur', $kategori_umur)->value('kategori_umur');
+
+        $dataFilm = Film::orderByDesc('tahun_rilis')->get();
+
+        // Ambil hanya film berdasarkan kategori umur yang dipilih
+        $filterUmur = Film::where('kategori_umur', $kategori_umur)
+            ->orderByDesc('tahun_rilis')
+            ->get();
+        // Ambil daftar genre
+        $genre = Genre_relation::select('genre_relations.id_genre', 'genre.title', 'genre.slug')
+            ->join('genre', 'genre_relations.id_genre', '=', 'genre.id_genre')
+            ->groupBy('genre_relations.id_genre', 'genre.title', 'genre.slug')
+            ->get();
+
+        // Ambil daftar kategori umur unik untuk navbar
+        $listNavbarUmur = Film::select('kategori_umur')->distinct()->orderByDesc('kategori_umur')->get();
+
+        return view('anonymous/kategori_umur', compact('listNavbarUmur', 'genre', 'dataFilm', 'filterUmur', 'selectedUmur'));
+    }
+
 
     private function calculateAverageRating($filmId)
     {
         $ratings = Comment::where('id_film', $filmId)
+            ->whereHas('user', function ($query) {
+                $query->where('role', 'subcriber');
+            })
             ->pluck('rating');
 
         if ($ratings->isNotEmpty()) {
@@ -152,6 +198,7 @@ class homeAnonymous extends Controller
 
         return 0;
     }
+
 
     public function store(Request $request)
     {

@@ -8,7 +8,16 @@
     <title>Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
 
+        /* Untuk Firefox */
+        html {
+            scrollbar-width: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -100,7 +109,8 @@
                     <ul class="py-2 text-sm text-white">
                         <li class="block px-4 py-2 hover:bg-green-600 rounded-lg cursor-pointer">Semua</li>
                         @foreach ($komen->unique('film.judul') as $item)
-                            <li class="block px-4 py-2 hover:bg-green-600 rounded-lg cursor-pointer">{{ $item->film->judul }}</li>
+                            <li class="block px-4 py-2 hover:bg-green-600 rounded-lg cursor-pointer">
+                                {{ $item->film->judul }}</li>
                         @endforeach
 
                     </ul>

@@ -34,14 +34,12 @@ class CastingsController extends Controller
     {
         // Validasi data
         $request->validate([
-            'id_film' => 'required',
             'nama_panggung' => 'required|string|max:255',
             'nama_asli' => 'required|string|max:255',
         ]);
     
         // Menyimpan data ke database
         Casting::create([
-            'id_film' => $request->id_film,
             'nama_panggung' => $request->nama_panggung,
             'nama_asli' => $request->nama_asli,
         ]);

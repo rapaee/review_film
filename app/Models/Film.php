@@ -41,7 +41,7 @@ class Film extends Model
 
     public function castings()
     {
-        return $this->hasMany(Casting::class, 'id_film', 'id_film');
+        return $this->hasMany(casting_relation::class, 'id_film', 'id_film');
     }
     public function genreRelations()
     {

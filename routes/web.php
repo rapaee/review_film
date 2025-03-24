@@ -37,6 +37,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('hapus/komen{id_comments}', [AdminHomeController::class,'destroy'])->name('admin.hapus-komen');
     Route::get('admin/film-detail/{id}', [FilmDetailController::class,'index'])->name('admin.film-detail');
     Route::post('admin/film-detail', [FilmDetailController::class, 'store'])->name('admin.film-detail.casting');
+    Route::delete('admin/film-detail/{id}', [FilmDetailController::class, 'destroy'])->name('admin.film-detail.delete');
+    
 
     Route::get('admin/castings', [CastingsController::class,'index'])->name('admin.castings');
     Route::post('admin/castings', [CastingsController::class,'store'])->name('admin.castings.store');
@@ -98,6 +100,7 @@ Route::get('anonymous/detail-film{id}', [detailfilmController::class,'index'])->
 Route::get('anonymous/filter-rating', [filmFilterRatingController::class,'index'])->name('anonymous.filter-rating');
 Route::get('anonymous/film-genre/{slug}', [filmgenreController::class, 'index'])->name('anonymous.film-genre');
 Route::get('anonymous/tahun-rilis/{tahun}', [homeAnonymous::class, 'filterByYear'])->name('anonymous.tahun-rilis');
+Route::get('anonymous/kategori_umur/{kategori_umur}', [homeAnonymous::class, 'filterUmur'])->name('anonymous.filter-umur');
 Route::get('search', [homeAnonymous::class, 'search'])->name('search');
 Route::get('anonymous/search-film', [homeAnonymous::class, 'search'])->name('anonymous.film-search');
 
@@ -118,6 +121,7 @@ Route::put('author/edit-genre-relasi/{id}', [AuthorGenreRelationController::clas
 
 Route::get('author/detail-film/{id}', [AuthorDetailFilmController::class,'index'])->name('author.detail-film');
 Route::post('author/detail-film', [AuthorDetailFilmController::class, 'store'])->name('author.detail-film.casting');
+Route::delete('author/detail-film/{id}', [AuthorDetailFilmController::class, 'destroy'])->name('author.detail-film.delete');
 Route::get('author/edit-castings-detail-film/{id}', [AuthorDetailFilmController::class, 'edit'])->name('author.edit-castings-detail-film.edit');
 Route::put('author/edit-castings-detail-film/{id_castings}', [AuthorDetailFilmController::class, 'update'])->name('author.edit-castings-detail-film.update');
 

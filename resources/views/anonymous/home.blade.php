@@ -100,18 +100,12 @@
                 <a href="{{ route('anonymous.filter-rating') }}">SEMUA</a>
             </button>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
 
-            @php
-                // Urutkan berdasarkan rating terbanyak saat diakses dari perangkat mobile
-                $sortedComments = $comments->sortByDesc(fn($poster) => $poster->film->averageRating ?? 0);
-            @endphp
-
-            @foreach ($sortedComments as $poster)
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            @foreach ($datafilm as $poster)
                 <div
-                    class="max-w-sm bg-black border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-200 relative">
-                    <a href="{{ route('anonymous.detail-film', ['id' => $poster->film->id_film]) }}">
-                        <!-- Ikon Bintang -->
+                    class="bg-black border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-200 relative">
+                    <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}">
                         <div
                             class="absolute top-2 right-2 flex justify-center items-center z-10 bg-black bg-opacity-50 px-2 py-1 rounded-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 20 20"
@@ -119,29 +113,30 @@
                                 <path
                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.285 3.945a1 1 0 00.95.69h4.15c.969 0 1.372 1.24.588 1.81l-3.356 2.438a1 1 0 00-.364 1.118l1.285 3.945c.3.921-.755 1.688-1.538 1.118L10 14.347l-3.951 2.844c-.783.57-1.837-.197-1.538-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.076 8.372c-.784-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.285-3.945z" />
                             </svg>
-                            <p class="text-white text-sm ml-1">{{ round($poster->film->averageRating, 1) ?? 'N/A' }}</p>
+                            <p class="text-white text-sm ml-1">{{ round($poster->averageRating, 1) ?? 'N/A' }}</p>
                         </div>
-                        <img class="rounded-t-lg w-full h-52 object-cover"
-                            src="{{ asset('storage/' . $poster->film->poster) }}" alt="{{ $poster->film->judul }}" />
+                        <img class="rounded-t-lg w-full h-52 object-cover" src="{{ asset('storage/' . $poster->poster) }}"
+                            alt="{{ $poster->judul }}" />
                         <div class="p-4">
                             <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-black">
-                                {{ $poster->film->judul }}
+                                {{ $poster->judul }}
                             </h5>
                             <p class="mb-3 text-sm text-gray-700 dark:text-gray-400">Tahun Rilis
-                                ({{ $poster->film->tahun_rilis }})</p>
+                                ({{ $poster->tahun_rilis }})
+                            </p>
                         </div>
                     </a>
                 </div>
             @endforeach
-
         </div>
+
 
         <h1 class="text-xl ml-5 font-bold">Terbaru</h1>
         <div data-aos="fade-up" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
-            @foreach ($datafilm as $poster)
+            @foreach ($terbaruInput as $poster)
                 <div
                     class="max-w-sm bg-black border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-200 relative">
-                    <a href="{{ route('anonymous.detail-film', ['id' => $poster->id_film]) }}">
+                    <a href="{{ route('anonymous.detail-film', ['id' => $poster]) }}">
                         <div class="relative">
                             <img class="rounded-t-lg w-full h-52 object-cover"
                                 src="{{ asset('storage/' . $poster->poster) }}" alt="{{ $poster->judul }}" />
